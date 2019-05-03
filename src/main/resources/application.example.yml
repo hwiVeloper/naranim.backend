@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://HOSTNAME:PORT/DATABASE?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+    username: USERNAME
+    password: PASSWORD
+  jpa:
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+    show-sql: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+  data:
+    rest:
+      base-path: /api
+server:
+  port: 80
