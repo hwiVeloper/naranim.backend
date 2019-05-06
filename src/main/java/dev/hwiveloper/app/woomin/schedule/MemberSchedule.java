@@ -20,6 +20,10 @@ import org.springframework.stereotype.Component;
 import dev.hwiveloper.app.woomin.domain.Member;
 import dev.hwiveloper.app.woomin.repository.MemberRepository;
 
+/*
+ * MemberSchedule
+ * 각종 의원 정보에 관한 API 호출 후 DB에 저장한다.
+ */
 @Component
 public class MemberSchedule {
 	
