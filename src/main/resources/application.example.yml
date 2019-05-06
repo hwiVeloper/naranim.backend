@@ -16,3 +16,8 @@ spring:
       base-path: /api
 server:
   port: 80
+  
+# keys
+keys:
+  national-assembly-info-service: SERVICE_KEY
+  agenda-schedule-info-service: SERVICE_KEY

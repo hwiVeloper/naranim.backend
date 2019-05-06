@@ -1,0 +1,158 @@
+package dev.hwiveloper.app.woomin.schedule;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.XML;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import dev.hwiveloper.app.woomin.domain.Member;
+import dev.hwiveloper.app.woomin.repository.MemberRepository;
+
+@Component
+public class MemberSchedule {
+	
+	@Value("${keys.national-assembly-info-service}")
+	String NATIONAL_ASSEMBLY_INFO_SERVICE;
+	
+	@Autowired
+	MemberRepository memberRepo;
+	
+	/**
+	 * getMemberCurrStateList
+	 * 국회의원 현황 조회
+	 */
+	@Scheduled(cron="0 0 0 */1 * ?")
+	public void getMemberCurrStateList() {
+		try {
+			// URL 생성
+			StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9710000/NationalAssemblyInfoService/getMemberCurrStateList"); /*URL*/
+			urlBuilder.append("?" + URLEncoder.encode("ServiceKey","UTF-8") + "=" + NATIONAL_ASSEMBLY_INFO_SERVICE); /*Service Key*/
+			urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("300", "UTF-8")); /*한 페이지 결과 수*/
+			urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지 번호*/
+			URL url = new URL(urlBuilder.toString());
+			
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Content-type", "application/json");
+			
+			BufferedReader rd;
+			if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+				rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			} else {
+				rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+			}
+			StringBuilder sb = new StringBuilder();
+			String line;
+			while ((line = rd.readLine()) != null) {
+				sb.append(line);
+			}
+			
+			rd.close();
+			conn.disconnect();
+			
+			JSONObject jsonObj = XML.toJSONObject(sb.toString());
+			List<Member> memberList = new ArrayList<Member>();
+			
+			JSONArray itemJson = jsonObj.getJSONObject("response")
+										.getJSONObject("body")
+										.getJSONObject("items")
+										.getJSONArray("item");
+			
+			for (int i = 0; i < itemJson.length(); i++) {
+				JSONObject tmpJson = itemJson.getJSONObject(i);
+				Member itemMember = new Member();
+				itemMember.setDeptCd(tmpJson.get("deptCd").toString());
+				itemMember.setEmpNm(tmpJson.getString("empNm"));
+				itemMember.setEngNm(tmpJson.getString("engNm"));
+				itemMember.setHjNm(tmpJson.getString("hjNm"));
+				itemMember.setJpgLink(tmpJson.getString("jpgLink"));
+				itemMember.setNum(tmpJson.getInt("num"));
+				itemMember.setOrigNm(tmpJson.getString("origNm"));
+				itemMember.setReeleGbnNm(tmpJson.getString("reeleGbnNm"));
+				memberList.add(itemMember);
+			}
+			
+			memberRepo.saveAll(memberList);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * getMemberDetailInfoList
+	 * 국회의원 현황 상세 조회
+	 */
+	@Scheduled(cron="0 5 0 */1 * ?")
+	public void getMemberDetailInfoList() {
+		try {
+			// 현재 국회의원 현황 조회
+			List<Member> memberList = (List<Member>) memberRepo.findAll();
+			
+			StringBuilder urlBuilder = null;
+			URL url;
+			HttpURLConnection conn = null;
+			BufferedReader rd = null;
+			
+			for (Member member : memberList) {
+				urlBuilder = new StringBuilder("http://apis.data.go.kr/9710000/NationalAssemblyInfoService/getMemberDetailInfoList");
+				urlBuilder.append("?" + URLEncoder.encode("ServiceKey","UTF-8") + "=" + NATIONAL_ASSEMBLY_INFO_SERVICE);
+				urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8"));
+				urlBuilder.append("&" + URLEncoder.encode("dept_cd", "UTF-8") + "=" + URLEncoder.encode(member.getDeptCd(), "UTF-8"));
+				url = new URL(urlBuilder.toString());
+				
+				conn = (HttpURLConnection) url.openConnection();
+				conn.setRequestMethod("GET");
+				conn.setRequestProperty("Content-type", "application/json");
+				
+				if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+					rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				} else {
+					rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+				}
+				StringBuilder sb = new StringBuilder();
+				String line;
+				while ((line = rd.readLine()) != null) {
+					sb.append(line);
+				}
+				
+				JSONObject itemJson = XML.toJSONObject(sb.toString())
+										.getJSONObject("response")
+										.getJSONObject("body")
+										.getJSONObject("item");
+
+				member.setBthDate(itemJson.has("bthDate") ? itemJson.get("bthDate").toString() : "");
+				member.setPolyNm(itemJson.has("polyNm") ? itemJson.getString("polyNm") : "");
+				member.setShrtNm(itemJson.has("shrtNm") ? itemJson.getString("shrtNm") : "");
+				member.setElectionNum(itemJson.has("electionNum") ? itemJson.getString("electionNum") : "");
+				member.setAssemTel(itemJson.has("assemTel") ? itemJson.getString("assemTel") : "");
+				member.setAssemHomep(itemJson.has("assemHomep") ? itemJson.getString("assemHomep") : "");
+				member.setAssemEmail(itemJson.has("assemEmail") ?itemJson.getString("assemEmail") : "");
+				member.setStaff(itemJson.has("staff") ? itemJson.getString("staff") : "");
+				member.setSecretary(itemJson.has("secretary") ? itemJson.getString("secretary") : "");
+				member.setSecretary2(itemJson.has("secretary2") ? itemJson.getString("secretary2") : "");
+				member.setHbbyCd(itemJson.has("hbbyCd") ? itemJson.getString("hbbyCd") : "");
+				member.setExamCd(itemJson.has("examCd") ? itemJson.getString("examCd") : "");
+				member.setMemTitle(itemJson.has("memTitle") ? itemJson.getString("memTitle") : "");
+				
+				rd.close();
+				conn.disconnect();
+			}
+			
+			memberRepo.saveAll(memberList);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}
