@@ -12,5 +12,6 @@ import lombok.Setter;
 public class Orig {
 	@Id
 	private String origCd;
-	private String orgNm;
+	private String origNm;
+	private String upOrigCd;
 }

@@ -18,11 +18,16 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import dev.hwiveloper.app.woomin.domain.Member;
+import dev.hwiveloper.app.woomin.domain.Poly;
 import dev.hwiveloper.app.woomin.repository.MemberRepository;
+import dev.hwiveloper.app.woomin.repository.PolyRepository;
 
 /*
  * MemberSchedule
  * 각종 의원 정보에 관한 API 호출 후 DB에 저장한다.
+ * 
+ * 매일 00:30:00 => getMemberCurrStateList (국회의원 현황 조회)
+ * 매일 00:35:00 => getMemberDetailInfoList (국회의원 현황 상세 조회)
  */
 @Component
 public class MemberSchedule {
@@ -37,7 +42,7 @@ public class MemberSchedule {
 	 * getMemberCurrStateList
 	 * 국회의원 현황 조회
 	 */
-	@Scheduled(cron="0 0 0 */1 * ?")
+	@Scheduled(cron="0 30 0 * * ?")
 	public void getMemberCurrStateList() {
 		try {
 			// URL 생성
@@ -47,6 +52,7 @@ public class MemberSchedule {
 			urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지 번호*/
 			URL url = new URL(urlBuilder.toString());
 			
+			// API 호출
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Content-type", "application/json");
@@ -66,6 +72,7 @@ public class MemberSchedule {
 			rd.close();
 			conn.disconnect();
 			
+			// 후처리
 			JSONObject jsonObj = XML.toJSONObject(sb.toString());
 			List<Member> memberList = new ArrayList<Member>();
 			
@@ -98,7 +105,7 @@ public class MemberSchedule {
 	 * getMemberDetailInfoList
 	 * 국회의원 현황 상세 조회
 	 */
-	@Scheduled(cron="0 5 0 */1 * ?")
+	@Scheduled(cron="0 35 0 * * ?")
 	public void getMemberDetailInfoList() {
 		try {
 			// 현재 국회의원 현황 조회
