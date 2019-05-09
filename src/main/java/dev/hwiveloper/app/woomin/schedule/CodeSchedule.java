@@ -104,8 +104,7 @@ public class CodeSchedule {
 	 * getLocalSearch
 	 * 지역 검색
 	 */
-	//@Scheduled(cron="0 5 0 * * ?")
-	@Scheduled(cron="*/5 * * * * *")
+	@Scheduled(cron="0 5 0 * * ?")
 	public void getLocalSearch() {
 		try {
 			// 상위지역코드 조회
@@ -141,20 +140,34 @@ public class CodeSchedule {
 				conn.disconnect();
 				
 				// 후처리
-				JSONArray itemJson = XML.toJSONObject(sb.toString())
+				JSONObject tmpJson = XML.toJSONObject(sb.toString())
 										.getJSONObject("response")
 										.getJSONObject("body")
-										.getJSONObject("items")
-										.getJSONArray("item");
+										.getJSONObject("items");
 				List<Orig> listOrig = new ArrayList<Orig>();
 				
-				for (int i = 0; i < itemJson.length(); i++) {
-					JSONObject item = itemJson.getJSONObject(i);
+				// JSONArray | JSONObject 케이스에 따라 분기처리
+				if (tmpJson.get("item") instanceof JSONArray) {
+					JSONArray itemJson = tmpJson.getJSONArray("item");
+					for (int i = 0; i < itemJson.length(); i++) {
+						JSONObject item = itemJson.getJSONObject(i);
+						Orig itemOrig = new Orig();
+						itemOrig.setOrigCd(item.get("origCd").toString());
+						itemOrig.setOrigNm(item.getString("origNm"));
+						itemOrig.setUpOrigCd(orig.getOrigCd());
+						listOrig.add(itemOrig);
+					}
+				} else
+				if (tmpJson.get("item") instanceof JSONObject) {
+					JSONObject itemJson = tmpJson.getJSONObject("item");
 					Orig itemOrig = new Orig();
-					itemOrig.setOrigCd(item.getString("origCd"));
-					itemOrig.setOrigNm(item.getString("origNm"));
+					itemOrig.setOrigCd(itemJson.get("origCd").toString());
+					itemOrig.setOrigNm(itemJson.getString("origNm"));
 					itemOrig.setUpOrigCd(orig.getOrigCd());
+					listOrig.add(itemOrig);
 				}
+				
+				origRepo.saveAll(listOrig);
 			}
 			
 		} catch (IOException e) {
