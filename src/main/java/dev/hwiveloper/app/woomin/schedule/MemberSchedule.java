@@ -18,9 +18,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import dev.hwiveloper.app.woomin.domain.Member;
-import dev.hwiveloper.app.woomin.domain.Poly;
 import dev.hwiveloper.app.woomin.repository.MemberRepository;
+import dev.hwiveloper.app.woomin.repository.OrigRepository;
 import dev.hwiveloper.app.woomin.repository.PolyRepository;
+import dev.hwiveloper.app.woomin.repository.ReeleGbnRepository;
 
 /*
  * MemberSchedule
@@ -38,11 +39,21 @@ public class MemberSchedule {
 	@Autowired
 	MemberRepository memberRepo;
 	
+	@Autowired
+	OrigRepository origRepo;
+	
+	@Autowired
+	PolyRepository polyRepo;
+	
+	@Autowired
+	ReeleGbnRepository reeleRepo;
+	
 	/**
 	 * getMemberCurrStateList
 	 * 국회의원 현황 조회
 	 */
-	@Scheduled(cron="0 30 0 * * ?")
+//	@Scheduled(cron="0 30 0 * * ?")
+	@Scheduled(cron="0 * * * * *")
 	public void getMemberCurrStateList() {
 		try {
 			// URL 생성
@@ -74,7 +85,7 @@ public class MemberSchedule {
 			
 			// 후처리
 			JSONObject jsonObj = XML.toJSONObject(sb.toString());
-			List<Member> memberList = new ArrayList<Member>();
+			List<Member> memberList = (List<Member>) memberRepo.findAll();
 			
 			JSONArray itemJson = jsonObj.getJSONObject("response")
 										.getJSONObject("body")
@@ -92,6 +103,13 @@ public class MemberSchedule {
 				itemMember.setNum(tmpJson.getInt("num"));
 				itemMember.setOrigNm(tmpJson.getString("origNm"));
 				itemMember.setReeleGbnNm(tmpJson.getString("reeleGbnNm"));
+				
+				// 지역코드
+				itemMember.setOrigCd(origRepo.findByOrigNm(itemMember.getOrigNm()).getOrigCd());
+				
+				// 당선구분코드
+				itemMember.setReeleGbnCd(reeleRepo.findByReeleGbnNm(itemMember.getReeleGbnNm()).getReeleGbnCd());
+				
 				memberList.add(itemMember);
 			}
 			
@@ -105,7 +123,8 @@ public class MemberSchedule {
 	 * getMemberDetailInfoList
 	 * 국회의원 현황 상세 조회
 	 */
-	@Scheduled(cron="0 35 0 * * ?")
+//	@Scheduled(cron="0 35 0 * * ?")
+	@Scheduled(cron="5 * * * * *")
 	public void getMemberDetailInfoList() {
 		try {
 			// 현재 국회의원 현황 조회
@@ -156,6 +175,11 @@ public class MemberSchedule {
 				member.setHbbyCd(itemJson.has("hbbyCd") ? itemJson.getString("hbbyCd") : "");
 				member.setExamCd(itemJson.has("examCd") ? itemJson.getString("examCd") : "");
 				member.setMemTitle(itemJson.has("memTitle") ? itemJson.getString("memTitle") : "");
+				
+				// 정당코드
+				if (!member.getPolyNm().equals("")) {
+					member.setPolyCd(polyRepo.findByPolyNm(member.getPolyNm()).getPolyCd());
+				}
 				
 				rd.close();
 				conn.disconnect();

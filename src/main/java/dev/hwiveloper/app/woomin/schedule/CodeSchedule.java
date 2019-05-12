@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 
 import dev.hwiveloper.app.woomin.domain.Orig;
 import dev.hwiveloper.app.woomin.domain.Poly;
-import dev.hwiveloper.app.woomin.repository.MemberRepository;
 import dev.hwiveloper.app.woomin.repository.OrigRepository;
 import dev.hwiveloper.app.woomin.repository.PolyRepository;
 import dev.hwiveloper.app.woomin.repository.ReeleGbnRepository;
@@ -29,39 +28,42 @@ import dev.hwiveloper.app.woomin.repository.ReeleGbnRepository;
  * 각종 코드성 정보에 관한 API 호출 후 DB에 저장한다.
  * 
  * 매일 00:00:00 => getPolySearch (정당 검색)
- * 매일 00:05:00 => getLocalSearch (지역 검색)
+ * 매일 00:01:00 => getLocalSearch (지역 검색)
  */
 @Component
 public class CodeSchedule {
 	@Value("${keys.national-assembly-info-service}")
 	String NATIONAL_ASSEMBLY_INFO_SERVICE;
-	
+
+	@Value("${keys.common-code-service}")
+	String COMMON_CODE_SERVICE;
+
 	@Autowired
 	PolyRepository polyRepo;
-	
+
 	@Autowired
 	OrigRepository origRepo;
-	
+
 	@Autowired
 	ReeleGbnRepository reeleGbnRepo;
-		
+
 	/**
 	 * getPolySearch
 	 * 정당 검색
 	 */
-	@Scheduled(cron="0 0 0 * * ?")
+	@Scheduled(cron="0 0 0 * * *")
 	public void getPolySearch() {
 		try {
 			// URL 생성
 			StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9710000/NationalAssemblyInfoService/getPolySearch"); /*URL*/
 			urlBuilder.append("?" + URLEncoder.encode("ServiceKey","UTF-8") + "=" + NATIONAL_ASSEMBLY_INFO_SERVICE); /*Service Key*/
 			URL url = new URL(urlBuilder.toString());
-			
+
 			// API 호출
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Content-type", "application/json");
-			
+
 			BufferedReader rd;
 			if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
 				rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -73,27 +75,27 @@ public class CodeSchedule {
 			while ((line = rd.readLine()) != null) {
 				sb.append(line);
 			}
-			
+
 			rd.close();
 			conn.disconnect();
-			
+
 			// 후처리
 			JSONArray itemJson = XML.toJSONObject(sb.toString())
-									.getJSONObject("response")
-									.getJSONObject("body")
-									.getJSONObject("items")
-									.getJSONArray("item");
+					.getJSONObject("response")
+					.getJSONObject("body")
+					.getJSONObject("items")
+					.getJSONArray("item");
 			List<Poly> listPoly = new ArrayList<Poly>();
-			
+
 			for (int i = 0; i < itemJson.length(); i++) {
 				JSONObject item = itemJson.getJSONObject(i);
-				
+
 				Poly poly = new Poly();
-				poly.setPolyCd(item.getString("polyCd"));
+				poly.setPolyCd(item.get("polyCd").toString());
 				poly.setPolyNm(item.getString("polyNm"));
 				listPoly.add(poly);
 			}
-			
+
 			polyRepo.saveAll(listPoly);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -104,12 +106,12 @@ public class CodeSchedule {
 	 * getLocalSearch
 	 * 지역 검색
 	 */
-	@Scheduled(cron="0 5 0 * * ?")
+	@Scheduled(cron="0 1 0 * * *")
 	public void getLocalSearch() {
 		try {
 			// 상위지역코드 조회
 			List<Orig> listUpOrig = origRepo.findByUpOrigCd(null);
-			
+
 			for (Orig orig : listUpOrig) {
 				// URL 생성
 				StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9710000/NationalAssemblyInfoService/getLocalSearch"); /*URL*/
@@ -118,12 +120,12 @@ public class CodeSchedule {
 				urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지 번호*/
 				urlBuilder.append("&" + URLEncoder.encode("up_orig_cd","UTF-8") + "=" + URLEncoder.encode(orig.getOrigCd(), "UTF-8")); /*시도코드*/
 				URL url = new URL(urlBuilder.toString());
-				
+
 				// API 호출
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
 				conn.setRequestProperty("Content-type", "application/json");
-				
+
 				BufferedReader rd;
 				if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
 					rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -135,17 +137,17 @@ public class CodeSchedule {
 				while ((line = rd.readLine()) != null) {
 					sb.append(line);
 				}
-				
+
 				rd.close();
 				conn.disconnect();
-				
+
 				// 후처리
 				JSONObject tmpJson = XML.toJSONObject(sb.toString())
-										.getJSONObject("response")
-										.getJSONObject("body")
-										.getJSONObject("items");
+						.getJSONObject("response")
+						.getJSONObject("body")
+						.getJSONObject("items");
 				List<Orig> listOrig = new ArrayList<Orig>();
-				
+
 				// JSONArray | JSONObject 케이스에 따라 분기처리
 				if (tmpJson.get("item") instanceof JSONArray) {
 					JSONArray itemJson = tmpJson.getJSONArray("item");
@@ -158,18 +160,49 @@ public class CodeSchedule {
 						listOrig.add(itemOrig);
 					}
 				} else
-				if (tmpJson.get("item") instanceof JSONObject) {
-					JSONObject itemJson = tmpJson.getJSONObject("item");
-					Orig itemOrig = new Orig();
-					itemOrig.setOrigCd(itemJson.get("origCd").toString());
-					itemOrig.setOrigNm(itemJson.getString("origNm"));
-					itemOrig.setUpOrigCd(orig.getOrigCd());
-					listOrig.add(itemOrig);
-				}
-				
+					if (tmpJson.get("item") instanceof JSONObject) {
+						JSONObject itemJson = tmpJson.getJSONObject("item");
+						Orig itemOrig = new Orig();
+						itemOrig.setOrigCd(itemJson.get("origCd").toString());
+						itemOrig.setOrigNm(itemJson.getString("origNm"));
+						itemOrig.setUpOrigCd(orig.getOrigCd());
+						listOrig.add(itemOrig);
+					}
+
 				origRepo.saveAll(listOrig);
 			}
-			
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Scheduled(cron="0 10 0 * * *")
+	public void getCommonSgCodeList() {
+		try {
+			StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9760000/CommonCodeService/getCommonSgCodeList"); /*URL*/
+			urlBuilder.append("?" + URLEncoder.encode("ServiceKey","UTF-8") + "=" + URLEncoder.encode(COMMON_CODE_SERVICE ,"UTF-8")); /*Service Key*/
+			urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
+			urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("999", "UTF-8")); /*한 페이지 결과 수*/
+			URL url = new URL(urlBuilder.toString());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Content-type", "application/json");
+			System.out.println("Response code: " + conn.getResponseCode());
+			BufferedReader rd;
+			if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+				rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			} else {
+				rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+			}
+			StringBuilder sb = new StringBuilder();
+			String line;
+			while ((line = rd.readLine()) != null) {
+				sb.append(line);
+			}
+			rd.close();
+			conn.disconnect();
+			System.out.println(sb.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

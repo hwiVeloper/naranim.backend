@@ -9,4 +9,5 @@ import dev.hwiveloper.app.woomin.domain.Orig;
 public interface OrigRepository extends CrudRepository<Orig, String> {
 
 	List<Orig> findByUpOrigCd(Object object);
+	Orig findByOrigNm(String origNm);
 }

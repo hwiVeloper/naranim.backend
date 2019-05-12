@@ -21,3 +21,4 @@ server:
 keys:
   national-assembly-info-service: SERVICE_KEY
   agenda-schedule-info-service: SERVICE_KEY
+  common-code-service: SERVICE_KEY
