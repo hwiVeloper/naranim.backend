@@ -185,6 +185,10 @@ public class CodeSchedule {
 		}
 	}
 
+	/**
+	 * getCommonSgCodeList
+	 * 선거코드
+	 */
 	@Scheduled(cron="0 5 0 * * *")
 	public void getCommonSgCodeList() {
 		try {
@@ -239,5 +243,13 @@ public class CodeSchedule {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * getCommonGusigunCodeList
+	 * 구시군코드
+	 */
+	public void getCommonGusigunCodeList () {
+		
 	}
 }
