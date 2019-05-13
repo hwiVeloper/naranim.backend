@@ -17,8 +17,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import dev.hwiveloper.app.woomin.domain.Election;
+import dev.hwiveloper.app.woomin.domain.ElectionPK;
 import dev.hwiveloper.app.woomin.domain.Orig;
 import dev.hwiveloper.app.woomin.domain.Poly;
+import dev.hwiveloper.app.woomin.repository.ElectionRepository;
 import dev.hwiveloper.app.woomin.repository.OrigRepository;
 import dev.hwiveloper.app.woomin.repository.PolyRepository;
 import dev.hwiveloper.app.woomin.repository.ReeleGbnRepository;
@@ -29,6 +32,8 @@ import dev.hwiveloper.app.woomin.repository.ReeleGbnRepository;
  * 
  * 매일 00:00:00 => getPolySearch (정당 검색)
  * 매일 00:01:00 => getLocalSearch (지역 검색)
+ * 
+ * 매일 00:05:00 => getCommonSgCodeList (선거코드)
  */
 @Component
 public class CodeSchedule {
@@ -46,6 +51,9 @@ public class CodeSchedule {
 
 	@Autowired
 	ReeleGbnRepository reeleGbnRepo;
+	
+	@Autowired
+	ElectionRepository electionRepo;
 
 	/**
 	 * getPolySearch
@@ -177,18 +185,19 @@ public class CodeSchedule {
 		}
 	}
 
-	@Scheduled(cron="0 10 0 * * *")
+	@Scheduled(cron="0 5 0 * * *")
 	public void getCommonSgCodeList() {
 		try {
+			//API 호출
 			StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9760000/CommonCodeService/getCommonSgCodeList"); /*URL*/
-			urlBuilder.append("?" + URLEncoder.encode("ServiceKey","UTF-8") + "=" + URLEncoder.encode(COMMON_CODE_SERVICE ,"UTF-8")); /*Service Key*/
+			urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=" + COMMON_CODE_SERVICE); /*Service Key*/
 			urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
 			urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("999", "UTF-8")); /*한 페이지 결과 수*/
 			URL url = new URL(urlBuilder.toString());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Content-type", "application/json");
-			System.out.println("Response code: " + conn.getResponseCode());
+			
 			BufferedReader rd;
 			if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
 				rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -202,7 +211,31 @@ public class CodeSchedule {
 			}
 			rd.close();
 			conn.disconnect();
-			System.out.println(sb.toString());
+			
+			// 후처리
+			JSONArray tmpJson = XML.toJSONObject(sb.toString())
+					.getJSONObject("response")
+					.getJSONObject("body")
+					.getJSONObject("items")
+					.getJSONArray("item");
+			List<Election> listElection = new ArrayList<Election>();
+			
+			for (int i = 0; i < tmpJson.length(); i++) {
+				JSONObject tmpObj = tmpJson.getJSONObject(i);
+				Election itemElection = new Election();
+				
+				ElectionPK keyElection = new ElectionPK();
+				keyElection.setSgId(tmpObj.get("sgId").toString());
+				keyElection.setSgTypeCode(tmpObj.get("sgTypecode").toString());
+				
+				itemElection.setKey(keyElection);
+				itemElection.setSgName(tmpObj.getString("sgName"));
+				itemElection.setSgVoteDate(tmpObj.get("sgVotedate").toString());
+				
+				listElection.add(itemElection);
+			}
+			
+			electionRepo.saveAll(listElection);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
