@@ -250,6 +250,64 @@ public class CodeSchedule {
 	 * 구시군코드
 	 */
 	public void getCommonGusigunCodeList () {
-		
+		try {
+			List<Election> electionList = (List<Election>) electionRepo.findAll();
+			
+			for (Election election : electionList) {
+				// API 호출
+				StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9760000/CommonCodeService/getCommonGusigunCodeList"); /*URL*/
+				urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=" + COMMON_CODE_SERVICE); /*Service Key*/
+				urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
+				urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("999", "UTF-8")); /*한 페이지 결과 수*/
+				urlBuilder.append("&" + URLEncoder.encode("sgId","UTF-8") + "=" + URLEncoder.encode(election.getKey().getSgId().toString(), "UTF-8")); /*한 페이지 결과 수*/
+				URL url = new URL(urlBuilder.toString());
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				conn.setRequestMethod("GET");
+				conn.setRequestProperty("Content-type", "application/json");
+				
+				BufferedReader rd;
+				if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+					rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				} else {
+					rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+				}
+				StringBuilder sb = new StringBuilder();
+				String line;
+				while ((line = rd.readLine()) != null) {
+					sb.append(line);
+				}
+				rd.close();
+				conn.disconnect();
+				
+				// 후처리
+				JSONArray tmpJson = XML.toJSONObject(sb.toString())
+						.getJSONObject("response")
+						.getJSONObject("body")
+						.getJSONObject("items")
+						.getJSONArray("item");
+				List<Election> listElection = new ArrayList<Election>();
+				
+				for (int i = 0; i < tmpJson.length(); i++) {
+					JSONObject tmpObj = tmpJson.getJSONObject(i);
+					Election itemElection = new Election();
+					
+					ElectionPK keyElection = new ElectionPK();
+					keyElection.setSgId(tmpObj.get("sgId").toString());
+					keyElection.setSgTypeCode(tmpObj.get("sgTypecode").toString());
+					
+					itemElection.setKey(keyElection);
+					itemElection.setSgName(tmpObj.getString("sgName"));
+					itemElection.setSgVoteDate(tmpObj.get("sgVotedate").toString());
+					
+					listElection.add(itemElection);
+				}
+				
+				electionRepo.saveAll(listElection);
+			}
+			
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
