@@ -19,9 +19,12 @@ import org.springframework.stereotype.Component;
 
 import dev.hwiveloper.app.woomin.domain.Election;
 import dev.hwiveloper.app.woomin.domain.ElectionPK;
+import dev.hwiveloper.app.woomin.domain.Gusigun;
+import dev.hwiveloper.app.woomin.domain.GusigunPK;
 import dev.hwiveloper.app.woomin.domain.Orig;
 import dev.hwiveloper.app.woomin.domain.Poly;
 import dev.hwiveloper.app.woomin.repository.ElectionRepository;
+import dev.hwiveloper.app.woomin.repository.GusigunRepository;
 import dev.hwiveloper.app.woomin.repository.OrigRepository;
 import dev.hwiveloper.app.woomin.repository.PolyRepository;
 import dev.hwiveloper.app.woomin.repository.ReeleGbnRepository;
@@ -34,6 +37,7 @@ import dev.hwiveloper.app.woomin.repository.ReeleGbnRepository;
  * 매일 00:01:00 => getLocalSearch (지역 검색)
  * 
  * 매일 00:05:00 => getCommonSgCodeList (선거코드)
+ * 매일 00:10:00 => getCommonGusigunCodeList (구시군코드)
  */
 @Component
 public class CodeSchedule {
@@ -54,6 +58,9 @@ public class CodeSchedule {
 	
 	@Autowired
 	ElectionRepository electionRepo;
+	
+	@Autowired
+	GusigunRepository gusigunRepo;
 
 	/**
 	 * getPolySearch
@@ -249,17 +256,18 @@ public class CodeSchedule {
 	 * getCommonGusigunCodeList
 	 * 구시군코드
 	 */
+	@Scheduled(cron="0 10 0 * * *")
 	public void getCommonGusigunCodeList () {
 		try {
-			List<Election> electionList = (List<Election>) electionRepo.findAll();
+			List<String> electionList = (List<String>) electionRepo.findDistinctKeySgId();
 			
-			for (Election election : electionList) {
+			for (String election : electionList) {
 				// API 호출
 				StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9760000/CommonCodeService/getCommonGusigunCodeList"); /*URL*/
 				urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=" + COMMON_CODE_SERVICE); /*Service Key*/
 				urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
 				urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("999", "UTF-8")); /*한 페이지 결과 수*/
-				urlBuilder.append("&" + URLEncoder.encode("sgId","UTF-8") + "=" + URLEncoder.encode(election.getKey().getSgId().toString(), "UTF-8")); /*한 페이지 결과 수*/
+				urlBuilder.append("&" + URLEncoder.encode("sgId","UTF-8") + "=" + URLEncoder.encode(election.toString(), "UTF-8")); /*한 페이지 결과 수*/
 				URL url = new URL(urlBuilder.toString());
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
@@ -285,28 +293,38 @@ public class CodeSchedule {
 						.getJSONObject("body")
 						.getJSONObject("items")
 						.getJSONArray("item");
-				List<Election> listElection = new ArrayList<Election>();
+				List<Gusigun> listGusigun = new ArrayList<Gusigun>();
 				
 				for (int i = 0; i < tmpJson.length(); i++) {
 					JSONObject tmpObj = tmpJson.getJSONObject(i);
-					Election itemElection = new Election();
+					Gusigun itemGusigun = new Gusigun();
+					GusigunPK keyGusigun = new GusigunPK();
 					
-					ElectionPK keyElection = new ElectionPK();
-					keyElection.setSgId(tmpObj.get("sgId").toString());
-					keyElection.setSgTypeCode(tmpObj.get("sgTypecode").toString());
+					keyGusigun.setSgId(tmpObj.get("sgId").toString());
+					keyGusigun.setWOrder(tmpObj.getInt("wOrder"));
 					
-					itemElection.setKey(keyElection);
-					itemElection.setSgName(tmpObj.getString("sgName"));
-					itemElection.setSgVoteDate(tmpObj.get("sgVotedate").toString());
+					itemGusigun.setKey(keyGusigun);
+					itemGusigun.setSdName(tmpObj.getString("sdName").equals(null) ? null : tmpObj.getString("sdName"));
+					itemGusigun.setWiwName(tmpObj.getString("wiwName"));
 					
-					listElection.add(itemElection);
+					listGusigun.add(itemGusigun);
 				}
 				
-				electionRepo.saveAll(listElection);
+				gusigunRepo.saveAll(listGusigun);
 			}
-			
-			
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * getCommonSggCodeList
+	 * 선거구코드
+	 */
+	public void getCommonSggCodeList() {
+		try {
+			
+		} catch(IOException e) {
 			e.printStackTrace();
 		}
 	}

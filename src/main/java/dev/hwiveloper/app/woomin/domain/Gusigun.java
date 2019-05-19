@@ -6,13 +6,13 @@ import javax.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity(name="woomin_election")
+@Entity(name="woomin_gusigun")
 @Getter
 @Setter
-public class Election {
+public class Gusigun {
 	@EmbeddedId
-	private ElectionPK key;
+	private GusigunPK key;
 	
-	private String sgName;
-	private String sgVoteDate;
+	private String wiwName;
+	private String sdName;
 }

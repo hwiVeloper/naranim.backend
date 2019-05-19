@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Entity(name="woomin_election_type")
 @Getter
