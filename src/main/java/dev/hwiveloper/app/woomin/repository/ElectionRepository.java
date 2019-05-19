@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Description;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import dev.hwiveloper.app.woomin.domain.Election;
-import dev.hwiveloper.app.woomin.domain.ElectionPK;
+import dev.hwiveloper.app.woomin.domain.common.Election;
+import dev.hwiveloper.app.woomin.domain.common.ElectionPK;
 
 public interface ElectionRepository extends CrudRepository<Election, ElectionPK> {
 	@Description("findDistinctKeySgId :: Get distinct sgId")

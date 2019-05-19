@@ -17,17 +17,20 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import dev.hwiveloper.app.woomin.domain.Election;
-import dev.hwiveloper.app.woomin.domain.ElectionPK;
-import dev.hwiveloper.app.woomin.domain.Gusigun;
-import dev.hwiveloper.app.woomin.domain.GusigunPK;
-import dev.hwiveloper.app.woomin.domain.Orig;
-import dev.hwiveloper.app.woomin.domain.Poly;
-import dev.hwiveloper.app.woomin.domain.Sungeogu;
-import dev.hwiveloper.app.woomin.domain.SungeoguPK;
+import dev.hwiveloper.app.woomin.domain.assembly.Orig;
+import dev.hwiveloper.app.woomin.domain.assembly.Poly;
+import dev.hwiveloper.app.woomin.domain.common.Election;
+import dev.hwiveloper.app.woomin.domain.common.ElectionPK;
+import dev.hwiveloper.app.woomin.domain.common.Gusigun;
+import dev.hwiveloper.app.woomin.domain.common.GusigunPK;
+import dev.hwiveloper.app.woomin.domain.common.Party;
+import dev.hwiveloper.app.woomin.domain.common.PartyPK;
+import dev.hwiveloper.app.woomin.domain.common.Sungeogu;
+import dev.hwiveloper.app.woomin.domain.common.SungeoguPK;
 import dev.hwiveloper.app.woomin.repository.ElectionRepository;
 import dev.hwiveloper.app.woomin.repository.GusigunRepository;
 import dev.hwiveloper.app.woomin.repository.OrigRepository;
+import dev.hwiveloper.app.woomin.repository.PartyRepository;
 import dev.hwiveloper.app.woomin.repository.PolyRepository;
 import dev.hwiveloper.app.woomin.repository.ReeleGbnRepository;
 import dev.hwiveloper.app.woomin.repository.SungeoguRepository;
@@ -42,6 +45,7 @@ import dev.hwiveloper.app.woomin.repository.SungeoguRepository;
  * 매일 00:05:00 => getCommonSgCodeList (선거코드)
  * 매일 00:10:00 => getCommonGusigunCodeList (구시군코드)
  * 매일 00:20:00 => getCommonSggCodeList (선거구코드)
+ * 매일 00:30:00 => getCommonPartyCodeList (정당코드)
  */
 @Component
 public class CodeSchedule {
@@ -68,6 +72,9 @@ public class CodeSchedule {
 	
 	@Autowired
 	SungeoguRepository sungeoguRepo;
+	
+	@Autowired
+	PartyRepository partyRepo;
 
 	/**
 	 * getPolySearch
@@ -334,7 +341,6 @@ public class CodeSchedule {
 			List<Election> electionList = (List<Election>) electionRepo.findAll();
 			
 			for (Election election : electionList) {
-				System.out.println("코드들 :: " + election.getKey().getSgId() + " :: " + election.getKey().getSgTypeCode());
 				// 선거종류코드 : 0 일 때, continue
 				if (election.getKey().getSgTypeCode().toString().equals("0")) {
 					continue;
@@ -417,5 +423,96 @@ public class CodeSchedule {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * getCommonPartyCodeList
+	 * 정당코드
+	 */
+	@Scheduled(cron="*/10 * * * * *")
+	public void getCommonPartyCodeList() {
+		try {
+			List<String> electionList = (List<String>) electionRepo.findDistinctKeySgId();
+			
+			for (String election : electionList) {				
+				// API 호출
+				StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9760000/CommonCodeService/getCommonPartyCodeList"); /*URL*/
+				urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=" + COMMON_CODE_SERVICE); /*Service Key*/
+				urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
+				urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("999", "UTF-8")); /*한 페이지 결과 수*/
+				urlBuilder.append("&" + URLEncoder.encode("sgId","UTF-8") + "=" + URLEncoder.encode(election, "UTF-8")); // 선거ID
+				URL url = new URL(urlBuilder.toString());
+				System.out.println("url ::::: " + urlBuilder.toString());
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				conn.setRequestMethod("GET");
+				conn.setRequestProperty("Content-type", "application/json");
+				
+				System.out.println("sgId ::::: " + election);
+				
+				BufferedReader rd;
+				if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+					rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				} else {
+					rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+				}
+				StringBuilder sb = new StringBuilder();
+				String line;
+				while ((line = rd.readLine()) != null) {
+					sb.append(line);
+				}
+				rd.close();
+				conn.disconnect();
+				
+				// 후처리
+				JSONObject tmpJson = XML.toJSONObject(sb.toString())
+						.getJSONObject("response")
+						.getJSONObject("body")
+						.getJSONObject("items");
+				List<Party> listParty = new ArrayList<Party>();
+				
+				// JSONArray | JSONObject 케이스에 따라 분기처리
+				if (tmpJson.get("item") instanceof JSONArray) {
+					JSONArray itemJson = tmpJson.getJSONArray("item");
+					for (int i = 0; i < itemJson.length(); i++) {
+						JSONObject item = itemJson.getJSONObject(i);
+						Party itemParty = new Party();
+						PartyPK keyParty = new PartyPK();
+						
+						keyParty.setSgId(item.get("sgId").toString());
+						keyParty.setPOrder(item.getInt("pOrder"));
+						
+						itemParty.setKey(keyParty);
+						itemParty.setJdName(item.getString("jdName").equals(null) ? null : item.getString("jdName"));
+						
+						listParty.add(itemParty);
+					}
+				} else
+				if (tmpJson.get("item") instanceof JSONObject) {
+					JSONObject itemJson = tmpJson.getJSONObject("item");
+					Party itemParty = new Party();
+					PartyPK keyParty = new PartyPK();
+					
+					keyParty.setSgId(itemJson.get("sgId").toString());
+					keyParty.setPOrder(itemJson.getInt("pOrder"));
+					
+					itemParty.setKey(keyParty);
+					itemParty.setJdName(itemJson.getString("jdName").equals(null) ? null : itemJson.getString("jdName"));
+					
+					listParty.add(itemParty);
+				}
+				
+				partyRepo.saveAll(listParty);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * getCommonJobCodeList
+	 * 직업코드
+	 */
+	public void getCommonJobCodeList() {
+		
 	}
 }

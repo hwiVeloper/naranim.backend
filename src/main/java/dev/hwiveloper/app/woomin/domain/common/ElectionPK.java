@@ -1,16 +1,18 @@
-package dev.hwiveloper.app.woomin.domain;
+package dev.hwiveloper.app.woomin.domain.common;
 
 import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Embeddable
 @Getter
 @Setter
+@EqualsAndHashCode
 public class ElectionPK implements Serializable {
 	@Column(name="sg_id")
 	private String sgId;

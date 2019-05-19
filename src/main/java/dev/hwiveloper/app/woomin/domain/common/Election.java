@@ -1,4 +1,4 @@
-package dev.hwiveloper.app.woomin.domain;
+package dev.hwiveloper.app.woomin.domain.common;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;

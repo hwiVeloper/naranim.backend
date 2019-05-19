@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import dev.hwiveloper.app.woomin.domain.Member;
+import dev.hwiveloper.app.woomin.domain.assembly.Member;
 import dev.hwiveloper.app.woomin.repository.MemberRepository;
 import dev.hwiveloper.app.woomin.repository.OrigRepository;
 import dev.hwiveloper.app.woomin.repository.PolyRepository;
