@@ -23,11 +23,14 @@ import dev.hwiveloper.app.woomin.domain.Gusigun;
 import dev.hwiveloper.app.woomin.domain.GusigunPK;
 import dev.hwiveloper.app.woomin.domain.Orig;
 import dev.hwiveloper.app.woomin.domain.Poly;
+import dev.hwiveloper.app.woomin.domain.Sungeogu;
+import dev.hwiveloper.app.woomin.domain.SungeoguPK;
 import dev.hwiveloper.app.woomin.repository.ElectionRepository;
 import dev.hwiveloper.app.woomin.repository.GusigunRepository;
 import dev.hwiveloper.app.woomin.repository.OrigRepository;
 import dev.hwiveloper.app.woomin.repository.PolyRepository;
 import dev.hwiveloper.app.woomin.repository.ReeleGbnRepository;
+import dev.hwiveloper.app.woomin.repository.SungeoguRepository;
 
 /*
  * CodeSchedule
@@ -38,6 +41,7 @@ import dev.hwiveloper.app.woomin.repository.ReeleGbnRepository;
  * 
  * 매일 00:05:00 => getCommonSgCodeList (선거코드)
  * 매일 00:10:00 => getCommonGusigunCodeList (구시군코드)
+ * 매일 00:20:00 => getCommonSggCodeList (선거구코드)
  */
 @Component
 public class CodeSchedule {
@@ -61,6 +65,9 @@ public class CodeSchedule {
 	
 	@Autowired
 	GusigunRepository gusigunRepo;
+	
+	@Autowired
+	SungeoguRepository sungeoguRepo;
 
 	/**
 	 * getPolySearch
@@ -175,14 +182,14 @@ public class CodeSchedule {
 						listOrig.add(itemOrig);
 					}
 				} else
-					if (tmpJson.get("item") instanceof JSONObject) {
-						JSONObject itemJson = tmpJson.getJSONObject("item");
-						Orig itemOrig = new Orig();
-						itemOrig.setOrigCd(itemJson.get("origCd").toString());
-						itemOrig.setOrigNm(itemJson.getString("origNm"));
-						itemOrig.setUpOrigCd(orig.getOrigCd());
-						listOrig.add(itemOrig);
-					}
+				if (tmpJson.get("item") instanceof JSONObject) {
+					JSONObject itemJson = tmpJson.getJSONObject("item");
+					Orig itemOrig = new Orig();
+					itemOrig.setOrigCd(itemJson.get("origCd").toString());
+					itemOrig.setOrigNm(itemJson.getString("origNm"));
+					itemOrig.setUpOrigCd(orig.getOrigCd());
+					listOrig.add(itemOrig);
+				}
 
 				origRepo.saveAll(listOrig);
 			}
@@ -267,7 +274,7 @@ public class CodeSchedule {
 				urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=" + COMMON_CODE_SERVICE); /*Service Key*/
 				urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
 				urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("999", "UTF-8")); /*한 페이지 결과 수*/
-				urlBuilder.append("&" + URLEncoder.encode("sgId","UTF-8") + "=" + URLEncoder.encode(election.toString(), "UTF-8")); /*한 페이지 결과 수*/
+				urlBuilder.append("&" + URLEncoder.encode("sgId","UTF-8") + "=" + URLEncoder.encode(election.toString(), "UTF-8"));
 				URL url = new URL(urlBuilder.toString());
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
@@ -321,10 +328,93 @@ public class CodeSchedule {
 	 * getCommonSggCodeList
 	 * 선거구코드
 	 */
+	@Scheduled(cron="0 20 0 * * *")
 	public void getCommonSggCodeList() {
 		try {
+			List<Election> electionList = (List<Election>) electionRepo.findAll();
 			
-		} catch(IOException e) {
+			for (Election election : electionList) {
+				System.out.println("코드들 :: " + election.getKey().getSgId() + " :: " + election.getKey().getSgTypeCode());
+				// 선거종류코드 : 0 일 때, continue
+				if (election.getKey().getSgTypeCode().toString().equals("0")) {
+					continue;
+				}
+				
+				// API 호출
+				StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9760000/CommonCodeService/getCommonSggCodeList"); /*URL*/
+				urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=" + COMMON_CODE_SERVICE); /*Service Key*/
+				urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
+				urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("999", "UTF-8")); /*한 페이지 결과 수*/
+				urlBuilder.append("&" + URLEncoder.encode("sgId","UTF-8") + "=" + URLEncoder.encode(election.getKey().getSgId().toString(), "UTF-8")); // 선거ID
+				urlBuilder.append("&" + URLEncoder.encode("sgTypecode","UTF-8") + "=" + URLEncoder.encode(election.getKey().getSgTypeCode().toString(), "UTF-8")); // 선거종류코드
+				URL url = new URL(urlBuilder.toString());
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				conn.setRequestMethod("GET");
+				conn.setRequestProperty("Content-type", "application/json");
+				
+				BufferedReader rd;
+				if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+					rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				} else {
+					rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+				}
+				StringBuilder sb = new StringBuilder();
+				String line;
+				while ((line = rd.readLine()) != null) {
+					sb.append(line);
+				}
+				rd.close();
+				conn.disconnect();
+				
+				// 후처리
+				JSONObject tmpJson = XML.toJSONObject(sb.toString())
+						.getJSONObject("response")
+						.getJSONObject("body")
+						.getJSONObject("items");
+				List<Sungeogu> listSungeogu = new ArrayList<Sungeogu>();
+				
+				// JSONArray | JSONObject 케이스에 따라 분기처리
+				if (tmpJson.get("item") instanceof JSONArray) {
+					JSONArray itemJson = tmpJson.getJSONArray("item");
+					for (int i = 0; i < itemJson.length(); i++) {
+						JSONObject item = itemJson.getJSONObject(i);
+						Sungeogu itemSungeogu = new Sungeogu();
+						SungeoguPK keySungeogu = new SungeoguPK();
+						
+						keySungeogu.setSgId(item.get("sgId").toString());
+						keySungeogu.setSgTypeCode(item.get("sgTypecode").toString());
+						keySungeogu.setSggName(item.getString("sggName"));
+						
+						itemSungeogu.setKey(keySungeogu);
+						itemSungeogu.setSdName(item.getString("sdName").equals(null) ? null : item.getString("sdName"));
+						itemSungeogu.setWiwName(item.getString("wiwName").equals(null) ? null : item.getString("wiwName"));
+						itemSungeogu.setSggJungsu(item.getInt("sggJungsu"));
+						itemSungeogu.setSOrder(item.getInt("sOrder"));
+						
+						listSungeogu.add(itemSungeogu);
+					}
+				} else
+				if (tmpJson.get("item") instanceof JSONObject) {
+					JSONObject itemJson = tmpJson.getJSONObject("item");
+					Sungeogu itemSungeogu = new Sungeogu();
+					SungeoguPK keySungeogu = new SungeoguPK();
+					
+					keySungeogu.setSgId(itemJson.get("sgId").toString());
+					keySungeogu.setSgTypeCode(itemJson.get("sgTypecode").toString());
+					keySungeogu.setSggName(itemJson.getString("sggName"));
+					
+					itemSungeogu.setKey(keySungeogu);
+					itemSungeogu.setSdName(itemJson.getString("sdName").equals(null) ? null : itemJson.getString("sdName"));
+					itemSungeogu.setWiwName(itemJson.getString("wiwName").equals(null) ? null : itemJson.getString("wiwName"));
+					itemSungeogu.setSggJungsu(itemJson.getInt("sggJungsu"));
+					itemSungeogu.setSOrder(itemJson.getInt("sOrder"));
+					
+					listSungeogu.add(itemSungeogu);
+				}
+				
+				sungeoguRepo.saveAll(listSungeogu);
+			}
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
