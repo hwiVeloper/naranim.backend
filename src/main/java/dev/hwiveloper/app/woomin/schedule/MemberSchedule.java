@@ -17,6 +17,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import dev.hwiveloper.app.woomin.domain.assembly.Member;
+import dev.hwiveloper.app.woomin.domain.assembly.ReeleGbn;
 import dev.hwiveloper.app.woomin.repository.MemberRepository;
 import dev.hwiveloper.app.woomin.repository.OrigRepository;
 import dev.hwiveloper.app.woomin.repository.PolyRepository;
@@ -51,8 +52,7 @@ public class MemberSchedule {
 	 * getMemberCurrStateList
 	 * 국회의원 현황 조회
 	 */
-//	@Scheduled(cron="0 30 0 * * ?")
-	@Scheduled(cron="0 * * * * *")
+	@Scheduled(cron="0 30 0 * * ?")
 	public void getMemberCurrStateList() {
 		try {
 			// URL 생성
@@ -122,8 +122,8 @@ public class MemberSchedule {
 	 * getMemberDetailInfoList
 	 * 국회의원 현황 상세 조회
 	 */
-//	@Scheduled(cron="0 35 0 * * ?")
-	@Scheduled(cron="5 * * * * *")
+	@Scheduled(cron="0 35 0 * * ?")
+//	@Scheduled(cron="5 * * * * *")
 	public void getMemberDetailInfoList() {
 		try {
 			// 현재 국회의원 현황 조회

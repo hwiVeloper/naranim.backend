@@ -512,7 +512,17 @@ public class CodeSchedule {
 	 * getCommonJobCodeList
 	 * 직업코드
 	 */
+	@Scheduled(cron="0 35 0 * * *")
 	public void getCommonJobCodeList() {
-		
+
+	}
+
+	/**
+	 * getCommonEduBckgrdCodeList
+	 * 학력코드
+	 */
+	@Scheduled(cron="0 40 0 * * *")
+	public void getCommonEduBckgrdCodeList() {
+
 	}
 }
