@@ -13,6 +13,6 @@ public class JobPK implements Serializable {
 	@Column(name="sg_id")
 	private String sgId;
 	
-	@Column(name="j_order")
-	private String jOrder;
+	@Column(name="job_id")
+	private String jobId;
 }

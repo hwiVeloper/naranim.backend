@@ -23,12 +23,15 @@ import dev.hwiveloper.app.woomin.domain.common.Election;
 import dev.hwiveloper.app.woomin.domain.common.ElectionPK;
 import dev.hwiveloper.app.woomin.domain.common.Gusigun;
 import dev.hwiveloper.app.woomin.domain.common.GusigunPK;
+import dev.hwiveloper.app.woomin.domain.common.Job;
+import dev.hwiveloper.app.woomin.domain.common.JobPK;
 import dev.hwiveloper.app.woomin.domain.common.Party;
 import dev.hwiveloper.app.woomin.domain.common.PartyPK;
 import dev.hwiveloper.app.woomin.domain.common.Sungeogu;
 import dev.hwiveloper.app.woomin.domain.common.SungeoguPK;
 import dev.hwiveloper.app.woomin.repository.ElectionRepository;
 import dev.hwiveloper.app.woomin.repository.GusigunRepository;
+import dev.hwiveloper.app.woomin.repository.JobRepository;
 import dev.hwiveloper.app.woomin.repository.OrigRepository;
 import dev.hwiveloper.app.woomin.repository.PartyRepository;
 import dev.hwiveloper.app.woomin.repository.PolyRepository;
@@ -46,6 +49,8 @@ import dev.hwiveloper.app.woomin.repository.SungeoguRepository;
  * 매일 00:10:00 => getCommonGusigunCodeList (구시군코드)
  * 매일 00:20:00 => getCommonSggCodeList (선거구코드)
  * 매일 00:30:00 => getCommonPartyCodeList (정당코드)
+ * 매일 00:35:00 => getCommonJobCodeList (직업코드)
+ * 매일 00:40:00 => getCommonEduBckgrdCodeList (학력코드)
  */
 @Component
 public class CodeSchedule {
@@ -75,6 +80,9 @@ public class CodeSchedule {
 	
 	@Autowired
 	PartyRepository partyRepo;
+	
+	@Autowired
+	JobRepository jobRepo;
 
 	/**
 	 * getPolySearch
@@ -514,7 +522,83 @@ public class CodeSchedule {
 	 */
 	@Scheduled(cron="0 35 0 * * *")
 	public void getCommonJobCodeList() {
-
+		try {
+			List<String> electionList = (List<String>) electionRepo.findDistinctKeySgId();
+			
+			for (String election : electionList) {				
+				// API 호출
+				StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9760000/CommonCodeService/getCommonJobCodeList"); /*URL*/
+				urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=" + COMMON_CODE_SERVICE); /*Service Key*/
+				urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
+				urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("999", "UTF-8")); /*한 페이지 결과 수*/
+				urlBuilder.append("&" + URLEncoder.encode("sgId","UTF-8") + "=" + URLEncoder.encode(election, "UTF-8")); // 선거ID
+				URL url = new URL(urlBuilder.toString());
+				System.out.println("url ::::: " + urlBuilder.toString());
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				conn.setRequestMethod("GET");
+				conn.setRequestProperty("Content-type", "application/json");
+				
+				System.out.println("sgId ::::: " + election);
+				
+				BufferedReader rd;
+				if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+					rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				} else {
+					rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+				}
+				StringBuilder sb = new StringBuilder();
+				String line;
+				while ((line = rd.readLine()) != null) {
+					sb.append(line);
+				}
+				rd.close();
+				conn.disconnect();
+				
+				// 후처리
+				JSONObject tmpJson = XML.toJSONObject(sb.toString())
+						.getJSONObject("response")
+						.getJSONObject("body")
+						.getJSONObject("items");
+				List<Job> listJob = new ArrayList<Job>();
+				
+				// JSONArray | JSONObject 케이스에 따라 분기처리
+				if (tmpJson.get("item") instanceof JSONArray) {
+					JSONArray itemJson = tmpJson.getJSONArray("item");
+					for (int i = 0; i < itemJson.length(); i++) {
+						JSONObject item = itemJson.getJSONObject(i);
+						Job itemJob = new Job();
+						JobPK keyJob = new JobPK();
+						
+						keyJob.setSgId(item.get("sgId").toString());
+						keyJob.setJobId(item.get("jobId").toString());
+						
+						itemJob.setKey(keyJob);
+						itemJob.setJobName(item.getString("jobName").equals(null) ? null : item.getString("jobName"));
+						itemJob.setJOrder(item.get("jOrder") == null ? null : item.getInt("jOrder"));
+						
+						listJob.add(itemJob);
+					}
+				} else
+				if (tmpJson.get("item") instanceof JSONObject) {
+					JSONObject itemJson = tmpJson.getJSONObject("item");
+					Job itemJob = new Job();
+					JobPK keyJob = new JobPK();
+					
+					keyJob.setSgId(itemJson.get("sgId").toString());
+					keyJob.setJobId(itemJson.get("jobId").toString());
+					
+					itemJob.setKey(keyJob);
+					itemJob.setJobName(itemJson.getString("jobName").equals(null) ? null : itemJson.getString("jobName"));
+					itemJob.setJOrder(itemJson.get("jOrder") == null ? null : itemJson.getInt("jOrder"));
+					
+					listJob.add(itemJob);
+				}
+				
+				jobRepo.saveAll(listJob);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

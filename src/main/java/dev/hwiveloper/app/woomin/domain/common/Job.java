@@ -14,4 +14,5 @@ public class Job {
 	private JobPK key;
 	
 	private String jobName;
+	private int jOrder;
 }
