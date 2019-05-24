@@ -9,6 +9,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.hwiveloper.app.woomin.domain.common.*;
+import dev.hwiveloper.app.woomin.repository.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.XML;
@@ -19,24 +21,6 @@ import org.springframework.stereotype.Component;
 
 import dev.hwiveloper.app.woomin.domain.assembly.Orig;
 import dev.hwiveloper.app.woomin.domain.assembly.Poly;
-import dev.hwiveloper.app.woomin.domain.common.Election;
-import dev.hwiveloper.app.woomin.domain.common.ElectionPK;
-import dev.hwiveloper.app.woomin.domain.common.Gusigun;
-import dev.hwiveloper.app.woomin.domain.common.GusigunPK;
-import dev.hwiveloper.app.woomin.domain.common.Job;
-import dev.hwiveloper.app.woomin.domain.common.JobPK;
-import dev.hwiveloper.app.woomin.domain.common.Party;
-import dev.hwiveloper.app.woomin.domain.common.PartyPK;
-import dev.hwiveloper.app.woomin.domain.common.Sungeogu;
-import dev.hwiveloper.app.woomin.domain.common.SungeoguPK;
-import dev.hwiveloper.app.woomin.repository.ElectionRepository;
-import dev.hwiveloper.app.woomin.repository.GusigunRepository;
-import dev.hwiveloper.app.woomin.repository.JobRepository;
-import dev.hwiveloper.app.woomin.repository.OrigRepository;
-import dev.hwiveloper.app.woomin.repository.PartyRepository;
-import dev.hwiveloper.app.woomin.repository.PolyRepository;
-import dev.hwiveloper.app.woomin.repository.ReeleGbnRepository;
-import dev.hwiveloper.app.woomin.repository.SungeoguRepository;
 
 /*
  * CodeSchedule
@@ -83,6 +67,9 @@ public class CodeSchedule {
 	
 	@Autowired
 	JobRepository jobRepo;
+
+	@Autowired
+	EduRepository eduRepo;
 
 	/**
 	 * getPolySearch
@@ -450,12 +437,10 @@ public class CodeSchedule {
 				urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("999", "UTF-8")); /*한 페이지 결과 수*/
 				urlBuilder.append("&" + URLEncoder.encode("sgId","UTF-8") + "=" + URLEncoder.encode(election, "UTF-8")); // 선거ID
 				URL url = new URL(urlBuilder.toString());
-				System.out.println("url ::::: " + urlBuilder.toString());
+
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
 				conn.setRequestProperty("Content-type", "application/json");
-				
-				System.out.println("sgId ::::: " + election);
 				
 				BufferedReader rd;
 				if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
@@ -533,12 +518,10 @@ public class CodeSchedule {
 				urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("999", "UTF-8")); /*한 페이지 결과 수*/
 				urlBuilder.append("&" + URLEncoder.encode("sgId","UTF-8") + "=" + URLEncoder.encode(election, "UTF-8")); // 선거ID
 				URL url = new URL(urlBuilder.toString());
-				System.out.println("url ::::: " + urlBuilder.toString());
+
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
 				conn.setRequestProperty("Content-type", "application/json");
-				
-				System.out.println("sgId ::::: " + election);
 				
 				BufferedReader rd;
 				if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
@@ -607,6 +590,80 @@ public class CodeSchedule {
 	 */
 	@Scheduled(cron="0 40 0 * * *")
 	public void getCommonEduBckgrdCodeList() {
+		try {
+			List<String> electionList = (List<String>) electionRepo.findDistinctKeySgId();
 
+			for (String election : electionList) {
+				// API 호출
+				StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9760000/CommonCodeService/getCommonEduBckgrdCodeList"); /*URL*/
+				urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=" + COMMON_CODE_SERVICE); /*Service Key*/
+				urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
+				urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("999", "UTF-8")); /*한 페이지 결과 수*/
+				urlBuilder.append("&" + URLEncoder.encode("sgId","UTF-8") + "=" + URLEncoder.encode(election, "UTF-8")); // 선거ID
+				URL url = new URL(urlBuilder.toString());
+
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				conn.setRequestMethod("GET");
+				conn.setRequestProperty("Content-type", "application/json");
+
+				BufferedReader rd;
+				if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+					rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				} else {
+					rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+				}
+				StringBuilder sb = new StringBuilder();
+				String line;
+				while ((line = rd.readLine()) != null) {
+					sb.append(line);
+				}
+				rd.close();
+				conn.disconnect();
+
+				// 후처리
+				JSONObject tmpJson = XML.toJSONObject(sb.toString())
+						.getJSONObject("response")
+						.getJSONObject("body")
+						.getJSONObject("items");
+				List<Edu> listEdu = new ArrayList<Edu>();
+
+				// JSONArray | JSONObject 케이스에 따라 분기처리
+				if (tmpJson.get("item") instanceof JSONArray) {
+					JSONArray itemJson = tmpJson.getJSONArray("item");
+					for (int i = 0; i < itemJson.length(); i++) {
+						JSONObject item = itemJson.getJSONObject(i);
+						Edu itemEdu = new Edu();
+						EduPK EduJob = new EduPK();
+
+						EduJob.setSgId(item.get("sgId").toString());
+						EduJob.setEduId(item.get("eduId").toString());
+
+						itemEdu.setKey(EduJob);
+						itemEdu.setEduName(item.getString("eduName").equals(null) ? null : item.getString("eduName"));
+						itemEdu.setEOrder(item.get("eOrder") == null ? null : item.getInt("eOrder"));
+
+						listEdu.add(itemEdu);
+					}
+				} else
+				if (tmpJson.get("item") instanceof JSONObject) {
+					JSONObject itemJson = tmpJson.getJSONObject("item");
+					Edu itemEdu = new Edu();
+					EduPK keyEdu = new EduPK();
+
+					keyEdu.setSgId(itemJson.get("sgId").toString());
+					keyEdu.setEduId(itemJson.get("eduId").toString());
+
+					itemEdu.setKey(keyEdu);
+					itemEdu.setEduName(itemJson.getString("eduName").equals(null) ? null : itemJson.getString("eduName"));
+					itemEdu.setEOrder(itemJson.get("eOrder") == null ? null : itemJson.getInt("eOrder"));
+
+					listEdu.add(itemEdu);
+				}
+
+				eduRepo.saveAll(listEdu);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
