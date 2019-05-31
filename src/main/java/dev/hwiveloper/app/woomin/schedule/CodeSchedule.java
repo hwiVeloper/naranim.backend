@@ -633,12 +633,12 @@ public class CodeSchedule {
 					for (int i = 0; i < itemJson.length(); i++) {
 						JSONObject item = itemJson.getJSONObject(i);
 						Edu itemEdu = new Edu();
-						EduPK EduJob = new EduPK();
+						EduPK keyEdu = new EduPK();
 
-						EduJob.setSgId(item.get("sgId").toString());
-						EduJob.setEduId(item.get("eduId").toString());
+						keyEdu.setSgId(item.get("sgId").toString());
+						keyEdu.setEduId(item.get("eduId").toString());
 
-						itemEdu.setKey(EduJob);
+						itemEdu.setKey(keyEdu);
 						itemEdu.setEduName(item.getString("eduName").equals(null) ? null : item.getString("eduName"));
 						itemEdu.setEOrder(item.get("eOrder") == null ? null : item.getInt("eOrder"));
 
