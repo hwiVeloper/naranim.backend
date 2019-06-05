@@ -1,4 +1,25 @@
-spring:  datasource:    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
-    username: ${DB_USER}
-    password: ${DB_PASS}  jpa:    hibernate:      ddl-auto: update    generate-ddl: true    show-sql: false    database: mysql    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect  data:    rest:      base-path: /apiserver:  port: 80# keyskeys:  national-assembly-info-service: ${NATIONAL_ASSEMBLY_INFO_SERVICE}  agenda-schedule-info-service: ${AGENDA_SCHEDULE_INFO_SERVICE}  common-code-service: ${COMMON_CODE_SERVICE}
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://203.229.102.139:3306/hwi?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+    username: hwi
+    password: hwi0817!
+  jpa:
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+    show-sql: false
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+  data:
+    rest:
+      base-path: /api
+server:
+  port: 80
+
+# keys
+keys:
+  national-assembly-info-service: Tu%2FOhdv0niE3u%2F%2FrkFZ8nIlIkeyr3R5l0J0sGVR2WILioKqSyfBsIrdbxWvgTFqjPucOu3O1Z5hf7%2FjwsVgxjg%3D%3D
+  agenda-schedule-info-service: Tu%2FOhdv0niE3u%2F%2FrkFZ8nIlIkeyr3R5l0J0sGVR2WILioKqSyfBsIrdbxWvgTFqjPucOu3O1Z5hf7%2FjwsVgxjg%3D%3D
+  common-code-service: Tu%2FOhdv0niE3u%2F%2FrkFZ8nIlIkeyr3R5l0J0sGVR2WILioKqSyfBsIrdbxWvgTFqjPucOu3O1Z5hf7%2FjwsVgxjg%3D%3D
+  poll-place-service: Tu%2FOhdv0niE3u%2F%2FrkFZ8nIlIkeyr3R5l0J0sGVR2WILioKqSyfBsIrdbxWvgTFqjPucOu3O1Z5hf7%2FjwsVgxjg%3D%3D
