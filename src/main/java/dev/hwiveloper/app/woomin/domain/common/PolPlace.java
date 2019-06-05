@@ -13,6 +13,7 @@ public class PolPlace {
 	@EmbeddedId
 	private PolPlacePK key;
 	
+	private String psName;
 	private String evPsName;
 	private String wiwName;
 	private String emdName;
