@@ -199,16 +199,15 @@ public class PollPlaceSchedule {
 						PolPlace itemPp = new PolPlace();
 						PolPlacePK keyPp = new PolPlacePK();
 
-						keyPp.setPreYn(true); // Y, N
+						keyPp.setPreYn(false); // Y, N
 						keyPp.setNum(item.getInt("num"));
 						keyPp.setSgId(item.get("sgId").toString());
 						keyPp.setSdName(item.getString("sdName"));
 
 						itemPp.setKey(keyPp);
-						itemPp.setEvPsName(item.getString("evPsName"));
+						itemPp.setPsName(item.getString("psName"));
 						itemPp.setWiwName(item.getString("wiwName"));
 						itemPp.setEmdName(item.getString("emdName"));
-						itemPp.setEvOrder(item.getInt("evOrder"));
 						itemPp.setPlaceName(item.getString("placeName"));
 						itemPp.setAddr(item.getString("addr"));
 						itemPp.setFloor(item.getString("floor"));
@@ -221,16 +220,15 @@ public class PollPlaceSchedule {
 					PolPlace itemPp = new PolPlace();
 					PolPlacePK keyPp = new PolPlacePK();
 
-					keyPp.setPreYn(true); // Y, N
+					keyPp.setPreYn(false); // Y, N
 					keyPp.setNum(itemJson.getInt("num"));
 					keyPp.setSgId(itemJson.get("sgId").toString());
 					keyPp.setSdName(itemJson.getString("sdName"));
 
 					itemPp.setKey(keyPp);
-					itemPp.setEvPsName(itemJson.getString("evPsName"));
+					itemPp.setPsName(itemJson.getString("psName"));
 					itemPp.setWiwName(itemJson.getString("wiwName"));
 					itemPp.setEmdName(itemJson.getString("emdName"));
-					itemPp.setEvOrder(itemJson.getInt("evOrder"));
 					itemPp.setPlaceName(itemJson.getString("placeName"));
 					itemPp.setAddr(itemJson.getString("addr"));
 					itemPp.setFloor(itemJson.getString("floor"));
