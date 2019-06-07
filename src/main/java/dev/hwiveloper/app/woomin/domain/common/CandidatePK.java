@@ -13,7 +13,7 @@ import lombok.Setter;
 @EqualsAndHashCode
 public class CandidatePK implements Serializable {
 	@Column(name="num")
-	private String num;
+	private int num;
 	
 	@Column(name="sg_id")
 	private String sgId;
