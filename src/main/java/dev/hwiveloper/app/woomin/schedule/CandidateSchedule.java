@@ -14,13 +14,12 @@ import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import dev.hwiveloper.app.woomin.domain.common.Candidate;
 import dev.hwiveloper.app.woomin.domain.common.CandidatePK;
 import dev.hwiveloper.app.woomin.domain.common.Election;
-import dev.hwiveloper.app.woomin.domain.common.PolPlace;
-import dev.hwiveloper.app.woomin.domain.common.PolPlacePK;
 import dev.hwiveloper.app.woomin.repository.CandidateRepository;
 import dev.hwiveloper.app.woomin.repository.ElectionRepository;
 
@@ -29,7 +28,7 @@ import dev.hwiveloper.app.woomin.repository.ElectionRepository;
  * 후보자 정보 조회 후 DB에 저장한다.
  * 
  * 매일 0?:??:?? => getPoelpcddRegistSttusInfoInqire (예비후보자 정보 조회)
- * 매일 0?:??:?? => getPofelcddRegistSttusInfoInqire (후보자 정보 조회) 
+ * 매일 02:00:00 => getPofelcddRegistSttusInfoInqire (후보자 정보 조회) 
  */
 @Component
 public class CandidateSchedule {
@@ -46,6 +45,7 @@ public class CandidateSchedule {
 	 * getPofelcddRegistSttusInfoInqire
 	 * 후보자 정보
 	 */
+	@Scheduled(cron="0 0 2 * * *")
 	public void getPofelcddRegistSttusInfoInqire() {
 		try {
 			// sgId, sgTypeCode 가져오기 (선거리스트)
@@ -106,31 +106,56 @@ public class CandidateSchedule {
 						itemCndd.setSdName(item.getString("sdName"));
 						itemCndd.setWiwName(item.getString("wiwName"));
 						itemCndd.setGiho(item.getInt("giho"));
-						itemCndd.setGihoSangse(item.getString("gihoSangse"));
-
+						itemCndd.setGihoSangse(item.isNull("gihoSangse") ? "" : item.getString("gihoSangse"));
+						itemCndd.setJdName(item.getString("jdName"));
+						itemCndd.setName(item.getString("name"));
+						itemCndd.setHanjaName(item.getString("hanjaName"));
+						itemCndd.setGender(item.getString("gender"));
+						itemCndd.setBirthday(item.getString("birthday"));
+						itemCndd.setAge(item.getInt("age"));
+						itemCndd.setAddr(item.getString("addr"));
+						itemCndd.setJobId(item.get("jobId").toString());
+						itemCndd.setJob(item.getString("job"));
+						itemCndd.setEduId(item.get("eduId").toString());
+						itemCndd.setEdu(item.getString("edu"));
+						itemCndd.setCareer1(item.isNull("career1") ? "" : item.getString("career1"));
+						itemCndd.setCareer2(item.isNull("career2") ? "" : item.getString("career2"));
+						itemCndd.setStatus(item.getString("status"));
+						
 						listCandidate.add(itemCndd);
 					}
 				} else
 				if (tmpJson.get("item") instanceof JSONObject) {
-//					JSONObject itemJson = tmpJson.getJSONObject("item");
-//					PolPlace itemPp = new PolPlace();
-//					PolPlacePK keyPp = new PolPlacePK();
-//
-//					keyPp.setPreYn(true);
-//					keyPp.setNum(itemJson.getInt("num"));
-//					keyPp.setSgId(itemJson.get("sgId").toString());
-//					keyPp.setSdName(itemJson.getString("sdName"));
-//
-//					itemPp.setKey(keyPp);
-//					itemPp.setEvPsName(itemJson.getString("evPsName"));
-//					itemPp.setWiwName(itemJson.getString("wiwName"));
-//					itemPp.setEmdName(itemJson.getString("emdName"));
-//					itemPp.setEvOrder(itemJson.getInt("evOrder"));
-//					itemPp.setPlaceName(itemJson.getString("placeName"));
-//					itemPp.setAddr(itemJson.getString("addr"));
-//					itemPp.setFloor(itemJson.getString("floor"));
-//
-//					listCandidate.add(itemPp);
+					JSONObject item = tmpJson.getJSONObject("item");
+					Candidate itemCndd = new Candidate();
+					CandidatePK keyCndd = new CandidatePK();
+
+					keyCndd.setNum(item.getInt("num"));
+					keyCndd.setSgId(item.get("sgId").toString());
+					keyCndd.setSgTypeCode(item.get("sgTypecode").toString());
+					keyCndd.setHuboId(item.get("huboId").toString());
+
+					itemCndd.setKey(keyCndd);
+					itemCndd.setSdName(item.getString("sdName"));
+					itemCndd.setWiwName(item.getString("wiwName"));
+					itemCndd.setGiho(item.getInt("giho"));
+					itemCndd.setGihoSangse(item.isNull("gihoSangse") ? "" : item.getString("gihoSangse"));
+					itemCndd.setJdName(item.getString("jdName"));
+					itemCndd.setName(item.getString("name"));
+					itemCndd.setHanjaName(item.getString("hanjaName"));
+					itemCndd.setGender(item.getString("gender"));
+					itemCndd.setBirthday(item.getString("birthday"));
+					itemCndd.setAge(item.getInt("age"));
+					itemCndd.setAddr(item.getString("addr"));
+					itemCndd.setJobId(item.get("jobId").toString());
+					itemCndd.setJob(item.getString("job"));
+					itemCndd.setEduId(item.get("eduId").toString());
+					itemCndd.setEdu(item.getString("edu"));
+					itemCndd.setCareer1(item.isNull("career1") ? "" : item.getString("career1"));
+					itemCndd.setCareer2(item.isNull("career2") ? "" : item.getString("career2"));
+					itemCndd.setStatus(item.getString("status"));
+
+					listCandidate.add(itemCndd);
 				}
 
 				candidateRepo.saveAll(listCandidate);
