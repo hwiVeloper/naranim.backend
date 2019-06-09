@@ -1,4 +1,4 @@
-package dev.hwiveloper.app.woomin.domain.common;
+package dev.hwiveloper.app.woomin.domain.election;
 
 import java.io.Serializable;
 
