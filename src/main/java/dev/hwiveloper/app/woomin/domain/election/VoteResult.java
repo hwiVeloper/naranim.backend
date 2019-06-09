@@ -2,6 +2,7 @@ package dev.hwiveloper.app.woomin.domain.election;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.validation.constraints.Digits;
@@ -9,28 +10,28 @@ import javax.validation.constraints.Digits;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity(name="woomin_vote")
+@Entity(name="woomin_vote_result")
 @Getter
 @Setter
-public class Vote {
+public class VoteResult {
 	@EmbeddedId
-	private VotePK key;
+	private VoteResultPK key;
 	
 	private String sdName;
 	private String wiwName;
 	@Digits(integer=10, fraction=0)
-	private BigDecimal totSunsu;
+	private BigDecimal sunsu;
 	@Digits(integer=10, fraction=0)
-	private BigDecimal psSunsu;
+	private BigDecimal tusu;
 	@Digits(integer=10, fraction=0)
-	private BigDecimal psEtcSunsu;
+	private BigDecimal yutusu;
 	@Digits(integer=10, fraction=0)
-	private BigDecimal totTusu;
+	private BigDecimal mutusu;
 	@Digits(integer=10, fraction=0)
-	private BigDecimal psTusu;
+	private BigDecimal gigwonsu;
+	private String jd;
+	private String hbj;
 	@Digits(integer=10, fraction=0)
-	private BigDecimal psEtcTusu;
-	@Digits(integer=10, fraction=2)
-	private BigDecimal turnout;
-	private int vrOrder;
+	private BigDecimal dugsu;
+	private int crOrder;
 }
