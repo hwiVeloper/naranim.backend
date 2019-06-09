@@ -1,4 +1,4 @@
-package dev.hwiveloper.app.woomin.domain.common;
+package dev.hwiveloper.app.woomin.domain.election;
 
 import java.io.Serializable;
 
@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class CandidatePK implements Serializable {
+public class VotePK implements Serializable {
 	@Column(name="num")
 	private int num;
 	
@@ -21,6 +21,4 @@ public class CandidatePK implements Serializable {
 	@Column(name="sg_type_code")
 	private String sgTypeCode;
 	
-	@Column(name="hubo_id")
-	private String huboId;
 }

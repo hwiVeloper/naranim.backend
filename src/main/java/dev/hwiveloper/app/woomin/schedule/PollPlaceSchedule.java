@@ -1,8 +1,8 @@
 package dev.hwiveloper.app.woomin.schedule;
 
-import dev.hwiveloper.app.woomin.domain.common.PolPlace;
-import dev.hwiveloper.app.woomin.domain.common.PolPlacePK;
 import dev.hwiveloper.app.woomin.domain.common.Sungeogu;
+import dev.hwiveloper.app.woomin.domain.election.PolPlace;
+import dev.hwiveloper.app.woomin.domain.election.PolPlacePK;
 import dev.hwiveloper.app.woomin.repository.PolPlaceRepository;
 import dev.hwiveloper.app.woomin.repository.SungeoguRepository;
 import org.json.JSONArray;

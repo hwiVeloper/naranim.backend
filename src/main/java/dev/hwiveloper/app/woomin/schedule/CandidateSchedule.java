@@ -17,9 +17,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import dev.hwiveloper.app.woomin.domain.common.Candidate;
-import dev.hwiveloper.app.woomin.domain.common.CandidatePK;
 import dev.hwiveloper.app.woomin.domain.common.Election;
+import dev.hwiveloper.app.woomin.domain.election.Candidate;
+import dev.hwiveloper.app.woomin.domain.election.CandidatePK;
 import dev.hwiveloper.app.woomin.repository.CandidateRepository;
 import dev.hwiveloper.app.woomin.repository.ElectionRepository;
 
