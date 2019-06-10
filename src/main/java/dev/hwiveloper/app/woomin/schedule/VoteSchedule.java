@@ -162,9 +162,8 @@ public class VoteSchedule {
 	 * getXmntckSttusInfoInqire
 	 * 개표 결과 조회
 	 */
-	@Scheduled(cron="0 33 * * * *")
+	@Scheduled(cron="0 9 * * * *")
 	public void getXmntckSttusInfoInqire() {
-		System.out.println("스케쥴러 시작 :: 개표 결과 조회");
 		try {
 			List<Election> electionList = (List<Election>) electionRepo.findAll();
 
@@ -204,8 +203,7 @@ public class VoteSchedule {
 						.getJSONObject("response")
 						.getJSONObject("body");
 				if (resultBody.getInt("totalCount") == 0) {
-					//continue;
-					return;
+					continue;
 				}
 				JSONObject tmpJson = resultBody.getJSONObject("items");
 
@@ -222,7 +220,7 @@ public class VoteSchedule {
 						||  item.getString("wiwName").equals("합계")) {
 							continue;
 						}
-												
+						
 						// 후보자 seq 추출
 						for (int seq = 1; seq <= 30; seq++) {
 							String key = "jd".concat(padLeft(seq, 2));
@@ -289,7 +287,6 @@ public class VoteSchedule {
 
 				voteResultRepo.saveAll(listVoteResult);
 			}
-			System.out.println("스케쥴러 End :: 개표 결과 조회");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
