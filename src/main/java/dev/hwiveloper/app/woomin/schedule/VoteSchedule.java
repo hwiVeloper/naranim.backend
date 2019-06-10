@@ -162,22 +162,20 @@ public class VoteSchedule {
 	 * getXmntckSttusInfoInqire
 	 * 개표 결과 조회
 	 */
-	@Scheduled(cron="0 */1 * * * *")
+	@Scheduled(cron="0 33 * * * *")
 	public void getXmntckSttusInfoInqire() {
 		System.out.println("스케쥴러 시작 :: 개표 결과 조회");
 		try {
 			List<Election> electionList = (List<Election>) electionRepo.findAll();
 
-			//for (Election election : electionList) {
+			for (Election election : electionList) {
 				// URL 생성
 				StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9760000/VoteXmntckInfoInqireService2/getXmntckSttusInfoInqire"); /*URL*/
 				urlBuilder.append("?" + URLEncoder.encode("ServiceKey","UTF-8") + "=" + VOTE_SERVICE); /*Service Key*/
 				urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("9999", "UTF-8")); /*한 페이지 결과 수*/
 				urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지 번호*/
-//				urlBuilder.append("&" + URLEncoder.encode("sgId","UTF-8") + "=" + URLEncoder.encode(election.getKey().getSgId().toString(), "UTF-8"));
-//				urlBuilder.append("&" + URLEncoder.encode("sgTypecode","UTF-8") + "=" + URLEncoder.encode(election.getKey().getSgTypeCode().toString(), "UTF-8"));
-				urlBuilder.append("&" + URLEncoder.encode("sgId","UTF-8") + "=" + URLEncoder.encode("20160413", "UTF-8"));
-				urlBuilder.append("&" + URLEncoder.encode("sgTypecode","UTF-8") + "=" + URLEncoder.encode("4", "UTF-8"));
+				urlBuilder.append("&" + URLEncoder.encode("sgId","UTF-8") + "=" + URLEncoder.encode(election.getKey().getSgId().toString(), "UTF-8"));
+				urlBuilder.append("&" + URLEncoder.encode("sgTypecode","UTF-8") + "=" + URLEncoder.encode(election.getKey().getSgTypeCode().toString(), "UTF-8"));
 				
 				URL url = new URL(urlBuilder.toString());
 
@@ -290,7 +288,7 @@ public class VoteSchedule {
 				}
 
 				voteResultRepo.saveAll(listVoteResult);
-			//}
+			}
 			System.out.println("스케쥴러 End :: 개표 결과 조회");
 		} catch (IOException e) {
 			e.printStackTrace();
