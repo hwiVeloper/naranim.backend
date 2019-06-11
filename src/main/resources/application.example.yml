@@ -23,4 +23,5 @@ keys:
   agenda-schedule-info-service: SERVICE_KEY
   common-code-service: SERVICE_KEY
   poll-place-service: SERVICE_KEY
-  vote-service: SERVICE_KEY 
+  vote-service: SERVICE_KEY
+  winner-service: SERVICE_KEY
