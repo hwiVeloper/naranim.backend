@@ -2,7 +2,9 @@ package dev.hwiveloper.app.woomin.domain.election;
 
 import java.math.BigDecimal;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.validation.constraints.Digits;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,10 +13,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Winner {
-	private int num;
-	private String sgId;
-	private String sgTypeCode;
-	private String huboId;
+	@EmbeddedId
+	private WinnerPK key;
+	
 	private String sggName;
 	private String sdName;
 	private String wiwName;
@@ -33,6 +34,8 @@ public class Winner {
 	private String edu;
 	private String career1;
 	private String career2;
+	@Digits(integer=10, fraction=0)
 	private BigDecimal dugsu;
+	@Digits(integer=10, fraction=2)
 	private BigDecimal dugyul;
 }
