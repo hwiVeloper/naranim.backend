@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import dev.hwiveloper.app.woomin.common.CommonSchedule;
 import dev.hwiveloper.app.woomin.domain.common.Election;
 import dev.hwiveloper.app.woomin.domain.election.Winner;
 import dev.hwiveloper.app.woomin.domain.election.WinnerPK;
@@ -44,6 +46,8 @@ public class WinnerSchedule {
 	 * 당선인 정보 조회
 	 */
 	public void getWinnerInfoInqire() {
+		Date startTime = new Date();
+		
 		try {
 			List<Election> electionList = (List<Election>) electionRepo.findAll();
 
@@ -164,7 +168,12 @@ public class WinnerSchedule {
 				winnerRepo.saveAll(listWinner);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			CommonSchedule.writeErrorScheduleLog(
+				WinnerSchedule.class.getSimpleName(),
+				new Object() {},
+				e.getMessage(),
+				startTime
+			);
 		}
 	}
 }
