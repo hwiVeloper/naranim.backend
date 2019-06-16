@@ -18,7 +18,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import dev.hwiveloper.app.woomin.domain.common.Election;
-import dev.hwiveloper.app.woomin.domain.common.Sungeogu;
 import dev.hwiveloper.app.woomin.domain.election.Vote;
 import dev.hwiveloper.app.woomin.domain.election.VotePK;
 import dev.hwiveloper.app.woomin.domain.election.VoteResult;
