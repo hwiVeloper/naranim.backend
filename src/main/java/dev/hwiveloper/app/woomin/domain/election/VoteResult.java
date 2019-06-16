@@ -2,7 +2,6 @@ package dev.hwiveloper.app.woomin.domain.election;
 
 import java.math.BigDecimal;
 
-import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.validation.constraints.Digits;

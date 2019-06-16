@@ -15,6 +15,7 @@ import org.json.XML;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.annotation.Schedules;
 import org.springframework.stereotype.Component;
 
 import dev.hwiveloper.app.woomin.domain.common.Election;
@@ -30,8 +31,8 @@ import dev.hwiveloper.app.woomin.repository.VoteResultRepository;
 /**
  * VoteSchedule
  * 
- * 매일 ??:??:?? => getVoteSttusInfoInqire (투표 결과 조회)
- * 매일 ??:??:?? => getXmntckSttusInfoInqire (개표 결과 조회)
+ * 매일 02:30:00 => getVoteSttusInfoInqire (투표 결과 조회)
+ * 매일 02:45:00 => getXmntckSttusInfoInqire (개표 결과 조회)
  */
 @Component
 public class VoteSchedule {

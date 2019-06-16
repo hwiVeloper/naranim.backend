@@ -9,13 +9,11 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.tomcat.util.json.JSONParser;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import dev.hwiveloper.app.woomin.domain.common.Election;
@@ -28,7 +26,7 @@ import dev.hwiveloper.app.woomin.repository.WinnerRepository;
  * WinnerSchedule
  * 당선인 정보를 조회하여 DB에 저장한다.
  * 
- * 매일 ??:??:?? => getWinnerInfoInqire (당선인 조회)
+ * 매일 03:00:00 => getWinnerInfoInqire (당선인 조회)
  */
 @Component
 public class WinnerSchedule {
@@ -46,7 +44,6 @@ public class WinnerSchedule {
 	 * 당선인 정보 조회
 	 */
 	public void getWinnerInfoInqire() {
-		System.out.println("Winner 스케쥴 시작");
 		try {
 			List<Election> electionList = (List<Election>) electionRepo.findAll();
 
@@ -166,8 +163,6 @@ public class WinnerSchedule {
 
 				winnerRepo.saveAll(listWinner);
 			}
-			
-			System.out.println("Winner 스케쥴 종료");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
