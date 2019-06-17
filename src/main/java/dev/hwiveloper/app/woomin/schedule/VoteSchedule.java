@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import dev.hwiveloper.app.woomin.common.CommonSchedule;
 import dev.hwiveloper.app.woomin.domain.common.Election;
 import dev.hwiveloper.app.woomin.domain.election.Vote;
 import dev.hwiveloper.app.woomin.domain.election.VotePK;
@@ -55,6 +57,7 @@ public class VoteSchedule {
 	 * 투표 결과 조회
 	 */
 	public void getVoteSttusInfoInqire() {
+		Date startTime = new Date();
 		try {
 			List<Election> electionList = (List<Election>) electionRepo.findAll();
 
@@ -153,7 +156,12 @@ public class VoteSchedule {
 				voteRepo.saveAll(listVote);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			CommonSchedule.writeErrorScheduleLog(
+				VoteSchedule.class.getSimpleName(),
+				new Object() {},
+				e.getMessage(),
+				startTime
+			);
 		}
 	}
 
@@ -163,6 +171,8 @@ public class VoteSchedule {
 	 */
 	@Scheduled(cron="0 9 * * * *")
 	public void getXmntckSttusInfoInqire() {
+		Date startTime = new Date();
+		
 		try {
 			List<Election> electionList = (List<Election>) electionRepo.findAll();
 
@@ -287,7 +297,12 @@ public class VoteSchedule {
 				voteResultRepo.saveAll(listVoteResult);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			CommonSchedule.writeErrorScheduleLog(
+				VoteSchedule.class.getSimpleName(),
+				new Object() {},
+				e.getMessage(),
+				startTime
+			);
 		}
 	}
 	

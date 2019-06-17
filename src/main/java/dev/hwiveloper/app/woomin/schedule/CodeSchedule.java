@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import dev.hwiveloper.app.woomin.domain.common.*;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import dev.hwiveloper.app.woomin.common.CommonSchedule;
 import dev.hwiveloper.app.woomin.domain.assembly.Orig;
 import dev.hwiveloper.app.woomin.domain.assembly.Poly;
 
@@ -77,6 +79,8 @@ public class CodeSchedule {
 	 */
 	@Scheduled(cron="0 0 0 * * *")
 	public void getPolySearch() {
+		Date startTime = new Date();
+		
 		try {
 			// URL 생성
 			StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9710000/NationalAssemblyInfoService/getPolySearch"); /*URL*/
@@ -122,7 +126,12 @@ public class CodeSchedule {
 
 			polyRepo.saveAll(listPoly);
 		} catch (IOException e) {
-			e.printStackTrace();
+			CommonSchedule.writeErrorScheduleLog(
+				CodeSchedule.class.getSimpleName(),
+				new Object() {},
+				e.getMessage(),
+				startTime
+			);
 		}
 	}
 
@@ -132,6 +141,8 @@ public class CodeSchedule {
 	 */
 	@Scheduled(cron="0 1 0 * * *")
 	public void getLocalSearch() {
+		Date startTime = new Date();
+		
 		try {
 			// 상위지역코드 조회
 			List<Orig> listUpOrig = origRepo.findByUpOrigCd(null);
@@ -197,7 +208,12 @@ public class CodeSchedule {
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			CommonSchedule.writeErrorScheduleLog(
+				CodeSchedule.class.getSimpleName(),
+				new Object() {},
+				e.getMessage(),
+				startTime
+			);
 		}
 	}
 
@@ -207,6 +223,8 @@ public class CodeSchedule {
 	 */
 	@Scheduled(cron="0 5 0 * * *")
 	public void getCommonSgCodeList() {
+		Date startTime = new Date();
+		
 		try {
 			//API 호출
 			StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9760000/CommonCodeService/getCommonSgCodeList"); /*URL*/
@@ -257,7 +275,12 @@ public class CodeSchedule {
 			
 			electionRepo.saveAll(listElection);
 		} catch (IOException e) {
-			e.printStackTrace();
+			CommonSchedule.writeErrorScheduleLog(
+				CodeSchedule.class.getSimpleName(),
+				new Object() {},
+				e.getMessage(),
+				startTime
+			);
 		}
 	}
 	
@@ -267,6 +290,8 @@ public class CodeSchedule {
 	 */
 	@Scheduled(cron="0 10 0 * * *")
 	public void getCommonGusigunCodeList () {
+		Date startTime = new Date();
+		
 		try {
 			List<String> electionList = (List<String>) electionRepo.findDistinctKeySgId();
 			
@@ -322,7 +347,12 @@ public class CodeSchedule {
 				gusigunRepo.saveAll(listGusigun);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			CommonSchedule.writeErrorScheduleLog(
+				CodeSchedule.class.getSimpleName(),
+				new Object() {},
+				e.getMessage(),
+				startTime
+			);
 		}
 	}
 	
@@ -332,6 +362,8 @@ public class CodeSchedule {
 	 */
 	@Scheduled(cron="0 20 0 * * *")
 	public void getCommonSggCodeList() {
+		Date startTime = new Date();
+		
 		try {
 			List<Election> electionList = (List<Election>) electionRepo.findAll();
 			
@@ -416,7 +448,12 @@ public class CodeSchedule {
 				sungeoguRepo.saveAll(listSungeogu);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			CommonSchedule.writeErrorScheduleLog(
+				CodeSchedule.class.getSimpleName(),
+				new Object() {},
+				e.getMessage(),
+				startTime
+			);
 		}
 	}
 	
@@ -426,6 +463,8 @@ public class CodeSchedule {
 	 */
 	@Scheduled(cron="*/10 * * * * *")
 	public void getCommonPartyCodeList() {
+		Date startTime = new Date();
+		
 		try {
 			List<String> electionList = (List<String>) electionRepo.findDistinctKeySgId();
 			
@@ -497,7 +536,12 @@ public class CodeSchedule {
 				partyRepo.saveAll(listParty);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			CommonSchedule.writeErrorScheduleLog(
+				CodeSchedule.class.getSimpleName(),
+				new Object() {},
+				e.getMessage(),
+				startTime
+			);
 		}
 	}
 	
@@ -507,6 +551,8 @@ public class CodeSchedule {
 	 */
 	@Scheduled(cron="0 35 0 * * *")
 	public void getCommonJobCodeList() {
+		Date startTime = new Date();
+		
 		try {
 			List<String> electionList = (List<String>) electionRepo.findDistinctKeySgId();
 			
@@ -580,7 +626,12 @@ public class CodeSchedule {
 				jobRepo.saveAll(listJob);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			CommonSchedule.writeErrorScheduleLog(
+				CodeSchedule.class.getSimpleName(),
+				new Object() {},
+				e.getMessage(),
+				startTime
+			);
 		}
 	}
 
@@ -590,6 +641,8 @@ public class CodeSchedule {
 	 */
 	@Scheduled(cron="0 40 0 * * *")
 	public void getCommonEduBckgrdCodeList() {
+		Date startTime = new Date();
+		
 		try {
 			List<String> electionList = (List<String>) electionRepo.findDistinctKeySgId();
 
@@ -663,7 +716,12 @@ public class CodeSchedule {
 				eduRepo.saveAll(listEdu);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			CommonSchedule.writeErrorScheduleLog(
+				CodeSchedule.class.getSimpleName(),
+				new Object() {},
+				e.getMessage(),
+				startTime
+			);
 		}
 	}
 }
