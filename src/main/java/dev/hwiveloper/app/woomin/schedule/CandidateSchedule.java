@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import dev.hwiveloper.app.woomin.common.CommonSchedule;
 import dev.hwiveloper.app.woomin.domain.common.Election;
 import dev.hwiveloper.app.woomin.domain.election.Candidate;
 import dev.hwiveloper.app.woomin.domain.election.CandidatePK;
@@ -47,6 +49,8 @@ public class CandidateSchedule {
 	 */
 	@Scheduled(cron="0 0 2 * * *")
 	public void getPofelcddRegistSttusInfoInqire() {
+		Date startTime = new Date();
+		
 		try {
 			// sgId, sgTypeCode 가져오기 (선거리스트)
 			List<Election> electionList = (List<Election>) electionRepo.findAll();
@@ -161,7 +165,12 @@ public class CandidateSchedule {
 				candidateRepo.saveAll(listCandidate);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			CommonSchedule.writeErrorScheduleLog(
+				CandidateSchedule.class.getSimpleName(),
+				new Object() {},
+				e.getMessage(),
+				startTime
+			);
 		}
 	}
 }

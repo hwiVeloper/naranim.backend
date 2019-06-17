@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import dev.hwiveloper.app.woomin.common.CommonSchedule;
 import dev.hwiveloper.app.woomin.domain.assembly.Member;
 import dev.hwiveloper.app.woomin.repository.MemberRepository;
 import dev.hwiveloper.app.woomin.repository.OrigRepository;
@@ -53,6 +55,7 @@ public class MemberSchedule {
 	 */
 	@Scheduled(cron="0 30 0 * * ?")
 	public void getMemberCurrStateList() {
+		Date startTime = new Date();
 		try {
 			// URL 생성
 			StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9710000/NationalAssemblyInfoService/getMemberCurrStateList"); /*URL*/
@@ -113,7 +116,12 @@ public class MemberSchedule {
 			
 			memberRepo.saveAll(memberList);
 		} catch (IOException e) {
-			e.printStackTrace();
+			CommonSchedule.writeErrorScheduleLog(
+				MemberSchedule.class.getSimpleName(),
+				new Object() {},
+				e.getMessage(),
+				startTime
+			);
 		}
 	}
 	
@@ -124,6 +132,8 @@ public class MemberSchedule {
 	@Scheduled(cron="0 35 0 * * ?")
 //	@Scheduled(cron="5 * * * * *")
 	public void getMemberDetailInfoList() {
+		Date startTime = new Date();
+		
 		try {
 			// 현재 국회의원 현황 조회
 			List<Member> memberList = (List<Member>) memberRepo.findAll();
@@ -185,7 +195,12 @@ public class MemberSchedule {
 			
 			memberRepo.saveAll(memberList);
 		} catch (IOException e) {
-			e.printStackTrace();
+			CommonSchedule.writeErrorScheduleLog(
+				MemberSchedule.class.getSimpleName(),
+				new Object() {},
+				e.getMessage(),
+				startTime
+			);
 		}
 	}
 }

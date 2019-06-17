@@ -1,5 +1,6 @@
 package dev.hwiveloper.app.woomin.schedule;
 
+import dev.hwiveloper.app.woomin.common.CommonSchedule;
 import dev.hwiveloper.app.woomin.domain.common.Sungeogu;
 import dev.hwiveloper.app.woomin.domain.election.PolPlace;
 import dev.hwiveloper.app.woomin.domain.election.PolPlacePK;
@@ -20,6 +21,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,6 +49,8 @@ public class PollPlaceSchedule {
 	 */
 	@Scheduled(cron="0 0 1 * * *")
 	public void getPrePolplcOtlnmapTrnsportInfoInqire() {
+		Date startTime = new Date();
+		
 		try {
 			// sgId, sdName 추출
 			List<Sungeogu> sggList = sggRepo.findDistinctSgIdSdNameBySdNameOrderBySgIdSOrder();
@@ -139,7 +143,12 @@ public class PollPlaceSchedule {
 				ppRepo.saveAll(listPolPlace);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			CommonSchedule.writeErrorScheduleLog(
+				PollPlaceSchedule.class.getSimpleName(),
+				new Object() {},
+				e.getMessage(),
+				startTime
+			);
 		}
 	}
 
@@ -149,6 +158,8 @@ public class PollPlaceSchedule {
 	 */
 	@Scheduled(cron="0 30 1 * * *")
 	public void getPolplcOtlnmapTrnsportInfoInqire() {
+		Date startTime = new Date();
+		
 		try {
 			// sgId, sdName 추출
 			List<Sungeogu> sggList = sggRepo.findDistinctSgIdSdNameBySdNameOrderBySgIdSOrder();
@@ -239,7 +250,12 @@ public class PollPlaceSchedule {
 				ppRepo.saveAll(listPolPlace);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			CommonSchedule.writeErrorScheduleLog(
+				PollPlaceSchedule.class.getSimpleName(),
+				new Object() {},
+				e.getMessage(),
+				startTime
+			);
 		}
 	}
 }
