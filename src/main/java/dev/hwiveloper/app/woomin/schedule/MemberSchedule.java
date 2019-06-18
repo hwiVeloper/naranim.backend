@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import dev.hwiveloper.app.woomin.common.CommonSchedule;
 import dev.hwiveloper.app.woomin.domain.assembly.Member;
 import dev.hwiveloper.app.woomin.repository.MemberRepository;
@@ -28,8 +30,8 @@ import dev.hwiveloper.app.woomin.repository.ReeleGbnRepository;
  * MemberSchedule
  * 각종 의원 정보에 관한 API 호출 후 DB에 저장한다.
  * 
- * 매일 00:30:00 => getMemberCurrStateList (국회의원 현황 조회)
- * 매일 00:35:00 => getMemberDetailInfoList (국회의원 현황 상세 조회)
+ * 매일 00:05:00 => getMemberCurrStateList (국회의원 현황 조회)
+ * 매일 00:10:00 => getMemberDetailInfoList (국회의원 현황 상세 조회)
  */
 @Component
 public class MemberSchedule {
@@ -53,9 +55,10 @@ public class MemberSchedule {
 	 * getMemberCurrStateList
 	 * 국회의원 현황 조회
 	 */
-	@Scheduled(cron="0 30 0 * * ?")
+	@Scheduled(cron="0 5 0 * * ?")
 	public void getMemberCurrStateList() {
 		Date startTime = new Date();
+		
 		try {
 			// URL 생성
 			StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9710000/NationalAssemblyInfoService/getMemberCurrStateList"); /*URL*/
@@ -93,25 +96,15 @@ public class MemberSchedule {
 										.getJSONObject("items")
 										.getJSONArray("item");
 			
-			for (int i = 0; i < itemJson.length(); i++) {
-				JSONObject tmpJson = itemJson.getJSONObject(i);
-				Member itemMember = new Member();
-				itemMember.setDeptCd(tmpJson.get("deptCd").toString());
-				itemMember.setEmpNm(tmpJson.getString("empNm"));
-				itemMember.setEngNm(tmpJson.getString("engNm"));
-				itemMember.setHjNm(tmpJson.getString("hjNm"));
-				itemMember.setJpgLink(tmpJson.getString("jpgLink"));
-				itemMember.setNum(tmpJson.getInt("num"));
-				itemMember.setOrigNm(tmpJson.getString("origNm"));
-				itemMember.setReeleGbnNm(tmpJson.getString("reeleGbnNm"));
-				
+			ObjectMapper om = new ObjectMapper();
+			memberList = (List<Member>) om.readValue(itemJson.toString(), List.class);
+			
+			for (Member member : memberList) {
 				// 지역코드
-				itemMember.setOrigCd(origRepo.findByOrigNm(itemMember.getOrigNm()).getOrigCd());
+				member.setOrigCd(origRepo.findByOrigNm(member.getOrigNm()).getOrigCd());
 				
 				// 당선구분코드
-				itemMember.setReeleGbnCd(reeleRepo.findByReeleGbnNm(itemMember.getReeleGbnNm()).getReeleGbnCd());
-				
-				memberList.add(itemMember);
+				member.setReeleGbnCd(reeleRepo.findByReeleGbnNm(member.getReeleGbnNm()).getReeleGbnCd());
 			}
 			
 			memberRepo.saveAll(memberList);
@@ -129,7 +122,7 @@ public class MemberSchedule {
 	 * getMemberDetailInfoList
 	 * 국회의원 현황 상세 조회
 	 */
-	@Scheduled(cron="0 35 0 * * ?")
+	@Scheduled(cron="0 10 0 * * ?")
 //	@Scheduled(cron="5 * * * * *")
 	public void getMemberDetailInfoList() {
 		Date startTime = new Date();

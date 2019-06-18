@@ -29,8 +29,8 @@ import dev.hwiveloper.app.woomin.repository.ElectionRepository;
  * CandidateSchedule
  * 후보자 정보 조회 후 DB에 저장한다.
  * 
- * 매일 0?:??:?? => getPoelpcddRegistSttusInfoInqire (예비후보자 정보 조회)
- * 매일 02:00:00 => getPofelcddRegistSttusInfoInqire (후보자 정보 조회) 
+ * 매일 0?:??:?? => getPoelpcddRegistSttusInfoInqire (예비후보자 정보 조회 / 미개발)
+ * 매일 02:00:00 => getPofelcddRegistSttusInfoInqire (후보자 정보 조회)
  */
 @Component
 public class CandidateSchedule {

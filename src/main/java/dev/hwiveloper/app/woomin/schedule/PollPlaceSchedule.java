@@ -26,10 +26,10 @@ import java.util.List;
 
 /**
  * PollPlaceSchedule
- * 투표소 정보 관련 스케쥴러
+ * 투표소 정보 조회 후 DB에 저장한다.
  *
- * 매일 01:00:00 => getPrePolplcOtlnmapTrnsportInfoInqire (사전투표소 정보 조회)
- * 매일 01:30:00 => getPolplcOtlnmapTrnsportInfoInqire (선거일 투표소 정보 조회)
+ * 매일 01:20:00 => getPrePolplcOtlnmapTrnsportInfoInqire (사전투표소 정보 조회)
+ * 매일 01:50:00 => getPolplcOtlnmapTrnsportInfoInqire (선거일 투표소 정보 조회)
  */
 @Component
 public class PollPlaceSchedule {
@@ -47,7 +47,7 @@ public class PollPlaceSchedule {
 	 * getPrePolplcOtlnmapTrnsportInfoInqire
 	 * 사전투표소 정보
 	 */
-	@Scheduled(cron="0 0 1 * * *")
+	@Scheduled(cron="0 20 1 * * *")
 	public void getPrePolplcOtlnmapTrnsportInfoInqire() {
 		Date startTime = new Date();
 		
@@ -156,7 +156,7 @@ public class PollPlaceSchedule {
 	 * getPolplcOtlnmapTrnsportInfoInqire
 	 * 선거일 투표소 정보 조회
 	 */
-	@Scheduled(cron="0 30 1 * * *")
+	@Scheduled(cron="0 50 1 * * *")
 	public void getPolplcOtlnmapTrnsportInfoInqire() {
 		Date startTime = new Date();
 		

@@ -28,15 +28,14 @@ import dev.hwiveloper.app.woomin.domain.assembly.Poly;
  * CodeSchedule
  * 각종 코드성 정보에 관한 API 호출 후 DB에 저장한다.
  * 
- * 매일 00:00:00 => getPolySearch (정당 검색)
- * 매일 00:01:00 => getLocalSearch (지역 검색)
- * 
- * 매일 00:05:00 => getCommonSgCodeList (선거코드)
- * 매일 00:10:00 => getCommonGusigunCodeList (구시군코드)
- * 매일 00:20:00 => getCommonSggCodeList (선거구코드)
- * 매일 00:30:00 => getCommonPartyCodeList (정당코드)
- * 매일 00:35:00 => getCommonJobCodeList (직업코드)
- * 매일 00:40:00 => getCommonEduBckgrdCodeList (학력코드)
+ * 매일 00:30:00 => getPolySearch (정당 검색)
+ * 매일 00:31:00 => getLocalSearch (지역 검색)
+ * 매일 00:35:00 => getCommonSgCodeList (선거코드)
+ * 매일 00:40:00 => getCommonGusigunCodeList (구시군코드)
+ * 매일 00:50:00 => getCommonSggCodeList (선거구코드)
+ * 매일 01:00:00 => getCommonPartyCodeList (정당코드)
+ * 매일 01:05:00 => getCommonJobCodeList (직업코드)
+ * 매일 01:10:00 => getCommonEduBckgrdCodeList (학력코드)
  */
 @Component
 public class CodeSchedule {
@@ -77,7 +76,7 @@ public class CodeSchedule {
 	 * getPolySearch
 	 * 정당 검색
 	 */
-	@Scheduled(cron="0 0 0 * * *")
+	@Scheduled(cron="0 30 0 * * *")
 	public void getPolySearch() {
 		Date startTime = new Date();
 		
@@ -221,7 +220,7 @@ public class CodeSchedule {
 	 * getCommonSgCodeList
 	 * 선거코드
 	 */
-	@Scheduled(cron="0 5 0 * * *")
+	@Scheduled(cron="0 35 0 * * *")
 	public void getCommonSgCodeList() {
 		Date startTime = new Date();
 		
@@ -288,7 +287,7 @@ public class CodeSchedule {
 	 * getCommonGusigunCodeList
 	 * 구시군코드
 	 */
-	@Scheduled(cron="0 10 0 * * *")
+	@Scheduled(cron="0 40 0 * * *")
 	public void getCommonGusigunCodeList () {
 		Date startTime = new Date();
 		
@@ -360,7 +359,7 @@ public class CodeSchedule {
 	 * getCommonSggCodeList
 	 * 선거구코드
 	 */
-	@Scheduled(cron="0 20 0 * * *")
+	@Scheduled(cron="0 50 0 * * *")
 	public void getCommonSggCodeList() {
 		Date startTime = new Date();
 		
@@ -461,7 +460,7 @@ public class CodeSchedule {
 	 * getCommonPartyCodeList
 	 * 정당코드
 	 */
-	@Scheduled(cron="*/10 * * * * *")
+	@Scheduled(cron="0 0 1 * * *")
 	public void getCommonPartyCodeList() {
 		Date startTime = new Date();
 		
@@ -549,7 +548,7 @@ public class CodeSchedule {
 	 * getCommonJobCodeList
 	 * 직업코드
 	 */
-	@Scheduled(cron="0 35 0 * * *")
+	@Scheduled(cron="0 5 1 * * *")
 	public void getCommonJobCodeList() {
 		Date startTime = new Date();
 		
@@ -639,7 +638,7 @@ public class CodeSchedule {
 	 * getCommonEduBckgrdCodeList
 	 * 학력코드
 	 */
-	@Scheduled(cron="0 40 0 * * *")
+	@Scheduled(cron="0 10 1 * * *")
 	public void getCommonEduBckgrdCodeList() {
 		Date startTime = new Date();
 		

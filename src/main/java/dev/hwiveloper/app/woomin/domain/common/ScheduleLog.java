@@ -20,7 +20,7 @@ import lombok.Setter;
 public class ScheduleLog {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private BigInteger id;
+	private int seq;
 	
 	@Column(name="group_name", length=100, nullable=false)
 	private String groupName;

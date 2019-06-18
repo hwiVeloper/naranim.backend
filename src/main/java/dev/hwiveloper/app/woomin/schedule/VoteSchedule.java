@@ -31,6 +31,7 @@ import dev.hwiveloper.app.woomin.repository.VoteResultRepository;
 
 /**
  * VoteSchedule
+ * 투표와 개표 정보 조회 후 DB에 저장한다.
  * 
  * 매일 02:30:00 => getVoteSttusInfoInqire (투표 결과 조회)
  * 매일 02:45:00 => getXmntckSttusInfoInqire (개표 결과 조회)
