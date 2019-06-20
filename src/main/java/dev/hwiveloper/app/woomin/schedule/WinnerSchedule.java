@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import dev.hwiveloper.app.woomin.common.CommonSchedule;
+import dev.hwiveloper.app.woomin.common.ScheduleUtil;
 import dev.hwiveloper.app.woomin.domain.common.Election;
 import dev.hwiveloper.app.woomin.domain.election.Winner;
 import dev.hwiveloper.app.woomin.domain.election.WinnerPK;
@@ -168,7 +168,7 @@ public class WinnerSchedule {
 				winnerRepo.saveAll(listWinner);
 			}
 		} catch (IOException e) {
-			CommonSchedule.writeErrorScheduleLog(
+			ScheduleUtil.writeErrorScheduleLog(
 				WinnerSchedule.class.getSimpleName(),
 				new Object() {},
 				e.getMessage(),

@@ -1,6 +1,6 @@
 package dev.hwiveloper.app.woomin.schedule;
 
-import dev.hwiveloper.app.woomin.common.CommonSchedule;
+import dev.hwiveloper.app.woomin.common.ScheduleUtil;
 import dev.hwiveloper.app.woomin.domain.common.Sungeogu;
 import dev.hwiveloper.app.woomin.domain.election.PolPlace;
 import dev.hwiveloper.app.woomin.domain.election.PolPlacePK;
@@ -143,7 +143,7 @@ public class PollPlaceSchedule {
 				ppRepo.saveAll(listPolPlace);
 			}
 		} catch (IOException e) {
-			CommonSchedule.writeErrorScheduleLog(
+			ScheduleUtil.writeErrorScheduleLog(
 				PollPlaceSchedule.class.getSimpleName(),
 				new Object() {},
 				e.getMessage(),
@@ -250,7 +250,7 @@ public class PollPlaceSchedule {
 				ppRepo.saveAll(listPolPlace);
 			}
 		} catch (IOException e) {
-			CommonSchedule.writeErrorScheduleLog(
+			ScheduleUtil.writeErrorScheduleLog(
 				PollPlaceSchedule.class.getSimpleName(),
 				new Object() {},
 				e.getMessage(),

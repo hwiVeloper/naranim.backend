@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import dev.hwiveloper.app.woomin.common.CommonSchedule;
+import dev.hwiveloper.app.woomin.common.ScheduleUtil;
 import dev.hwiveloper.app.woomin.domain.assembly.Orig;
 import dev.hwiveloper.app.woomin.domain.assembly.Poly;
 
@@ -125,7 +125,7 @@ public class CodeSchedule {
 
 			polyRepo.saveAll(listPoly);
 		} catch (IOException e) {
-			CommonSchedule.writeErrorScheduleLog(
+			ScheduleUtil.writeErrorScheduleLog(
 				CodeSchedule.class.getSimpleName(),
 				new Object() {},
 				e.getMessage(),
@@ -207,7 +207,7 @@ public class CodeSchedule {
 			}
 
 		} catch (IOException e) {
-			CommonSchedule.writeErrorScheduleLog(
+			ScheduleUtil.writeErrorScheduleLog(
 				CodeSchedule.class.getSimpleName(),
 				new Object() {},
 				e.getMessage(),
@@ -274,7 +274,7 @@ public class CodeSchedule {
 			
 			electionRepo.saveAll(listElection);
 		} catch (IOException e) {
-			CommonSchedule.writeErrorScheduleLog(
+			ScheduleUtil.writeErrorScheduleLog(
 				CodeSchedule.class.getSimpleName(),
 				new Object() {},
 				e.getMessage(),
@@ -346,7 +346,7 @@ public class CodeSchedule {
 				gusigunRepo.saveAll(listGusigun);
 			}
 		} catch (IOException e) {
-			CommonSchedule.writeErrorScheduleLog(
+			ScheduleUtil.writeErrorScheduleLog(
 				CodeSchedule.class.getSimpleName(),
 				new Object() {},
 				e.getMessage(),
@@ -447,7 +447,7 @@ public class CodeSchedule {
 				sungeoguRepo.saveAll(listSungeogu);
 			}
 		} catch (IOException e) {
-			CommonSchedule.writeErrorScheduleLog(
+			ScheduleUtil.writeErrorScheduleLog(
 				CodeSchedule.class.getSimpleName(),
 				new Object() {},
 				e.getMessage(),
@@ -535,7 +535,7 @@ public class CodeSchedule {
 				partyRepo.saveAll(listParty);
 			}
 		} catch (IOException e) {
-			CommonSchedule.writeErrorScheduleLog(
+			ScheduleUtil.writeErrorScheduleLog(
 				CodeSchedule.class.getSimpleName(),
 				new Object() {},
 				e.getMessage(),
@@ -625,7 +625,7 @@ public class CodeSchedule {
 				jobRepo.saveAll(listJob);
 			}
 		} catch (IOException e) {
-			CommonSchedule.writeErrorScheduleLog(
+			ScheduleUtil.writeErrorScheduleLog(
 				CodeSchedule.class.getSimpleName(),
 				new Object() {},
 				e.getMessage(),
@@ -715,7 +715,7 @@ public class CodeSchedule {
 				eduRepo.saveAll(listEdu);
 			}
 		} catch (IOException e) {
-			CommonSchedule.writeErrorScheduleLog(
+			ScheduleUtil.writeErrorScheduleLog(
 				CodeSchedule.class.getSimpleName(),
 				new Object() {},
 				e.getMessage(),

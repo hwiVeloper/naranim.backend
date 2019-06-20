@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import dev.hwiveloper.app.woomin.common.CommonSchedule;
+import dev.hwiveloper.app.woomin.common.ScheduleUtil;
 import dev.hwiveloper.app.woomin.domain.assembly.Member;
 import dev.hwiveloper.app.woomin.repository.MemberRepository;
 import dev.hwiveloper.app.woomin.repository.OrigRepository;
@@ -109,7 +109,7 @@ public class MemberSchedule {
 			
 			memberRepo.saveAll(memberList);
 		} catch (IOException e) {
-			CommonSchedule.writeErrorScheduleLog(
+			ScheduleUtil.writeErrorScheduleLog(
 				MemberSchedule.class.getSimpleName(),
 				new Object() {},
 				e.getMessage(),
@@ -188,7 +188,7 @@ public class MemberSchedule {
 			
 			memberRepo.saveAll(memberList);
 		} catch (IOException e) {
-			CommonSchedule.writeErrorScheduleLog(
+			ScheduleUtil.writeErrorScheduleLog(
 				MemberSchedule.class.getSimpleName(),
 				new Object() {},
 				e.getMessage(),
