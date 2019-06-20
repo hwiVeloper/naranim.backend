@@ -687,10 +687,13 @@ public class CodeSchedule {
 						Edu itemEdu = new Edu();
 						EduPK keyEdu = new EduPK();
 
-						keyEdu.setSgId(item.get("sgId").toString());
-						keyEdu.setEduId(item.get("eduId").toString());
-
-						itemEdu.setKey(keyEdu);
+//						keyEdu.setSgId(item.get("sgId").toString());
+//						keyEdu.setEduId(item.get("eduId").toString());
+//
+//						itemEdu.setKey(keyEdu);
+						
+						itemEdu.setSgId(item.get("sgId").toString());
+						itemEdu.setEduId(item.get("eduId").toString());
 						itemEdu.setEduName(item.getString("eduName").equals(null) ? null : item.getString("eduName"));
 						itemEdu.setEOrder(item.get("eOrder") == null ? null : item.getInt("eOrder"));
 
@@ -702,10 +705,13 @@ public class CodeSchedule {
 					Edu itemEdu = new Edu();
 					EduPK keyEdu = new EduPK();
 
-					keyEdu.setSgId(itemJson.get("sgId").toString());
-					keyEdu.setEduId(itemJson.get("eduId").toString());
-
-					itemEdu.setKey(keyEdu);
+//					keyEdu.setSgId(itemJson.get("sgId").toString());
+//					keyEdu.setEduId(itemJson.get("eduId").toString());
+//
+//					itemEdu.setKey(keyEdu);
+					
+					itemEdu.setSgId(itemJson.get("sgId").toString());
+					itemEdu.setEduId(itemJson.get("eduId").toString());
 					itemEdu.setEduName(itemJson.getString("eduName").equals(null) ? null : itemJson.getString("eduName"));
 					itemEdu.setEOrder(itemJson.get("eOrder") == null ? null : itemJson.getInt("eOrder"));
 
