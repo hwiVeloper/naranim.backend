@@ -21,9 +21,4 @@ public class EduPK implements Serializable {
 
     @Column(name="edu_id")
     private String eduId;
-    
-    public EduPK(String sgId, String eduId) {
-    	this.sgId = sgId;
-    	this.eduId = eduId;
-    }
 }

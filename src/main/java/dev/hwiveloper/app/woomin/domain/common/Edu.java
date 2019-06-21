@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 import javax.persistence.EmbeddedId;
@@ -18,26 +19,15 @@ import dev.hwiveloper.app.woomin.repository.EduRepository;
 @Entity(name="woomin_edu")
 @Getter
 @Setter
-@IdClass(EduPK.class)
 @NoArgsConstructor
-public class Edu {
-	@Id
-    private String sgId;
-	@Id
-    private String eduId;
+public class Edu implements Serializable {
+	@EmbeddedId
+	private EduPK key;
 
-    private String eduName;
-    private int eOrder;
-    
-    public Edu(
-    		String sgId,
-    		String eduId,
-    		String eduName,
-    		int eOrder
-    		) {
-		this.sgId = sgId;
-		this.eduId = eduId;
-		this.eduName = eduName;
-		this.eOrder = eOrder;
+	private String eduName;
+	private int eOrder;
+	
+	public Edu(int parseInt, String eduIdPart) {
+		// TODO Auto-generated constructor stub
 	}
 }
