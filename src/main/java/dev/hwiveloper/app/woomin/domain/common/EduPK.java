@@ -16,9 +16,22 @@ import lombok.Setter;
 @EqualsAndHashCode
 @NoArgsConstructor
 public class EduPK implements Serializable {
-    @Column(name="sg_id")
-    private String sgId;
 
-    @Column(name="edu_id")
-    private String eduId;
+	private static final long serialVersionUID = 1L;
+
+	@Column(name="sg_id")
+	private String sgId;
+
+	@Column(name="edu_id")
+	private String eduId;
+
+	public EduPK(String sgId, String eduId) {
+		this.sgId = sgId;
+		this.eduId = eduId;
+	}
+	
+	@Override
+	public String toString() {
+		return "/search/findByKeySgIdAndKeyEduId?sgId=" + sgId + "&eduId=" + eduId;
+	}
 }
