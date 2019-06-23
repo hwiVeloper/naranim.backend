@@ -1,7 +1,6 @@
 package dev.hwiveloper.app.woomin.schedule;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -16,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dev.hwiveloper.app.woomin.common.ScheduleUtil;
 import dev.hwiveloper.app.woomin.domain.assembly.Member;
@@ -96,19 +93,30 @@ public class MemberSchedule {
 										.getJSONObject("items")
 										.getJSONArray("item");
 			
-			ObjectMapper om = new ObjectMapper();
-			memberList = (List<Member>) om.readValue(itemJson.toString(), List.class);
-			
-			for (Member member : memberList) {
+			for (int i = 0; i < itemJson.length(); i++) {
+				JSONObject tmpJson = itemJson.getJSONObject(i);
+				Member itemMember = new Member();
+				itemMember.setDeptCd(tmpJson.get("deptCd").toString());
+				itemMember.setEmpNm(tmpJson.getString("empNm"));
+				itemMember.setEngNm(tmpJson.getString("engNm"));
+				itemMember.setHjNm(tmpJson.getString("hjNm"));
+				itemMember.setJpgLink(tmpJson.getString("jpgLink"));
+				itemMember.setNum(tmpJson.getInt("num"));
+				itemMember.setOrigNm(tmpJson.getString("origNm"));
+				itemMember.setReeleGbnNm(tmpJson.getString("reeleGbnNm"));
+				
 				// 지역코드
-				member.setOrigCd(origRepo.findByOrigNm(member.getOrigNm()).getOrigCd());
+				itemMember.setOrigCd(origRepo.findByOrigNm(itemMember.getOrigNm()).getOrigCd());
 				
 				// 당선구분코드
-				member.setReeleGbnCd(reeleRepo.findByReeleGbnNm(member.getReeleGbnNm()).getReeleGbnCd());
+				itemMember.setReeleGbnCd(reeleRepo.findByReeleGbnNm(itemMember.getReeleGbnNm()).getReeleGbnCd());
+				
+				memberList.add(itemMember);
 			}
 			
 			memberRepo.saveAll(memberList);
-		} catch (IOException e) {
+			System.out.println("의원 현황 종료");
+		} catch (Exception e) {
 			ScheduleUtil.writeErrorScheduleLog(
 				MemberSchedule.class.getSimpleName(),
 				new Object() {},
@@ -123,8 +131,8 @@ public class MemberSchedule {
 	 * 국회의원 현황 상세 조회
 	 */
 	@Scheduled(cron="0 10 0 * * ?")
-//	@Scheduled(cron="5 * * * * *")
 	public void getMemberDetailInfoList() {
+		System.out.println("국회의원 현황 상세 조회 시작");
 		Date startTime = new Date();
 		
 		try {
@@ -152,10 +160,22 @@ public class MemberSchedule {
 				} else {
 					rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
 				}
+				
+				
 				StringBuilder sb = new StringBuilder();
 				String line;
 				while ((line = rd.readLine()) != null) {
 					sb.append(line);
+				}
+				
+				rd.close();
+				conn.disconnect();
+				
+				if (XML.toJSONObject(sb.toString())
+										.getJSONObject("response")
+										.get("body").equals("")) {
+					memberRepo.deleteById(member.getDeptCd());
+					continue;
 				}
 				
 				JSONObject itemJson = XML.toJSONObject(sb.toString())
@@ -182,12 +202,12 @@ public class MemberSchedule {
 					member.setPolyCd(polyRepo.findByPolyNm(member.getPolyNm()).getPolyCd());
 				}
 				
-				rd.close();
-				conn.disconnect();
 			}
 			
 			memberRepo.saveAll(memberList);
-		} catch (IOException e) {
+			
+			System.out.println("국회의원 현황 상세 조회 종료");
+		} catch (Exception e) {
 			ScheduleUtil.writeErrorScheduleLog(
 				MemberSchedule.class.getSimpleName(),
 				new Object() {},

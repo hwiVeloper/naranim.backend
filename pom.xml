@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>dev.hwiveloper.app</groupId>
 	<artifactId>woomin</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<packaging>war</packaging>
 	<name>woomin</name>
 	<description>우리동네 민주주의 - 우민(woomin)</description>
@@ -124,7 +124,6 @@
 			    		</goals>
 			    		<configuration>
 			    			<nodeVersion>v10.13.0</nodeVersion>
-			    			<!-- <npmVersion>6.4.1</npmVersion>-->
 			    			<yarnVersion>v1.12.1</yarnVersion>
 			    		</configuration>
 			    	</execution>

@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.IdClass;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
