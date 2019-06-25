@@ -11,9 +11,8 @@ spring:
     show-sql: false
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-  data:
-    rest:
-      base-path: /api
+  resources:
+    static-locations: classpath:/static/
 server:
   port: 80
   

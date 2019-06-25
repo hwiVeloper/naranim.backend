@@ -79,3 +79,4 @@ yarn-error.log*
 yarn.lock
 
 application.yml
+static

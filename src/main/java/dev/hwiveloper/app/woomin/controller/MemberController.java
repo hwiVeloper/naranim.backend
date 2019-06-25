@@ -20,16 +20,16 @@ public class MemberController {
 	@Autowired
 	MemberRepository memberRepo;
 	
-	@Autowired
-	OrigRepository origRepo;
-	
 	@GetMapping("/")
 	public ResponseEntity<List<Member>> getMembers() {
 		return new ResponseEntity<List<Member>>((List<Member>) memberRepo.findAll(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/{dept_cd}")
-	public ResponseEntity<Member> getMemberDetail(@PathVariable("dept_cd") String dept_cd) {
+	public ResponseEntity<Member> getMemberDetail(
+			@PathVariable("dept_cd") String dept_cd
+			
+		) {
 		return new ResponseEntity<Member>(memberRepo.findById(dept_cd).get(), HttpStatus.OK);
 	}
 }
