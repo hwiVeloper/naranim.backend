@@ -49,7 +49,7 @@ public class CandidateSchedule {
 	 */
 	@Scheduled(cron="0 0 2 * * *")
 	public void getPofelcddRegistSttusInfoInqire() {
-		Date startTime = new Date();
+Date startTime = new Date();
 		
 		try {
 			// sgId, sgTypeCode 가져오기 (선거리스트)
@@ -57,6 +57,10 @@ public class CandidateSchedule {
 			
 			// 본서비스 호출 (loop)
 			for (Election election : electionList) {
+				if (election.getKey().getSgTypeCode().toString().equals("0")) {
+					continue;
+				}
+				
 				// URL 생성
 				StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9760000/PofelcddInfoInqireService/getPofelcddRegistSttusInfoInqire"); /*URL*/
 				urlBuilder.append("?" + URLEncoder.encode("ServiceKey","UTF-8") + "=" + POLL_PLACE_SERVICE); /*Service Key*/
@@ -65,7 +69,7 @@ public class CandidateSchedule {
 				urlBuilder.append("&" + URLEncoder.encode("sgId","UTF-8") + "=" + URLEncoder.encode(election.getKey().getSgId().toString(), "UTF-8"));
 				urlBuilder.append("&" + URLEncoder.encode("sgTypecode","UTF-8") + "=" + URLEncoder.encode(election.getKey().getSgTypeCode().toString(), "UTF-8"));
 				URL url = new URL(urlBuilder.toString());
-
+				
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
 				conn.setRequestProperty("Content-type", "application/json");
@@ -98,24 +102,25 @@ public class CandidateSchedule {
 					JSONArray itemJson = tmpJson.getJSONArray("item");
 					for (int i = 0; i < itemJson.length(); i++) {
 						JSONObject item = itemJson.getJSONObject(i);
+						
 						Candidate itemCndd = new Candidate();
 						CandidatePK keyCndd = new CandidatePK();
 
 						keyCndd.setNum(item.getInt("num"));
 						keyCndd.setSgId(item.get("sgId").toString());
 						keyCndd.setSgTypeCode(item.get("sgTypecode").toString());
-						keyCndd.setHuboId(item.get("huboId").toString());
+						keyCndd.setHuboId(item.get("huboid").toString());
 
 						itemCndd.setKey(keyCndd);
 						itemCndd.setSdName(item.getString("sdName"));
 						itemCndd.setWiwName(item.getString("wiwName"));
-						itemCndd.setGiho(item.getInt("giho"));
+						itemCndd.setGiho(item.get("giho").toString().equals("") ? 99 : item.getInt("giho"));
 						itemCndd.setGihoSangse(item.isNull("gihoSangse") ? "" : item.getString("gihoSangse"));
 						itemCndd.setJdName(item.getString("jdName"));
 						itemCndd.setName(item.getString("name"));
 						itemCndd.setHanjaName(item.getString("hanjaName"));
 						itemCndd.setGender(item.getString("gender"));
-						itemCndd.setBirthday(item.getString("birthday"));
+						itemCndd.setBirthday(item.get("birthday").toString());
 						itemCndd.setAge(item.getInt("age"));
 						itemCndd.setAddr(item.getString("addr"));
 						itemCndd.setJobId(item.get("jobId").toString());
@@ -137,18 +142,18 @@ public class CandidateSchedule {
 					keyCndd.setNum(item.getInt("num"));
 					keyCndd.setSgId(item.get("sgId").toString());
 					keyCndd.setSgTypeCode(item.get("sgTypecode").toString());
-					keyCndd.setHuboId(item.get("huboId").toString());
+					keyCndd.setHuboId(item.get("huboid").toString());
 
 					itemCndd.setKey(keyCndd);
 					itemCndd.setSdName(item.getString("sdName"));
 					itemCndd.setWiwName(item.getString("wiwName"));
-					itemCndd.setGiho(item.getInt("giho"));
+					itemCndd.setGiho(item.get("giho").toString().equals("") ? 99 : item.getInt("giho"));
 					itemCndd.setGihoSangse(item.isNull("gihoSangse") ? "" : item.getString("gihoSangse"));
 					itemCndd.setJdName(item.getString("jdName"));
 					itemCndd.setName(item.getString("name"));
 					itemCndd.setHanjaName(item.getString("hanjaName"));
 					itemCndd.setGender(item.getString("gender"));
-					itemCndd.setBirthday(item.getString("birthday"));
+					itemCndd.setBirthday(item.get("birthday").toString());
 					itemCndd.setAge(item.getInt("age"));
 					itemCndd.setAddr(item.getString("addr"));
 					itemCndd.setJobId(item.get("jobId").toString());
@@ -164,6 +169,8 @@ public class CandidateSchedule {
 
 				candidateRepo.saveAll(listCandidate);
 			}
+			
+			System.out.println("===== 테스트 스케쥴 종료 :: 후보자 =====");
 		} catch (IOException e) {
 			ScheduleUtil.writeErrorScheduleLog(
 				CandidateSchedule.class.getSimpleName(),
