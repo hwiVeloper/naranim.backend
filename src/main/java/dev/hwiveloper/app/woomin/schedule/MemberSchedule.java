@@ -5,18 +5,19 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.XML;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import dev.hwiveloper.app.woomin.common.ScheduleUtil;
+import dev.hwiveloper.app.woomin.common.LogUtil;
 import dev.hwiveloper.app.woomin.domain.assembly.Member;
 import dev.hwiveloper.app.woomin.repository.MemberRepository;
 import dev.hwiveloper.app.woomin.repository.OrigRepository;
@@ -32,6 +33,7 @@ import dev.hwiveloper.app.woomin.repository.ReeleGbnRepository;
  */
 @Component
 public class MemberSchedule {
+	Logger logger = LoggerFactory.getLogger(MemberSchedule.class);
 	
 	@Value("${keys.national-assembly-info-service}")
 	String NATIONAL_ASSEMBLY_INFO_SERVICE;
@@ -54,8 +56,6 @@ public class MemberSchedule {
 	 */
 	@Scheduled(cron="0 5 0 * * ?")
 	public void getMemberCurrStateList() {
-		Date startTime = new Date();
-		
 		try {
 			// URL 생성
 			StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9710000/NationalAssemblyInfoService/getMemberCurrStateList"); /*URL*/
@@ -115,14 +115,8 @@ public class MemberSchedule {
 			}
 			
 			memberRepo.saveAll(memberList);
-			System.out.println("의원 현황 종료");
 		} catch (Exception e) {
-			ScheduleUtil.writeErrorScheduleLog(
-				MemberSchedule.class.getSimpleName(),
-				new Object() {},
-				e.getMessage(),
-				startTime
-			);
+			logger.error("ERROR :: " + e.getCause() + " :: " + e.getMessage());
 		}
 	}
 	
@@ -130,11 +124,9 @@ public class MemberSchedule {
 	 * getMemberDetailInfoList
 	 * 국회의원 현황 상세 조회
 	 */
-	@Scheduled(cron="0 10 0 * * ?")
+//	@Scheduled(cron="0 10 0 * * ?")
+	@Scheduled(initialDelay = 5000, fixedDelay = 6000000)
 	public void getMemberDetailInfoList() {
-		System.out.println("국회의원 현황 상세 조회 시작");
-		Date startTime = new Date();
-		
 		try {
 			// 현재 국회의원 현황 조회
 			List<Member> memberList = (List<Member>) memberRepo.findAll();
@@ -206,14 +198,9 @@ public class MemberSchedule {
 			
 			memberRepo.saveAll(memberList);
 			
-			System.out.println("국회의원 현황 상세 조회 종료");
+			LogUtil.scheduleSccssLog(logger, new Object() {});
 		} catch (Exception e) {
-			ScheduleUtil.writeErrorScheduleLog(
-				MemberSchedule.class.getSimpleName(),
-				new Object() {},
-				e.getMessage(),
-				startTime
-			);
+			LogUtil.scheduleErrorLog(logger, new Object() {}, e.getMessage());
 		}
 	}
 }

@@ -12,6 +12,11 @@ import java.io.Serializable;
 @Setter
 @EqualsAndHashCode
 public class JobPK implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Column(name="sg_id")
 	private String sgId;
 	

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import dev.hwiveloper.app.woomin.domain.assembly.Member;
 import dev.hwiveloper.app.woomin.repository.MemberRepository;
-import dev.hwiveloper.app.woomin.repository.OrigRepository;
 
 @Controller
 @RequestMapping("/members")

@@ -12,6 +12,11 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode
 public class VotePK implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Column(name="num")
 	private int num;
 	

@@ -12,6 +12,11 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode
 public class PolPlacePK implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Column(name="pre_yn")
 	private boolean preYn;
 	

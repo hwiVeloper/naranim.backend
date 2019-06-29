@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import dev.hwiveloper.app.woomin.common.ScheduleUtil;
 import dev.hwiveloper.app.woomin.domain.common.Election;
 import dev.hwiveloper.app.woomin.domain.election.Candidate;
 import dev.hwiveloper.app.woomin.domain.election.CandidatePK;
@@ -49,7 +48,7 @@ public class CandidateSchedule {
 	 */
 	@Scheduled(cron="0 0 2 * * *")
 	public void getPofelcddRegistSttusInfoInqire() {
-Date startTime = new Date();
+new Date();
 		
 		try {
 			// sgId, sgTypeCode 가져오기 (선거리스트)
@@ -172,12 +171,6 @@ Date startTime = new Date();
 			
 			System.out.println("===== 테스트 스케쥴 종료 :: 후보자 =====");
 		} catch (IOException e) {
-			ScheduleUtil.writeErrorScheduleLog(
-				CandidateSchedule.class.getSimpleName(),
-				new Object() {},
-				e.getMessage(),
-				startTime
-			);
 		}
 	}
 }

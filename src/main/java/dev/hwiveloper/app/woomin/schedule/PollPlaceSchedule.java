@@ -1,6 +1,5 @@
 package dev.hwiveloper.app.woomin.schedule;
 
-import dev.hwiveloper.app.woomin.common.ScheduleUtil;
 import dev.hwiveloper.app.woomin.domain.common.Sungeogu;
 import dev.hwiveloper.app.woomin.domain.election.PolPlace;
 import dev.hwiveloper.app.woomin.domain.election.PolPlacePK;
@@ -49,7 +48,7 @@ public class PollPlaceSchedule {
 	 */
 	@Scheduled(cron="0 20 1 * * *")
 	public void getPrePolplcOtlnmapTrnsportInfoInqire() {
-		Date startTime = new Date();
+		new Date();
 		
 		try {
 			// sgId, sdName 추출
@@ -143,12 +142,6 @@ public class PollPlaceSchedule {
 				ppRepo.saveAll(listPolPlace);
 			}
 		} catch (IOException e) {
-			ScheduleUtil.writeErrorScheduleLog(
-				PollPlaceSchedule.class.getSimpleName(),
-				new Object() {},
-				e.getMessage(),
-				startTime
-			);
 		}
 	}
 
@@ -158,7 +151,7 @@ public class PollPlaceSchedule {
 	 */
 	@Scheduled(cron="0 50 1 * * *")
 	public void getPolplcOtlnmapTrnsportInfoInqire() {
-		Date startTime = new Date();
+		new Date();
 		
 		try {
 			// sgId, sdName 추출
@@ -250,12 +243,6 @@ public class PollPlaceSchedule {
 				ppRepo.saveAll(listPolPlace);
 			}
 		} catch (IOException e) {
-			ScheduleUtil.writeErrorScheduleLog(
-				PollPlaceSchedule.class.getSimpleName(),
-				new Object() {},
-				e.getMessage(),
-				startTime
-			);
 		}
 	}
 }

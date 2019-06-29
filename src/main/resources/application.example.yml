@@ -13,8 +13,14 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
   resources:
     static-locations: classpath:/static/
+  profiles:
+    active:
+    - logging-daily
 server:
   port: 80
+logging:
+  config: classpath:logback-woomin.xml
+
   
 # keys
 keys:
