@@ -115,8 +115,10 @@ public class MemberSchedule {
 			}
 			
 			memberRepo.saveAll(memberList);
+			
+			LogUtil.scheduleSccssLog(logger, new Object() {});
 		} catch (Exception e) {
-			logger.error("ERROR :: " + e.getCause() + " :: " + e.getMessage());
+			LogUtil.scheduleErrorLog(logger, new Object() {}, e.getMessage());
 		}
 	}
 	

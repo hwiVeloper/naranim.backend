@@ -1,27 +1,47 @@
 package dev.hwiveloper.app.woomin.schedule;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import dev.hwiveloper.app.woomin.domain.common.*;
-import dev.hwiveloper.app.woomin.repository.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.XML;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import dev.hwiveloper.app.woomin.common.LogUtil;
 import dev.hwiveloper.app.woomin.domain.assembly.Orig;
 import dev.hwiveloper.app.woomin.domain.assembly.Poly;
+import dev.hwiveloper.app.woomin.domain.common.Edu;
+import dev.hwiveloper.app.woomin.domain.common.EduPK;
+import dev.hwiveloper.app.woomin.domain.common.Election;
+import dev.hwiveloper.app.woomin.domain.common.ElectionPK;
+import dev.hwiveloper.app.woomin.domain.common.Gusigun;
+import dev.hwiveloper.app.woomin.domain.common.GusigunPK;
+import dev.hwiveloper.app.woomin.domain.common.Job;
+import dev.hwiveloper.app.woomin.domain.common.JobPK;
+import dev.hwiveloper.app.woomin.domain.common.Party;
+import dev.hwiveloper.app.woomin.domain.common.PartyPK;
+import dev.hwiveloper.app.woomin.domain.common.Sungeogu;
+import dev.hwiveloper.app.woomin.domain.common.SungeoguPK;
+import dev.hwiveloper.app.woomin.repository.EduRepository;
+import dev.hwiveloper.app.woomin.repository.ElectionRepository;
+import dev.hwiveloper.app.woomin.repository.GusigunRepository;
+import dev.hwiveloper.app.woomin.repository.JobRepository;
+import dev.hwiveloper.app.woomin.repository.OrigRepository;
+import dev.hwiveloper.app.woomin.repository.PartyRepository;
+import dev.hwiveloper.app.woomin.repository.PolyRepository;
+import dev.hwiveloper.app.woomin.repository.ReeleGbnRepository;
+import dev.hwiveloper.app.woomin.repository.SungeoguRepository;
 
 /*
  * CodeSchedule
@@ -38,6 +58,8 @@ import dev.hwiveloper.app.woomin.domain.assembly.Poly;
  */
 @Component
 public class CodeSchedule {
+	Logger logger = LoggerFactory.getLogger(CodeSchedule.class);
+	
 	@Value("${keys.national-assembly-info-service}")
 	String NATIONAL_ASSEMBLY_INFO_SERVICE;
 
@@ -77,8 +99,6 @@ public class CodeSchedule {
 	 */
 	@Scheduled(cron="0 30 0 * * *")
 	public void getPolySearch() {
-		new Date();
-		
 		try {
 			// URL 생성
 			StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9710000/NationalAssemblyInfoService/getPolySearch"); /*URL*/
@@ -123,7 +143,10 @@ public class CodeSchedule {
 			}
 
 			polyRepo.saveAll(listPoly);
-		} catch (IOException e) {
+			
+			LogUtil.scheduleSccssLog(logger, new Object() {});
+		} catch (Exception e) {
+			LogUtil.scheduleErrorLog(logger, new Object() {}, e.getMessage());
 		}
 	}
 
@@ -133,8 +156,6 @@ public class CodeSchedule {
 	 */
 	@Scheduled(cron="0 1 0 * * *")
 	public void getLocalSearch() {
-		new Date();
-		
 		try {
 			// 상위지역코드 조회
 			List<Orig> listUpOrig = origRepo.findByUpOrigCd(null);
@@ -198,8 +219,10 @@ public class CodeSchedule {
 
 				origRepo.saveAll(listOrig);
 			}
-
-		} catch (IOException e) {
+			
+			LogUtil.scheduleSccssLog(logger, new Object() {});
+		} catch (Exception e) {
+			LogUtil.scheduleErrorLog(logger, new Object() {}, e.getMessage());
 		}
 	}
 
@@ -209,8 +232,6 @@ public class CodeSchedule {
 	 */
 	@Scheduled(cron="0 35 0 * * *")
 	public void getCommonSgCodeList() {
-		new Date();
-		
 		try {
 			//API 호출
 			StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9760000/CommonCodeService/getCommonSgCodeList"); /*URL*/
@@ -260,7 +281,10 @@ public class CodeSchedule {
 			}
 			
 			electionRepo.saveAll(listElection);
-		} catch (IOException e) {
+			
+			LogUtil.scheduleSccssLog(logger, new Object() {});
+		} catch (Exception e) {
+			LogUtil.scheduleErrorLog(logger, new Object() {}, e.getMessage());
 		}
 	}
 	
@@ -270,8 +294,6 @@ public class CodeSchedule {
 	 */
 	@Scheduled(cron="0 40 0 * * *")
 	public void getCommonGusigunCodeList () {
-		new Date();
-		
 		try {
 			List<String> electionList = (List<String>) electionRepo.findDistinctKeySgId();
 			
@@ -326,7 +348,10 @@ public class CodeSchedule {
 				
 				gusigunRepo.saveAll(listGusigun);
 			}
-		} catch (IOException e) {
+			
+			LogUtil.scheduleSccssLog(logger, new Object() {});
+		} catch (Exception e) {
+			LogUtil.scheduleErrorLog(logger, new Object() {}, e.getMessage());
 		}
 	}
 	
@@ -336,8 +361,6 @@ public class CodeSchedule {
 	 */
 	@Scheduled(cron="0 50 0 * * *")
 	public void getCommonSggCodeList() {
-		new Date();
-		
 		try {
 			List<Election> electionList = (List<Election>) electionRepo.findAll();
 			
@@ -421,7 +444,10 @@ public class CodeSchedule {
 				
 				sungeoguRepo.saveAll(listSungeogu);
 			}
-		} catch (IOException e) {
+			
+			LogUtil.scheduleSccssLog(logger, new Object() {});
+		} catch (Exception e) {
+			LogUtil.scheduleErrorLog(logger, new Object() {}, e.getMessage());
 		}
 	}
 	
@@ -431,8 +457,6 @@ public class CodeSchedule {
 	 */
 	@Scheduled(cron="0 0 1 * * *")
 	public void getCommonPartyCodeList() {
-		new Date();
-		
 		try {
 			List<String> electionList = (List<String>) electionRepo.findDistinctKeySgId();
 			
@@ -503,7 +527,10 @@ public class CodeSchedule {
 				
 				partyRepo.saveAll(listParty);
 			}
-		} catch (IOException e) {
+			
+			LogUtil.scheduleSccssLog(logger, new Object() {});
+		} catch (Exception e) {
+			LogUtil.scheduleErrorLog(logger, new Object() {}, e.getMessage());
 		}
 	}
 	
@@ -513,8 +540,6 @@ public class CodeSchedule {
 	 */
 	@Scheduled(cron="0 5 1 * * *")
 	public void getCommonJobCodeList() {
-		new Date();
-		
 		try {
 			List<String> electionList = (List<String>) electionRepo.findDistinctKeySgId();
 			
@@ -587,7 +612,10 @@ public class CodeSchedule {
 				
 				jobRepo.saveAll(listJob);
 			}
-		} catch (IOException e) {
+			
+			LogUtil.scheduleSccssLog(logger, new Object() {});
+		} catch (Exception e) {
+			LogUtil.scheduleErrorLog(logger, new Object() {}, e.getMessage());
 		}
 	}
 
@@ -597,8 +625,6 @@ public class CodeSchedule {
 	 */
 	@Scheduled(cron="0 10 1 * * *")
 	public void getCommonEduBckgrdCodeList() {
-		new Date();
-		
 		try {
 			List<String> electionList = (List<String>) electionRepo.findDistinctKeySgId();
 
@@ -677,7 +703,10 @@ public class CodeSchedule {
 
 				eduRepo.saveAll(listEdu);
 			}
-		} catch (IOException e) {
+			
+			LogUtil.scheduleSccssLog(logger, new Object() {});
+		} catch (Exception e) {
+			LogUtil.scheduleErrorLog(logger, new Object() {}, e.getMessage());
 		}
 	}
 }

@@ -7,17 +7,19 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.XML;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import dev.hwiveloper.app.woomin.common.LogUtil;
 import dev.hwiveloper.app.woomin.domain.common.Election;
 import dev.hwiveloper.app.woomin.domain.election.Candidate;
 import dev.hwiveloper.app.woomin.domain.election.CandidatePK;
@@ -33,6 +35,8 @@ import dev.hwiveloper.app.woomin.repository.ElectionRepository;
  */
 @Component
 public class CandidateSchedule {
+	Logger logger = LoggerFactory.getLogger(CandidateSchedule.class);
+	
 	@Value("${keys.poll-place-service}")
 	String POLL_PLACE_SERVICE;
 	
@@ -48,8 +52,6 @@ public class CandidateSchedule {
 	 */
 	@Scheduled(cron="0 0 2 * * *")
 	public void getPofelcddRegistSttusInfoInqire() {
-new Date();
-		
 		try {
 			// sgId, sgTypeCode 가져오기 (선거리스트)
 			List<Election> electionList = (List<Election>) electionRepo.findAll();
@@ -169,8 +171,9 @@ new Date();
 				candidateRepo.saveAll(listCandidate);
 			}
 			
-			System.out.println("===== 테스트 스케쥴 종료 :: 후보자 =====");
+			LogUtil.scheduleSccssLog(logger, new Object() {});
 		} catch (IOException e) {
+			LogUtil.scheduleErrorLog(logger, new Object() {}, e.getMessage());
 		}
 	}
 }

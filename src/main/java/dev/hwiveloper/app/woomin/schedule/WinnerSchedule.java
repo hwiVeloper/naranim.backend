@@ -13,10 +13,13 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.XML;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import dev.hwiveloper.app.woomin.common.LogUtil;
 import dev.hwiveloper.app.woomin.domain.common.Election;
 import dev.hwiveloper.app.woomin.domain.election.Winner;
 import dev.hwiveloper.app.woomin.domain.election.WinnerPK;
@@ -31,6 +34,8 @@ import dev.hwiveloper.app.woomin.repository.WinnerRepository;
  */
 @Component
 public class WinnerSchedule {
+	Logger logger = LoggerFactory.getLogger(WinnerSchedule.class);
+	
 	@Value("${keys.winner-service}")
 	String WINNER_SERVICE;
 	
@@ -45,8 +50,6 @@ public class WinnerSchedule {
 	 * 당선인 정보 조회
 	 */
 	public void getWinnerInfoInqire() {
-		new Date();
-		
 		try {
 			List<Election> electionList = (List<Election>) electionRepo.findAll();
 
@@ -166,7 +169,10 @@ public class WinnerSchedule {
 
 				winnerRepo.saveAll(listWinner);
 			}
-		} catch (IOException e) {
+			
+			LogUtil.scheduleSccssLog(logger, new Object() {});
+		} catch (Exception e) {
+			LogUtil.scheduleErrorLog(logger, new Object() {}, e.getMessage());
 		}
 	}
 }

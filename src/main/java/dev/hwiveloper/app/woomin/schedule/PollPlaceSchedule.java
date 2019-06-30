@@ -1,27 +1,29 @@
 package dev.hwiveloper.app.woomin.schedule;
 
-import dev.hwiveloper.app.woomin.domain.common.Sungeogu;
-import dev.hwiveloper.app.woomin.domain.election.PolPlace;
-import dev.hwiveloper.app.woomin.domain.election.PolPlacePK;
-import dev.hwiveloper.app.woomin.repository.PolPlaceRepository;
-import dev.hwiveloper.app.woomin.repository.SungeoguRepository;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.XML;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.XML;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import dev.hwiveloper.app.woomin.common.LogUtil;
+import dev.hwiveloper.app.woomin.domain.common.Sungeogu;
+import dev.hwiveloper.app.woomin.domain.election.PolPlace;
+import dev.hwiveloper.app.woomin.domain.election.PolPlacePK;
+import dev.hwiveloper.app.woomin.repository.PolPlaceRepository;
+import dev.hwiveloper.app.woomin.repository.SungeoguRepository;
 
 /**
  * PollPlaceSchedule
@@ -32,6 +34,7 @@ import java.util.List;
  */
 @Component
 public class PollPlaceSchedule {
+	Logger logger = LoggerFactory.getLogger(PollPlaceSchedule.class);
 
 	@Value("${keys.poll-place-service}")
 	String POLL_PLACE_SERVICE;
@@ -48,8 +51,6 @@ public class PollPlaceSchedule {
 	 */
 	@Scheduled(cron="0 20 1 * * *")
 	public void getPrePolplcOtlnmapTrnsportInfoInqire() {
-		new Date();
-		
 		try {
 			// sgId, sdName 추출
 			List<Sungeogu> sggList = sggRepo.findDistinctSgIdSdNameBySdNameOrderBySgIdSOrder();
@@ -141,7 +142,10 @@ public class PollPlaceSchedule {
 
 				ppRepo.saveAll(listPolPlace);
 			}
-		} catch (IOException e) {
+			
+			LogUtil.scheduleSccssLog(logger, new Object() {});
+		} catch (Exception e) {
+			LogUtil.scheduleErrorLog(logger, new Object() {}, e.getMessage());
 		}
 	}
 
@@ -151,8 +155,6 @@ public class PollPlaceSchedule {
 	 */
 	@Scheduled(cron="0 50 1 * * *")
 	public void getPolplcOtlnmapTrnsportInfoInqire() {
-		new Date();
-		
 		try {
 			// sgId, sdName 추출
 			List<Sungeogu> sggList = sggRepo.findDistinctSgIdSdNameBySdNameOrderBySgIdSOrder();
@@ -242,7 +244,10 @@ public class PollPlaceSchedule {
 
 				ppRepo.saveAll(listPolPlace);
 			}
-		} catch (IOException e) {
+			
+			LogUtil.scheduleSccssLog(logger, new Object() {});
+		} catch (Exception e) {
+			LogUtil.scheduleErrorLog(logger, new Object() {}, e.getMessage());
 		}
 	}
 }
