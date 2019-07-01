@@ -169,7 +169,7 @@ public class VoteSchedule {
 	 * getXmntckSttusInfoInqire
 	 * 개표 결과 조회
 	 */
-	@Scheduled(cron="0 9 * * * *")
+	@Scheduled(cron="0 45 2 * * *")
 	public void getXmntckSttusInfoInqire() {
 		try {
 			List<Election> electionList = (List<Election>) electionRepo.findAll();

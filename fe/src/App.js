@@ -3,6 +3,7 @@ import "./App.css";
 import { BrowserRouter, Route } from "react-router-dom";
 import { Home, Members, Discussion } from "./pages";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 class App extends Component {
   render() {
@@ -15,6 +16,7 @@ class App extends Component {
             <Route exact path="/members" component={Members} />
             <Route exact path="/discussion" component={Discussion} />
           </div>
+          <Footer />
         </BrowserRouter>
       </>
     );

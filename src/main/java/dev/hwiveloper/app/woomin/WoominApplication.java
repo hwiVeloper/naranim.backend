@@ -2,7 +2,11 @@ package dev.hwiveloper.app.woomin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 @EnableScheduling
@@ -22,6 +26,19 @@ public class WoominApplication {
 		System.out.println(appSb.toString());
 		
 		SpringApplication.run(WoominApplication.class, args);
-		
 	}
+	
+	@Bean
+    public WebMvcConfigurer webMvcConfigurer() {
+            return new WebMvcConfigurer() {
+                    @Override
+                    public void addCorsMappings(CorsRegistry registry) {
+                            registry.addMapping("/**")
+                            .allowedOrigins("*")
+                            .allowedMethods(HttpMethod.GET.name())
+                            .allowCredentials(false)
+                            .maxAge(3600);
+                    }
+            };
+    }
 }

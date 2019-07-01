@@ -32,7 +32,7 @@ class Navbar extends Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static" color="default">
+        <AppBar position="fixed" color="default">
           <Toolbar>
             <Typography variant="h6" color="inherit" className={classes.grow}>
               우리동네 민주주의

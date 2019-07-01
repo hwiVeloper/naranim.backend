@@ -126,8 +126,7 @@ public class MemberSchedule {
 	 * getMemberDetailInfoList
 	 * 국회의원 현황 상세 조회
 	 */
-//	@Scheduled(cron="0 10 0 * * ?")
-	@Scheduled(initialDelay = 5000, fixedDelay = 6000000)
+	@Scheduled(cron="0 10 0 * * ?")
 	public void getMemberDetailInfoList() {
 		try {
 			// 현재 국회의원 현황 조회
