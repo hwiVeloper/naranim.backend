@@ -6,12 +6,18 @@ public class LogUtil {
 	final static String SCHEDULE_SUCCESS = "[SCHEDULE SUCCESS] ";
 	final static String SCHEDULE_ERROR   = "[SCHEDULE ERROR] ";
 	
+	/**
+	 * scheduleSccssLog
+	 * 스케쥴러에서 발생한 성공 로그를 기록한다.
+	 * @param logger
+	 * @param obj
+	 */
 	public static void scheduleSccssLog(Logger logger, Object obj) {
 		logger.info(SCHEDULE_SUCCESS.concat(getScheduleMethodName(obj)));
 	}
 	/**
 	 * scheduleErrorLog
-	 * 스케쥴러에서 발생한 에러 로그를 출력한다.
+	 * 스케쥴러에서 발생한 에러 로그를 기록한다.
 	 * @param logger
 	 * @param message
 	 */

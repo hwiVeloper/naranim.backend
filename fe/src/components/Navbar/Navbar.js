@@ -27,7 +27,7 @@ class Navbar extends Component {
     const { classes } = this.props;
 
     const NavHome = props => <NavLink to="/" {...props} />;
-    const NavMembers = props => <NavLink to="/members" {...props} />;
+    const NavMembers = props => <NavLink to="/member" {...props} />;
     const NavDiscussion = props => <NavLink to="/discussion" {...props} />;
 
     return (

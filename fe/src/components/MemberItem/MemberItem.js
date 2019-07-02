@@ -7,7 +7,9 @@ import "./MemberItem.css";
 const styles = theme => ({
   card: {
     display: "flex",
-    height: 150
+    height: 150,
+    borderRight: "1px solid black",
+    borderBottom: "1px solid black"
   },
   details: {
     display: "flex",
@@ -49,6 +51,12 @@ class MemberItem extends Component {
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
               {data.engNm}
+            </Typography>
+            <Typography variant="subtitle2" color="textSecondary">
+              {data.origNm}
+            </Typography>
+            <Typography variant="caption" color="textSecondary">
+              {data.polyNm}
             </Typography>
           </CardContent>
         </div>
