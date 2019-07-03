@@ -9,7 +9,7 @@ import {
   Button
 } from "@material-ui/core/";
 
-const styles = {
+const styles = theme => ({
   root: {
     flexGrow: 1
   },
@@ -19,13 +19,15 @@ const styles = {
   menuButton: {
     marginLeft: -12,
     marginRight: 20
-  }
-};
+  },
+  appBarSpacer: theme.mixins.toolbar
+});
 
 class Navbar extends Component {
   render() {
     const { classes } = this.props;
 
+    // TopMenu 구현체
     const NavHome = props => <NavLink to="/" {...props} />;
     const NavMembers = props => <NavLink to="/member" {...props} />;
     const NavDiscussion = props => <NavLink to="/discussion" {...props} />;
@@ -34,7 +36,7 @@ class Navbar extends Component {
       <div className={classes.root}>
         <AppBar position="fixed" color="default">
           <Toolbar>
-            <Typography variant="h6" color="inherit" className={classes.grow}>
+            <Typography variant="h5" color="inherit" className={classes.grow}>
               우리동네 민주주의
             </Typography>
             <Button color="inherit" component={NavHome}>

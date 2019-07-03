@@ -30,15 +30,16 @@ public class WoominApplication {
 	
 	@Bean
     public WebMvcConfigurer webMvcConfigurer() {
-            return new WebMvcConfigurer() {
-                    @Override
-                    public void addCorsMappings(CorsRegistry registry) {
-                            registry.addMapping("/**")
-                            .allowedOrigins("*")
-                            .allowedMethods(HttpMethod.GET.name())
-                            .allowCredentials(false)
-                            .maxAge(3600);
-                    }
-            };
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry
+                .addMapping("/**")
+                .allowedOrigins("*")
+                .allowedMethods(HttpMethod.GET.name())
+                .allowCredentials(false)
+                .maxAge(-1);
+            }
+        };
     }
 }

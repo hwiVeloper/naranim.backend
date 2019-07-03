@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { Route } from "react-router-dom";
 import MemberList from "../components/MemberList";
 import MemberDetail from "../components/MemberDetail";
@@ -6,7 +6,6 @@ import MemberDetail from "../components/MemberDetail";
 const Members = ({ match }) => {
   return (
     <>
-      <h2>Page : Members</h2>
       <Route
         exact
         path={match.url}

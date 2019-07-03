@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { Grid } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import MemberItem from "../MemberItem";
 
 class MemberList extends Component {
@@ -48,7 +48,9 @@ class MemberList extends Component {
     return (
       <>
         <div style={{ padding: 10 }}>
-          <h3>의원 정보</h3>
+          <Typography variant="h3" paragraph>
+            의원 정보
+          </Typography>
           <Grid container spacing={2}>
             {items}
           </Grid>

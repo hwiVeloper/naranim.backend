@@ -29,8 +29,9 @@
     "axios": "^0.19.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-router-dom": "^5.0.0",
-    "react-scripts": "3.0.0"
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "3.0.0",
+    "typeface-nanum-gothic": "^0.0.63"
   },
   "devDependencies": {
     "prettier-eslint": "^8.8.2"

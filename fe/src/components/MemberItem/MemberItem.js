@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { Card, CardContent, CardMedia, Typography } from "@material-ui/core";
-// import { SkipPrevious, PlayArrow, SkipNext } from "@material-ui/icons";
-import "./MemberItem.css";
 
 const styles = theme => ({
   card: {
@@ -19,7 +17,9 @@ const styles = theme => ({
     flex: "1 0 auto"
   },
   cover: {
-    width: 151
+    width: 151,
+    minWidth: 151,
+    maxWidth: 151
   },
   controls: {
     display: "flex",

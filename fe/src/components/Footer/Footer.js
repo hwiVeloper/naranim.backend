@@ -1,9 +1,12 @@
 import React, { Component } from "react";
-import { withStyles, AppBar, Typography } from "@material-ui/core";
+import { withStyles, Typography, Paper } from "@material-ui/core";
 
 const styles = theme => ({
   footer: {
-    marginTop: 10
+    marginTop: "auto"
+  },
+  footerPaper: {
+    padding: theme.spacing(3, 2)
   }
 });
 
@@ -13,12 +16,12 @@ class Footer extends Component {
 
     return (
       <footer className={classes.footer}>
-        <AppBar color="inherit" position="static">
+        <Paper className={classes.footerPaper}>
           <Typography variant="h5" component="h3">
             Woomin
           </Typography>
           <Typography component="p">@2019 All right reserved</Typography>
-        </AppBar>
+        </Paper>
       </footer>
     );
   }
