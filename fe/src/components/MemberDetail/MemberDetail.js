@@ -4,14 +4,17 @@ import {
   Grid,
   Paper,
   Typography,
-  withStyles
+  withStyles,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon
 } from "@material-ui/core";
 import {
   GroupRounded,
   LocationOnOutlined,
   PlusOne,
   MailOutline,
-  Home,
   HomeOutlined,
   LocalPhone,
   ThumbUpAltOutlined,
@@ -34,13 +37,6 @@ const styles = theme => ({
     width: "100%",
     height: "100%",
     borderRadius: "50%!important"
-  },
-  icon: {
-    position: "relative",
-    top: theme.spacing.unit,
-    width: theme.typography.body1.width,
-    height: theme.typography.body1.height,
-    marginRight: theme.spacing(1)
   }
 });
 
@@ -64,9 +60,29 @@ class MemberDetail extends Component {
       });
   }
 
+  makeHistoryText(strHistory) {
+    var strResult = "";
+    console.log(strHistory);
+    if (typeof strHistory === "string") {
+      strHistory = strHistory
+        .replace(/,/g, "")
+        .split("\r")
+        .map(line => (
+          <span>
+            {line}
+            <br />
+          </span>
+        ));
+    }
+    console.log(strHistory);
+    return strHistory;
+  }
+
   render() {
     const { classes } = this.props;
     const { member } = this.state;
+
+    const history = this.makeHistoryText(member.memTitle);
 
     return (
       <>
@@ -89,50 +105,74 @@ class MemberDetail extends Component {
                 &nbsp;({member.engNm}&nbsp;|&nbsp;{member.hjNm})
               </Typography>
               <Divider />
-              <Typography variant="body1">
-                <GroupRounded className={classes.icon} />
-                {member.polyNm}
-              </Typography>
-              <Typography>
-                <LocationOnOutlined className={classes.icon} />
-                {member.origNm}
-              </Typography>
-              <Typography>
-                <PlusOne className={classes.icon} />
-                {member.reeleGbnNm}
-              </Typography>
-              <Typography>
-                <MailOutline className={classes.icon} />
-                {member.assemEmail || "-"}
-              </Typography>
-              <Typography>
-                <HomeOutlined className={classes.icon} />
-                {member.assemHomep || "-"}
-              </Typography>
-              <Typography>
-                <LocalPhone className={classes.icon} />
-                {member.assemTel || "-"}
-              </Typography>
-              <Typography>
-                <Cake className={classes.icon} />
-                {member.bthDate || "-"}
-              </Typography>
-              <Typography>
-                <ThumbUpAltOutlined className={classes.icon} />
-                {member.examCd || "-"}
-              </Typography>
-              <Typography>
-                <FormatPaintOutlined className={classes.icon} />
-                {member.hbbyCd || "-"}
-              </Typography>
-              <Typography>
-                <BusinessOutlined className={classes.icon} />
-                {member.shrtNm || "-"}
-              </Typography>
-              <Typography>
-                <CreateOutlined className={classes.icon} />
-                {member.memTitle || "-"}
-              </Typography>
+              <List dense>
+                <ListItem>
+                  <ListItemIcon>
+                    <GroupRounded />
+                  </ListItemIcon>
+                  <ListItemText primary={member.polyNm} />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <LocationOnOutlined />
+                  </ListItemIcon>
+                  <ListItemText primary={member.origNm} />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <PlusOne />
+                  </ListItemIcon>
+                  <ListItemText primary={member.reeleGbnNm} />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <MailOutline />
+                  </ListItemIcon>
+                  <ListItemText primary={member.assemEmail || "-"} />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <HomeOutlined />
+                  </ListItemIcon>
+                  <ListItemText primary={member.assemHomep || "-"} />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <LocalPhone />
+                  </ListItemIcon>
+                  <ListItemText primary={member.assemTel || "-"} />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Cake />
+                  </ListItemIcon>
+                  <ListItemText primary={member.bthDate || "-"} />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <ThumbUpAltOutlined />
+                  </ListItemIcon>
+                  <ListItemText primary={member.examCd || "-"} />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <FormatPaintOutlined />
+                  </ListItemIcon>
+                  <ListItemText primary={member.hbbyCd || "-"} />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <BusinessOutlined />
+                  </ListItemIcon>
+                  <ListItemText primary={member.shrtNm || "-"} />
+                </ListItem>
+                <ListItem alignItems="flex-start">
+                  <ListItemIcon>
+                    <CreateOutlined />
+                  </ListItemIcon>
+                  <ListItemText primary={history || "-"} />
+                </ListItem>
+              </List>
             </Grid>
           </Grid>
         </Container>
