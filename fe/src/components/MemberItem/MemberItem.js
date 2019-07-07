@@ -35,7 +35,7 @@ const styles = theme => ({
 
 class MemberItem extends Component {
   render() {
-    const { key, data, classes } = this.props;
+    const { data, classes } = this.props;
     // const theme = useTheme();
     return (
       <Card className={classes.card}>

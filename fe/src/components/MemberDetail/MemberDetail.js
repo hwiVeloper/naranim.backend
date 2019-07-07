@@ -61,8 +61,6 @@ class MemberDetail extends Component {
   }
 
   makeHistoryText(strHistory) {
-    var strResult = "";
-    console.log(strHistory);
     if (typeof strHistory === "string") {
       strHistory = strHistory
         .replace(/,/g, "")
@@ -74,7 +72,6 @@ class MemberDetail extends Component {
           </span>
         ));
     }
-    console.log(strHistory);
     return strHistory;
   }
 

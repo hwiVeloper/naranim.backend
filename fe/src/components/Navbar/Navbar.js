@@ -6,12 +6,17 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  Button
+  Button,
+  Menu,
+  MenuItem
 } from "@material-ui/core/";
 
 const styles = theme => ({
   root: {
     flexGrow: 1
+  },
+  navButton: {
+    margin: theme.spacing(1)
   },
   grow: {
     flexGrow: 1
@@ -24,8 +29,22 @@ const styles = theme => ({
 });
 
 class Navbar extends Component {
+  state = {
+    anchorEl: null
+  };
+
+  handleMenu = event => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
+
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+  };
+
   render() {
     const { classes } = this.props;
+    const { anchorEl } = this.state;
+    const open = Boolean(anchorEl);
 
     // TopMenu 구현체
     const NavHome = props => <NavLink to="/" {...props} />;
@@ -37,17 +56,36 @@ class Navbar extends Component {
         <AppBar position="fixed" color="default">
           <Toolbar>
             <Typography variant="h5" color="inherit" className={classes.grow}>
-              우리동네 민주주의
+              WooMin
             </Typography>
-            <Button color="inherit" component={NavHome}>
+            <Button component={NavHome} className={classes.navButton}>
               홈
             </Button>
-            <Button color="inherit" component={NavMembers}>
+            <Button component={NavMembers} className={classes.navButton}>
               의원정보
             </Button>
-            <Button color="inherit" component={NavDiscussion}>
+            <Button component={NavDiscussion} className={classes.navButton}>
               의사정보
             </Button>
+            <Button
+              aria-controls="simple-menu"
+              aria-haspopup="true"
+              className={classes.navButton}
+              onClick={this.handleMenu}
+            >
+              Select Menu test
+            </Button>
+            <Menu
+              id="simple-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={open}
+              onClose={this.handleClose}
+            >
+              <MenuItem onClick={this.handleClose}>메뉴1</MenuItem>
+              <MenuItem onClick={this.handleClose}>메뉴2</MenuItem>
+              <MenuItem onClick={this.handleClose}>메뉴3</MenuItem>
+            </Menu>
           </Toolbar>
         </AppBar>
       </div>
