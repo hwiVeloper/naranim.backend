@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "typeface-nanum-gothic";
-import "./App.css";
 import { BrowserRouter, Route } from "react-router-dom";
 import { Home, Members, Discussion } from "./pages";
 import { CssBaseline, Container } from "@material-ui/core";
