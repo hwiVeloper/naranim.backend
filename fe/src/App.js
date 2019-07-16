@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "typeface-nanum-gothic";
 import { BrowserRouter, Route } from "react-router-dom";
-import { Home, Members, Discussion } from "./pages";
+import { Home, Members, Discussion, Election } from "./pages";
 import { CssBaseline, Container } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 import Navbar from "./components/Navbar";
@@ -38,7 +38,7 @@ class App extends Component {
             </div>
           </BrowserRouter>
         </Container>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     );
   }

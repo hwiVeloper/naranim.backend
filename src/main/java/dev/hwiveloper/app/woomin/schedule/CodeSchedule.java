@@ -48,7 +48,7 @@ import dev.hwiveloper.app.woomin.repository.SungeoguRepository;
  * 각종 코드성 정보에 관한 API 호출 후 DB에 저장한다.
  * 
  * 매일 00:30:00 => getPolySearch (정당 검색)
- * 매일 00:31:00 => getLocalSearch (지역 검색)
+ * 매일 00:01:00 => getLocalSearch (지역 검색)
  * 매일 00:35:00 => getCommonSgCodeList (선거코드)
  * 매일 00:40:00 => getCommonGusigunCodeList (구시군코드)
  * 매일 00:50:00 => getCommonSggCodeList (선거구코드)
@@ -158,15 +158,15 @@ public class CodeSchedule {
 	public void getLocalSearch() {
 		try {
 			// 상위지역코드 조회
-			List<Orig> listUpOrig = origRepo.findByUpOrigCd(null);
+//			List<Orig> listUpOrig = origRepo.findByUpOrigCd(null);
 
-			for (Orig orig : listUpOrig) {
+//			for (Orig orig : listUpOrig) {
 				// URL 생성
 				StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9710000/NationalAssemblyInfoService/getLocalSearch"); /*URL*/
 				urlBuilder.append("?" + URLEncoder.encode("ServiceKey","UTF-8") + "=" + NATIONAL_ASSEMBLY_INFO_SERVICE); /*Service Key*/
 				urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("999", "UTF-8")); /*한 페이지 결과 수*/
 				urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지 번호*/
-				urlBuilder.append("&" + URLEncoder.encode("up_orig_cd","UTF-8") + "=" + URLEncoder.encode(orig.getOrigCd(), "UTF-8")); /*시도코드*/
+//				urlBuilder.append("&" + URLEncoder.encode("up_orig_cd","UTF-8") + "=" + URLEncoder.encode(orig.getOrigCd(), "UTF-8")); /*시도코드*/
 				URL url = new URL(urlBuilder.toString());
 
 				// API 호출
@@ -204,7 +204,7 @@ public class CodeSchedule {
 						Orig itemOrig = new Orig();
 						itemOrig.setOrigCd(item.get("origCd").toString());
 						itemOrig.setOrigNm(item.getString("origNm"));
-						itemOrig.setUpOrigCd(orig.getOrigCd());
+//						itemOrig.setUpOrigCd(orig.getOrigCd());
 						listOrig.add(itemOrig);
 					}
 				} else
@@ -213,12 +213,12 @@ public class CodeSchedule {
 					Orig itemOrig = new Orig();
 					itemOrig.setOrigCd(itemJson.get("origCd").toString());
 					itemOrig.setOrigNm(itemJson.getString("origNm"));
-					itemOrig.setUpOrigCd(orig.getOrigCd());
+//					itemOrig.setUpOrigCd(orig.getOrigCd());
 					listOrig.add(itemOrig);
 				}
 
 				origRepo.saveAll(listOrig);
-			}
+//			}
 			
 			LogUtil.scheduleSccssLog(logger, new Object() {});
 		} catch (Exception e) {

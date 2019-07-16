@@ -3,7 +3,9 @@ import { withStyles, Typography, Paper } from "@material-ui/core";
 
 const styles = theme => ({
   footer: {
-    marginTop: "auto"
+    flexGrow: 1,
+    marginTop: "auto",
+    zIndex: 1
   },
   footerPaper: {
     padding: theme.spacing(3, 2)

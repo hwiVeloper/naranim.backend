@@ -60,6 +60,7 @@ public class VoteSchedule {
 	 * getVoteSttusInfoInqire
 	 * 투표 결과 조회
 	 */
+	@Scheduled(cron="0 30 2 * * *")
 	public void getVoteSttusInfoInqire() {
 		try {
 			List<Election> electionList = (List<Election>) electionRepo.findAll();

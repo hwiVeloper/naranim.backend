@@ -10,7 +10,9 @@ import dev.hwiveloper.app.woomin.domain.common.Election;
 import dev.hwiveloper.app.woomin.domain.common.ElectionPK;
 
 public interface ElectionRepository extends CrudRepository<Election, ElectionPK> {
-	@Description("findDistinctKeySgId :: Get distinct sgId")
 	@Query("SELECT e.key.sgId as sgId FROM woomin_election e GROUP BY e.key.sgId")
 	List<String> findDistinctKeySgId();
+
+	@Query("SELECT e FROM woomin_election e WHERE e.key.sgId=:sgId")
+	List<Election> findAllBySgId(String sgId);
 }

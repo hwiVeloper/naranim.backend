@@ -54,8 +54,7 @@ public class MemberSchedule {
 	 * getMemberCurrStateList
 	 * 국회의원 현황 조회
 	 */
-//	@Scheduled(cron="0 5 0 * * ?")
-//	@Scheduled(initialDelay=5000 , fixedDelay = 10000000)
+	@Scheduled(cron="0 5 0 * * ?")
 	public void getMemberCurrStateList() {
 		try {
 			// URL 생성

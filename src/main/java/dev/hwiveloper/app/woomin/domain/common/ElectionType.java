@@ -13,10 +13,10 @@ import lombok.Getter;
 public class ElectionType {
 	@Id
 	@NotNull
-	@Column(name = "sg_type_code", length = 2, columnDefinition = "선거타입코드")
+	@Column(name = "sg_type_code", length = 2)
 	private String sgTypeCode;
 	
 	@NotNull
-	@Column(name = "sg_type_name", length = 50, columnDefinition = "선거타입명")
+	@Column(name = "sg_type_name", length = 50)
 	private String sgTypeName;
 }

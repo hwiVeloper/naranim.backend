@@ -9,7 +9,7 @@
 - CodeSchedule
   - 각종 코드성 정보에 관한 API 호출 후 DB에 저장한다.
   - 매일 00:30:00 => getPolySearch (정당 검색)
-  - 매일 00:31:00 => getLocalSearch (지역 검색)
+  - 매일 00:01:00 => getLocalSearch (지역 검색)
   - 매일 00:35:00 => getCommonSgCodeList (선거코드)
   - 매일 00:40:00 => getCommonGusigunCodeList (구시군코드)
   - 매일 00:50:00 => getCommonSggCodeList (선거구코드)

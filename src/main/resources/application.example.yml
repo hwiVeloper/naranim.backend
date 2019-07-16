@@ -4,11 +4,6 @@ spring:
     url: jdbc:mysql://HOSTNAME:PORT/DATABASE?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
     username: USERNAME
     password: PASSWORD
-    hikari: 
-      idle-timeout: 10000
-      max-lifetime: 4200000
-      connection-timeout: 10000
-      validation-timeout: 10000
   jpa:
     hibernate:
       ddl-auto: update
@@ -25,6 +20,9 @@ server:
   port: 80
 logging:
   config: classpath:logback-woomin.xml
+
+# additional config
+spring.jpa.properties.hibernate.format_sql : true
   
 # keys
 keys:
