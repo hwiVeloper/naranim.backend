@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "typeface-nanum-gothic";
 import { BrowserRouter, Route } from "react-router-dom";
-import { Home, Members, Discussion, Election } from "./pages";
+import { Home, Members, Discussion, Election } from "./container";
 import { CssBaseline, Container } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 import Navbar from "./components/Navbar";
@@ -35,6 +35,7 @@ class App extends Component {
               <Route exact path="/" component={Home} />
               <Route path="/member" component={Members} />
               <Route exact path="/discussion" component={Discussion} />
+              <Route exact path="/election" component={Election} />
             </div>
           </BrowserRouter>
         </Container>

@@ -50,6 +50,7 @@ class Navbar extends Component {
     const NavHome = props => <NavLink to="/" {...props} />;
     const NavMembers = props => <NavLink to="/member" {...props} />;
     const NavDiscussion = props => <NavLink to="/discussion" {...props} />;
+    const NavElection = props => <NavLink to="/election" {...props} />;
 
     return (
       <div className={classes.root}>
@@ -67,13 +68,16 @@ class Navbar extends Component {
             <Button component={NavDiscussion} className={classes.navButton}>
               의사정보
             </Button>
+            <Button component={NavElection} className={classes.navButton}>
+              선거정보
+            </Button>
             <Button
               aria-controls="simple-menu"
               aria-haspopup="true"
               className={classes.navButton}
               onClick={this.handleMenu}
             >
-              Select Menu test
+              Dropwdown Test
             </Button>
             <Menu
               id="simple-menu"

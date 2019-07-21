@@ -32,4 +32,9 @@ public class ElectionController {
 		List<Election> electionList = electionRepo.findAllBySgId(sgId);
 		return new ResponseEntity<List<Election>>((List<Election>) electionList, HttpStatus.OK);
 	}
+	
+	@GetMapping("/getDates")
+	public ResponseEntity<List<String>> getDates() {
+		return new ResponseEntity<List<String>>((List<String>) electionRepo.findDistinctKeySgId(), HttpStatus.OK);
+	}
 }
