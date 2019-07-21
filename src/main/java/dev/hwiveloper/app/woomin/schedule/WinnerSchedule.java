@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import dev.hwiveloper.app.woomin.common.LogUtil;
@@ -47,6 +48,8 @@ public class WinnerSchedule {
 	 * getWinnerInfoInqire
 	 * 당선인 정보 조회
 	 */
+	@Scheduled(cron="0 0 3 * * *")
+//	@Scheduled(initialDelay = 5000, fixedDelay = 10000000)
 	public void getWinnerInfoInqire() {
 		try {
 			List<Election> electionList = (List<Election>) electionRepo.findAll();
