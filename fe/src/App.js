@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "typeface-nanum-gothic";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Home, Members, Discussion, Election } from "./container";
 import { CssBaseline, Container } from "@material-ui/core";
@@ -7,7 +6,8 @@ import { withStyles } from "@material-ui/styles";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
-import { createStore, applyMiddleware, compose } from "redux";
+// redux
+import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import { ConnectedRouter, routerMiddleware } from "connected-react-router";
 import reducers from "./reducers";
