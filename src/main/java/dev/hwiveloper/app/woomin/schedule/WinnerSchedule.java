@@ -49,7 +49,6 @@ public class WinnerSchedule {
 	 * 당선인 정보 조회
 	 */
 	@Scheduled(cron="0 0 3 * * *")
-//	@Scheduled(initialDelay = 5000, fixedDelay = 10000000)
 	public void getWinnerInfoInqire() {
 		try {
 			List<Election> electionList = (List<Election>) electionRepo.findAll();
