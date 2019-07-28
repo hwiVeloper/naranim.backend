@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import * as electionActions from "../reducers/election";
-import { withStyles } from "@material-ui/core/";
+import { withStyles, Grid } from "@material-ui/core/";
+import ElectionDates from "../components/ElectionDates";
+import { getElectionDates } from "../api";
+import ElectionTab from "../components/ElectionTab";
 
 const drawerWidth = 240;
 
@@ -33,34 +35,38 @@ class Election extends Component {
     super(props);
   }
 
-  state = {};
+  componentDidMount() {
+    // 선거일 정보 Call
+    this.props.getElectionDates();
+  }
 
   render() {
-    const { classes } = this.props;
+    const { classes, electionDates } = this.props;
+
     return (
       <div className={classes.root}>
-        {/* 선거일 리스트 (Chip UI) */}
-        {/* <Chip
-          color="primary"
-          label="2019년 7월 21일"
-          href="#"
-          component="a"
-          clickable
-        /> */}
-
-        {/* 선거정보 (Tab UI) */}
+        <Grid container spacing={2}>
+          {/* 선거일 리스트 (Chip UI) */}
+          <Grid item xs={12}>
+            <ElectionDates dates={electionDates} />
+          </Grid>
+          {/* 선거정보 (Tab UI) */}
+          <Grid item xs={12}>
+            <ElectionTab />
+          </Grid>
+        </Grid>
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ election }) => ({
-  // electionDates: election.
+const mapStateToProps = state => ({
+  electionDates: state.election.get("dates")
 });
 
-const mapDispatchToProps = dispatch => ({
-  electionActions: bindActionCreators(electionActions, dispatch)
-});
+const mapDispatchToProps = {
+  getElectionDates
+};
 
 export default connect(
   mapStateToProps,

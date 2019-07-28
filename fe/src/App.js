@@ -13,6 +13,7 @@ import { ConnectedRouter, routerMiddleware } from "connected-react-router";
 import reducers from "./reducers";
 import { createBrowserHistory } from "history";
 import { composeWithDevTools } from "redux-devtools-extension/developmentOnly";
+import ReduxThunk from "redux-thunk";
 
 const history = createBrowserHistory();
 
@@ -22,9 +23,10 @@ const configureStore = preloadedState => {
     preloadedState,
     composeWithDevTools(
       applyMiddleware(
-        routerMiddleware(history) // for dispatching history actions
+        routerMiddleware(history), // for dispatching history actions
         // ... other middlewares ...
         // 추후 thunk, saga 추가시 설정
+        ReduxThunk
       )
     )
   );

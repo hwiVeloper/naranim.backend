@@ -1,26 +1,39 @@
-import { createAction, handleActions } from "redux-actions";
 import { Map, List } from "immutable";
 
-// 액션 타입 정의
-const GET_DATES = "election/GET_DATES";
+const prefix = "election/";
 
-// 액션 생성
-// handleActions에서 분기처리하여 실행된다.
-export const getDates = createAction(GET_DATES);
-
-// 초기 상태 정의
 const initialState = Map({
-  electionDates: []
+  dates: List([])
 });
 
-// 리듀서 함수 정의
-const election = handleActions(
-  {
-    [GET_DATES]: (state, action) => ({
-      ...state
-    })
-  },
-  initialState
-);
+const election = (state = initialState, action) => {
+  const { dates } = state.get("dates");
+  console.log(dates);
+
+  switch (action.type) {
+    case "election/SET_DATES":
+      return state.set("dates", action.dates);
+    // case "SETTIMELINE":
+    //   return [...state, ...action.timeline];
+    // case "APPENDFEED":
+    //   return Object.values([action.feed, ...state]);
+    // case "UPDATEFEED":
+    //   return state.map(feed => {
+    //     if (feed.id === action.feed.id) {
+    //       return mergeObject(feed, action.feed);
+    //     }
+    //     return feed;
+    //   });
+    // case "APPENDCOMMENT":
+    //   return state.map(feed => {
+    //     if (feed.id === action.comment.rootDocument.id) {
+    //       return Object.values([action.comment, ...feed.comments]);
+    //     }
+    //     return feed;
+    //   });
+    default:
+      return state;
+  }
+};
 
 export default election;
