@@ -53,18 +53,22 @@ class ElectionTab extends Component {
             indicatorColor="primary"
             aria-label="Election Tabs"
           >
-            <Tab label="Item One" {...this.a11yProps(0)} />
-            <Tab label="Item Two" {...this.a11yProps(1)} />
-            <Tab label="Item Three" {...this.a11yProps(2)} />
+            <Tab label="투표정보" {...this.a11yProps(0)} />
+            <Tab label="개표정보" {...this.a11yProps(1)} />
+            <Tab label="후보자" {...this.a11yProps(2)} />
+            <Tab label="당선인" {...this.a11yProps(3)} />
           </Tabs>
           <TabPanel value={tabpage} index={0}>
-            Item One
+            투표정보
           </TabPanel>
           <TabPanel value={tabpage} index={1}>
-            Item Two
+            개표정보
           </TabPanel>
           <TabPanel value={tabpage} index={2}>
-            Item Three
+            후보자
+          </TabPanel>
+          <TabPanel value={tabpage} index={3}>
+            당선인
           </TabPanel>
         </AppBar>
       </div>

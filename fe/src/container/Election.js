@@ -47,6 +47,8 @@ class Election extends Component {
           <Grid item xs={12}>
             <ElectionDates dates={electionDates} />
           </Grid>
+          {/* 해당 선거일 선거종류정보 */}
+          <Grid item xs={12} />
           {/* 선거정보 (Tab UI) */}
           <Grid item xs={12}>
             <ElectionTab
