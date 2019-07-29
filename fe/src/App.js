@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 import { Home, Members, Discussion, Election } from "./container";
 import { CssBaseline, Container } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+// import Footer from "./components/Footer";
 
 // redux
 import { createStore, applyMiddleware } from "redux";
@@ -60,7 +60,7 @@ class App extends Component {
         <ConnectedRouter history={history}>
           <div className={classes.root}>
             <CssBaseline />
-            <Container component="main" maxWidth="false">
+            <Container component="main" maxWidth={false}>
               <BrowserRouter>
                 <Navbar />
                 <div className={classes.contents}>

@@ -1,36 +1,45 @@
 import { Map, List } from "immutable";
+import axios from "axios";
 
-const prefix = "election/";
+// API URL
+const apiUrl = "http://localhost";
+
+const SET_DATES = "election/SET_DATES";
+
+const setDates = dates => ({ type: SET_DATES, dates });
+
+export const getElectionDates = () => dispatch => {
+  console.log("api call");
+  axios
+    .get(`${apiUrl}/elections/getDates`)
+    .then(res => {
+      console.log("them");
+    })
+    .then(res => {
+      dispatch(setDates(res.data));
+    })
+    .catch(error => {
+      console.log("catch");
+    });
+};
 
 const initialState = Map({
-  dates: List([])
+  dates: List([]),
+  tabpage: 0
 });
 
 const election = (state = initialState, action) => {
-  const { dates } = state.get("dates");
-  console.log(dates);
+  // const { dates } = state.get("dates");
+  const { tabpage } = state.get("tabpage");
 
   switch (action.type) {
     case "election/SET_DATES":
       return state.set("dates", action.dates);
-    // case "SETTIMELINE":
-    //   return [...state, ...action.timeline];
-    // case "APPENDFEED":
-    //   return Object.values([action.feed, ...state]);
-    // case "UPDATEFEED":
-    //   return state.map(feed => {
-    //     if (feed.id === action.feed.id) {
-    //       return mergeObject(feed, action.feed);
-    //     }
-    //     return feed;
-    //   });
-    // case "APPENDCOMMENT":
-    //   return state.map(feed => {
-    //     if (feed.id === action.comment.rootDocument.id) {
-    //       return Object.values([action.comment, ...feed.comments]);
-    //     }
-    //     return feed;
-    //   });
+    case "election/CHANGE_TAB_PAGE":
+      if (tabpage === action.tabpage) {
+        return state;
+      }
+      return state.set("tabpage", action.tabpage);
     default:
       return state;
   }

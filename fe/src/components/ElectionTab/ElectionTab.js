@@ -10,21 +10,21 @@ import {
 
 const styles = theme => ({
   root: {
-    flexGrow: 1
-    // backgroundColor: theme.palette.background.paper
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper
   }
 });
 
 class ElectionTab extends Component {
   a11yProps(index) {
     return {
-      id: `simple-tab-${index}`,
-      "aria-controls": `simple-tabpanel-${index}`
+      id: `election-tab-${index}`,
+      "aria-controls": `election-tabpanel-${index}`
     };
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, tabpage, changeTabpage } = this.props;
 
     const TabPanel = props => {
       const { children, value, index, ...other } = props;
@@ -34,8 +34,8 @@ class ElectionTab extends Component {
           component="div"
           role="tabpanel"
           hidden={value !== index}
-          id={`simple-tabpanel-${index}`}
-          aria-labelledby={`simple-tab-${index}`}
+          id={`election-tabpanel-${index}`}
+          aria-labelledby={`election-tab-${index}`}
           {...other}
         >
           <Box p={3}>{children}</Box>
@@ -45,23 +45,25 @@ class ElectionTab extends Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position="static" color="default">
           <Tabs
-            value={0}
-            onChange={() => console.log("changed tab")}
-            aria-label="simple tabs example"
+            value={tabpage}
+            onChange={changeTabpage}
+            textColor="primary"
+            indicatorColor="primary"
+            aria-label="Election Tabs"
           >
             <Tab label="Item One" {...this.a11yProps(0)} />
             <Tab label="Item Two" {...this.a11yProps(1)} />
             <Tab label="Item Three" {...this.a11yProps(2)} />
           </Tabs>
-          <TabPanel value={0} index={0}>
+          <TabPanel value={tabpage} index={0}>
             Item One
           </TabPanel>
-          <TabPanel value={1} index={1}>
+          <TabPanel value={tabpage} index={1}>
             Item Two
           </TabPanel>
-          <TabPanel value={2} index={2}>
+          <TabPanel value={tabpage} index={2}>
             Item Three
           </TabPanel>
         </AppBar>

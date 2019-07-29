@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
 import { withStyles, Grid } from "@material-ui/core/";
 import ElectionDates from "../components/ElectionDates";
-import { getElectionDates } from "../api";
 import ElectionTab from "../components/ElectionTab";
+
+import { getElectionDates, handleChangeTabpage } from "../actions";
 
 const drawerWidth = 240;
 
@@ -31,17 +31,14 @@ const styles = theme => ({
 });
 
 class Election extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
-    // 선거일 정보 Call
-    this.props.getElectionDates();
+    const { getElectionDates } = this.props;
+    getElectionDates();
   }
 
   render() {
-    const { classes, electionDates } = this.props;
+    const { classes, electionDates, tabpage } = this.props;
+    const { handleChangeTabpage } = this.props;
 
     return (
       <div className={classes.root}>
@@ -52,7 +49,10 @@ class Election extends Component {
           </Grid>
           {/* 선거정보 (Tab UI) */}
           <Grid item xs={12}>
-            <ElectionTab />
+            <ElectionTab
+              changeTabpage={handleChangeTabpage}
+              tabpage={tabpage}
+            />
           </Grid>
         </Grid>
       </div>
@@ -61,11 +61,13 @@ class Election extends Component {
 }
 
 const mapStateToProps = state => ({
-  electionDates: state.election.get("dates")
+  electionDates: state.election.get("dates"),
+  tabpage: state.election.get("tabpage")
 });
 
 const mapDispatchToProps = {
-  getElectionDates
+  getElectionDates,
+  handleChangeTabpage
 };
 
 export default connect(

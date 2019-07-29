@@ -6,18 +6,19 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper
+  },
+  chip: {
+    marginRight: theme.spacing(2)
   }
 });
 
 class ElectionDates extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { dates, classes } = this.props;
     const comp = dates.map(date => (
       <Chip
+        key={date}
+        className={classes.chip}
         color="primary"
         label={moment(date, "YYYYMMDD").format("YYYY년 MM월 DD일")}
         onClick={() => console.log(date)}

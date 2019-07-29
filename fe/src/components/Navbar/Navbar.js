@@ -46,11 +46,12 @@ class Navbar extends Component {
     const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
 
-    // TopMenu 구현체
-    const NavHome = props => <NavLink to="/" {...props} />;
-    const NavMembers = props => <NavLink to="/member" {...props} />;
-    const NavDiscussion = props => <NavLink to="/discussion" {...props} />;
-    const NavElection = props => <NavLink to="/election" {...props} />;
+    // TopMenu 구현체 (forwardRef 적용)
+    const LinkRef = React.forwardRef((props, ref) => (
+      <div ref={ref}>
+        <NavLink {...props} />
+      </div>
+    ));
 
     return (
       <div className={classes.root}>
@@ -59,16 +60,28 @@ class Navbar extends Component {
             <Typography variant="h5" color="inherit" className={classes.grow}>
               WooMin
             </Typography>
-            <Button component={NavHome} className={classes.navButton}>
+            <Button component={LinkRef} className={classes.navButton} to="/">
               홈
             </Button>
-            <Button component={NavMembers} className={classes.navButton}>
+            <Button
+              component={LinkRef}
+              className={classes.navButton}
+              to="/member"
+            >
               의원정보
             </Button>
-            <Button component={NavDiscussion} className={classes.navButton}>
+            <Button
+              component={LinkRef}
+              className={classes.navButton}
+              to="/discussion"
+            >
               의사정보
             </Button>
-            <Button component={NavElection} className={classes.navButton}>
+            <Button
+              component={LinkRef}
+              className={classes.navButton}
+              to="/election"
+            >
               선거정보
             </Button>
             <Button
