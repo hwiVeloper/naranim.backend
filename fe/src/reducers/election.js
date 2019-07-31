@@ -40,6 +40,8 @@ const election = (state = initialState, action) => {
         return state;
       }
       return state.set("tabpage", action.tabpage);
+    case "election/CLICK_CHIP":
+      return state;
     default:
       return state;
   }

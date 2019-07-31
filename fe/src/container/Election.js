@@ -38,14 +38,17 @@ class Election extends Component {
 
   render() {
     const { classes, electionDates, tabpage } = this.props;
-    const { handleChangeTabpage } = this.props;
+    const { handleChangeTabpage, handleClickChip } = this.props;
 
     return (
       <div className={classes.root}>
         <Grid container spacing={2}>
           {/* 선거일 리스트 (Chip UI) */}
           <Grid item xs={12}>
-            <ElectionDates dates={electionDates} />
+            <ElectionDates
+              dates={electionDates}
+              handleClick={handleClickChip}
+            />
           </Grid>
           {/* 해당 선거일 선거종류정보 */}
           <Grid item xs={12} />
@@ -69,7 +72,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   getElectionDates,
-  handleChangeTabpage
+  handleChangeTabpage,
+  handleClickChip
 };
 
 export default connect(
