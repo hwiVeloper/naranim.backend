@@ -6,9 +6,9 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  Button,
-  Menu,
-  MenuItem
+  Button
+  // Menu,
+  // MenuItem
 } from "@material-ui/core/";
 
 const styles = theme => ({
@@ -43,8 +43,8 @@ class Navbar extends Component {
 
   render() {
     const { classes } = this.props;
-    const { anchorEl } = this.state;
-    const open = Boolean(anchorEl);
+    // const { anchorEl } = this.state;
+    // const open = Boolean(anchorEl);
 
     // TopMenu 구현체 (forwardRef 적용)
     const LinkRef = React.forwardRef((props, ref) => (
@@ -84,6 +84,7 @@ class Navbar extends Component {
             >
               선거정보
             </Button>
+            {/*
             <Button
               aria-controls="simple-menu"
               aria-haspopup="true"
@@ -103,6 +104,7 @@ class Navbar extends Component {
               <MenuItem onClick={this.handleClose}>메뉴2</MenuItem>
               <MenuItem onClick={this.handleClose}>메뉴3</MenuItem>
             </Menu>
+            */}
           </Toolbar>
         </AppBar>
       </div>

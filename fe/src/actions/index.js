@@ -14,6 +14,7 @@ const changeTabpage = (event, postValue) => ({
 });
 const clickChip = event => ({ type: CLICK_CHIP });
 
+// 선거일자 리스트
 export const getElectionDates = () => dispatch => {
   axios
     .get(`${apiUrl}/elections/getDates`)
@@ -25,10 +26,12 @@ export const getElectionDates = () => dispatch => {
     });
 };
 
+// 선거정보 탭 변경
 export const handleChangeTabpage = (event, postValue) => dispatch => {
   dispatch(changeTabpage(event, postValue));
 };
 
+// 선거일자 클릭 이벤트
 export const handleClickChip = event => dispatch => {
   dispatch(clickChip(event));
 };

@@ -1,27 +1,4 @@
 import { Map, List } from "immutable";
-import axios from "axios";
-
-// API URL
-const apiUrl = "http://localhost";
-
-const SET_DATES = "election/SET_DATES";
-
-const setDates = dates => ({ type: SET_DATES, dates });
-
-export const getElectionDates = () => dispatch => {
-  console.log("api call");
-  axios
-    .get(`${apiUrl}/elections/getDates`)
-    .then(res => {
-      console.log("them");
-    })
-    .then(res => {
-      dispatch(setDates(res.data));
-    })
-    .catch(error => {
-      console.log("catch");
-    });
-};
 
 const initialState = Map({
   dates: List([]),

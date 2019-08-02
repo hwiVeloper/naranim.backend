@@ -4,7 +4,11 @@ import { withStyles, Grid } from "@material-ui/core/";
 import ElectionDates from "../components/ElectionDates";
 import ElectionTab from "../components/ElectionTab";
 
-import { getElectionDates, handleChangeTabpage } from "../actions";
+import {
+  getElectionDates,
+  handleChangeTabpage,
+  handleClickChip
+} from "../actions";
 
 const drawerWidth = 240;
 
