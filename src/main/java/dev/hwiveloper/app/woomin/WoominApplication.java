@@ -6,10 +6,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 @EnableScheduling
+@EnableWebMvc
 public class WoominApplication {
 
 	public static void main(String[] args) {
@@ -38,7 +40,7 @@ public class WoominApplication {
                 .allowedOrigins("*")
                 .allowedMethods(HttpMethod.GET.name())
                 .allowCredentials(false)
-                .maxAge(-1);
+                .maxAge(3600);
             }
         };
     }
