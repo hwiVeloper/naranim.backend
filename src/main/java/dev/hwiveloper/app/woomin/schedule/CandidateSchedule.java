@@ -113,6 +113,7 @@ public class CandidateSchedule {
 						keyCndd.setHuboId(item.get("huboid").toString());
 
 						itemCndd.setKey(keyCndd);
+						itemCndd.setSggName(item.getString("sggName"));
 						itemCndd.setSdName(item.getString("sdName"));
 						itemCndd.setWiwName(item.getString("wiwName"));
 						itemCndd.setGiho(item.get("giho").toString().equals("") ? 99 : item.getInt("giho"));

@@ -13,6 +13,7 @@ public class Candidate {
 	@EmbeddedId
 	private CandidatePK key;
 	
+	private String sggName;
 	private String sdName;
 	private String wiwName;
 	private int giho;
