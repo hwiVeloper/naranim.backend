@@ -29,23 +29,40 @@ public class VoteResultController {
 	 * @return
 	 */
 	@GetMapping("/{sg_id}/{sg_type_code}")
-	public ResponseEntity<List<Map<String, Object>>> getUniqueSdNames(
+	public ResponseEntity<Map<String, Object>> getUniqueSdNames(
 		@PathVariable("sg_id") String sgId,
 		@PathVariable("sg_type_code") String sgTypeCode
 	) {
-		List<String> listSdNames = voteResultRepo.findDistinctSdNameByKey(sgId, sgTypeCode);
-		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		Map<String, Object> result = new HashMap<String, Object>();
 		
-		int size = listSdNames.size();
+		List<String> listSdSggNames = voteResultRepo.findDistinctSdNameSggNameByKey(sgId, sgTypeCode);
+		List<Map<String, Object>> listMapSdNames = new ArrayList<Map<String, Object>>(); 
+		
+		int size = listSdSggNames.size();
 		
 		for (int i = 0; i < size; i++) {
 			Map<String, Object> tmpMap = new HashMap<String, Object>();
-			String[] names = listSdNames.get(i).split(",");
+			String[] names = listSdSggNames.get(i).split(",");
 			tmpMap.put("sdName", names[0]);
 			tmpMap.put("sggName", names[1]);
-			result.add(tmpMap);
+			listMapSdNames.add(tmpMap);
 		}
 		
-		return new ResponseEntity<List<Map<String, Object>>>(result, HttpStatus.OK);
+		List<String> listSdNames = voteResultRepo.findDistinctSdNameByKey(sgId, sgTypeCode);
+		
+		result.put("sdSggNames", listMapSdNames);
+		result.put("sdNames", listSdNames);
+		
+		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/{sg_id}/{sg_type_code}/{sgg_name}")
+	public ResponseEntity<List<VoteResult>> getVoteResults(
+		@PathVariable("sg_id") String sgId,
+		@PathVariable("sg_type_code") String sgTypeCode,
+		@PathVariable("sgg_name") String sggName
+	) {
+		List<VoteResult> result = voteResultRepo.findAllByKey(sgId, sgTypeCode, sggName);
+		return new ResponseEntity<List<VoteResult>>(result, HttpStatus.OK);
 	}
 }
