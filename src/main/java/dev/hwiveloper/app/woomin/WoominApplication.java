@@ -38,7 +38,7 @@ public class WoominApplication {
                 registry
                 .addMapping("/**")
                 .allowedOrigins("*")
-                .allowedMethods(HttpMethod.GET.name())
+                .allowedMethods(HttpMethod.GET.name(), HttpMethod.POST.name())
                 .allowCredentials(false)
                 .maxAge(3600);
             }

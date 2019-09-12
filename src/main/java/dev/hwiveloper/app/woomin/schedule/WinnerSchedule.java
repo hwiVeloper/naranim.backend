@@ -104,7 +104,7 @@ public class WinnerSchedule {
 						Winner itemWinner = new Winner();
 						WinnerPK keyWinner = new WinnerPK();
 
-						keyWinner.setNum(item.getInt("num"));
+						keyWinner.setGiho(item.getInt("giho"));
 						keyWinner.setSgId(item.get("sgId").toString());
 						keyWinner.setSgTypeCode(item.get("sgTypecode").toString());
 						keyWinner.setHuboId(item.get("huboid").toString());
@@ -112,7 +112,6 @@ public class WinnerSchedule {
 						itemWinner.setSggName(item.getString("sggName"));
 						itemWinner.setSdName(item.getString("sdName"));
 						itemWinner.setWiwName(item.getString("wiwName"));
-						itemWinner.setGiho(item.getInt("giho"));
 						itemWinner.setGihoSangse(item.has("gihoSange") ? item.getString("gihoSange") : "");
 						itemWinner.setJdName(item.getString("jdName"));
 						itemWinner.setName(item.getString("name"));
@@ -138,7 +137,7 @@ public class WinnerSchedule {
 					Winner itemWinner = new Winner();
 					WinnerPK keyWinner = new WinnerPK();
 
-					keyWinner.setNum(itemJson.getInt("num"));
+					keyWinner.setGiho(itemJson.getInt("giho"));
 					keyWinner.setSgId(itemJson.get("sgId").toString());
 					keyWinner.setSgTypeCode(itemJson.get("sgTypecode").toString());
 					keyWinner.setHuboId(itemJson.get("huboid").toString());
@@ -146,7 +145,6 @@ public class WinnerSchedule {
 					itemWinner.setSggName(itemJson.getString("sggName"));
 					itemWinner.setSdName(itemJson.getString("sdName"));
 					itemWinner.setWiwName(itemJson.getString("wiwName"));
-					itemWinner.setGiho(itemJson.getInt("giho"));
 					itemWinner.setGihoSangse(itemJson.has("gihoSange") ? itemJson.getString("gihoSange") : "");
 					itemWinner.setJdName(itemJson.getString("jdName"));
 					itemWinner.setName(itemJson.getString("name"));

@@ -16,9 +16,6 @@ public class CandidatePK implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	@Column(name="num")
-	private int num;
 	
 	@Column(name="sg_id")
 	private String sgId;
@@ -28,4 +25,7 @@ public class CandidatePK implements Serializable {
 	
 	@Column(name="hubo_id")
 	private String huboId;
+	
+	@Column(name="giho")
+	private int giho;
 }

@@ -19,7 +19,6 @@ public class Winner {
 	private String sggName;
 	private String sdName;
 	private String wiwName;
-	private int giho;
 	private String gihoSangse;
 	private String jdName;
 	private String name;

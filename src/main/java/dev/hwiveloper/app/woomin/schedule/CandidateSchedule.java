@@ -107,7 +107,7 @@ public class CandidateSchedule {
 						Candidate itemCndd = new Candidate();
 						CandidatePK keyCndd = new CandidatePK();
 
-						keyCndd.setNum(item.getInt("num"));
+						keyCndd.setGiho(item.get("giho").toString().equals("") ? 99 : item.getInt("giho"));
 						keyCndd.setSgId(item.get("sgId").toString());
 						keyCndd.setSgTypeCode(item.get("sgTypecode").toString());
 						keyCndd.setHuboId(item.get("huboid").toString());
@@ -116,7 +116,6 @@ public class CandidateSchedule {
 						itemCndd.setSggName(item.getString("sggName"));
 						itemCndd.setSdName(item.getString("sdName"));
 						itemCndd.setWiwName(item.getString("wiwName"));
-						itemCndd.setGiho(item.get("giho").toString().equals("") ? 99 : item.getInt("giho"));
 						itemCndd.setGihoSangse(item.isNull("gihoSangse") ? "" : item.getString("gihoSangse"));
 						itemCndd.setJdName(item.getString("jdName"));
 						itemCndd.setName(item.getString("name"));
@@ -141,7 +140,7 @@ public class CandidateSchedule {
 					Candidate itemCndd = new Candidate();
 					CandidatePK keyCndd = new CandidatePK();
 
-					keyCndd.setNum(item.getInt("num"));
+					keyCndd.setGiho(item.get("giho").toString().equals("") ? 99 : item.getInt("giho"));
 					keyCndd.setSgId(item.get("sgId").toString());
 					keyCndd.setSgTypeCode(item.get("sgTypecode").toString());
 					keyCndd.setHuboId(item.get("huboid").toString());
@@ -149,7 +148,6 @@ public class CandidateSchedule {
 					itemCndd.setKey(keyCndd);
 					itemCndd.setSdName(item.getString("sdName"));
 					itemCndd.setWiwName(item.getString("wiwName"));
-					itemCndd.setGiho(item.get("giho").toString().equals("") ? 99 : item.getInt("giho"));
 					itemCndd.setGihoSangse(item.isNull("gihoSangse") ? "" : item.getString("gihoSangse"));
 					itemCndd.setJdName(item.getString("jdName"));
 					itemCndd.setName(item.getString("name"));
