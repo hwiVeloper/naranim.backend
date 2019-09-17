@@ -24,6 +24,11 @@ public class WinnerController {
 	@Autowired
 	WinnerRepository winnerRepo;
 	
+	/**
+	 * 당선자 조회
+	 * @param request
+	 * @return
+	 */
 	@PostMapping("")
 	public ResponseEntity<List<Winner>> getWinners(@RequestBody Map<String, Object> request) {
 		String sgId = (String) request.get("sgId");
