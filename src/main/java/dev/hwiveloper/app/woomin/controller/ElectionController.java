@@ -14,7 +14,6 @@ import dev.hwiveloper.app.woomin.domain.common.Election;
 import dev.hwiveloper.app.woomin.domain.common.ElectionType;
 import dev.hwiveloper.app.woomin.repository.ElectionRepository;
 import dev.hwiveloper.app.woomin.repository.ElectionTypeRepository;
-import dev.hwiveloper.app.woomin.repository.SungeoguRepository;
 
 @RestController
 @RequestMapping("/elections")
