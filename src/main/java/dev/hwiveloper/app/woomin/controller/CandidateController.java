@@ -1,5 +1,6 @@
 package dev.hwiveloper.app.woomin.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,6 +59,17 @@ public class CandidateController {
 	public ResponseEntity<Candidate> getCandidate(
 		@PathVariable("hubo_id") String huboId
 	) {
-		return null
+		Candidate result = candidateRepo.findByKeyHuboId(huboId);
+		return new ResponseEntity<Candidate>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/test")
+	public ResponseEntity<Map<String, Object>> test() {
+		Map<String, Object> result = new HashMap<String, Object>();
+		logger.info("test 메서드 실행");
+		result.put("test1", "테스트1");
+		result.put("test2", "테스트2");
+		result.put("test3", "test value3");
+		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 	}
 }
