@@ -29,7 +29,7 @@ public class WinnerController {
 	 * @param request
 	 * @return
 	 */
-	@PostMapping("")
+	@PostMapping("/getWinners")
 	public ResponseEntity<List<Winner>> getWinners(@RequestBody Map<String, Object> request) {
 		String sgId = (String) request.get("sgId");
 		String sgTypeCode = (String) request.get("sgTypeCode");

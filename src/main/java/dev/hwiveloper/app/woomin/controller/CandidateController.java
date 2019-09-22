@@ -1,17 +1,14 @@
 package dev.hwiveloper.app.woomin.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,12 +31,12 @@ public class CandidateController {
 	 * @param request
 	 * @return
 	 */
-	@PostMapping("")
+	@PostMapping("/getCandidates")
 	public ResponseEntity<List<Candidate>> getCandidates(@RequestBody Map<String, Object> request) {
-		String sgId = (String) request.get("sgId");
-		String sgTypeCode = (String) request.get("sgTypeCode");
-		String wiwName = (String) request.get("wiwName");
-		String sggName = (String) request.get("sggName");
+		String sgId = (String) request.get("sg_id");
+		String sgTypeCode = (String) request.get("sg_type_code");
+		String wiwName = (String) request.get("wiw_name");
+		String sggName = (String) request.get("sgg_name");
 		
 		List<Candidate> result = null;
 		if (wiwName != null)
@@ -55,21 +52,11 @@ public class CandidateController {
 	 * @param huboId
 	 * @return
 	 */
-	@GetMapping("/{hubo_id}")
-	public ResponseEntity<Candidate> getCandidate(
-		@PathVariable("hubo_id") String huboId
-	) {
+	@GetMapping("/getCandidate")
+	public ResponseEntity<Candidate> getCandidate(@RequestBody Map<String, Object> request) {
+		String huboId = (String) request.get("hubo_id");
+		
 		Candidate result = candidateRepo.findByKeyHuboId(huboId);
 		return new ResponseEntity<Candidate>(result, HttpStatus.OK);
-	}
-	
-	@GetMapping("/test")
-	public ResponseEntity<Map<String, Object>> test() {
-		Map<String, Object> result = new HashMap<String, Object>();
-		logger.info("test 메서드 실행");
-		result.put("test1", "테스트1");
-		result.put("test2", "테스트2");
-		result.put("test3", "test value3");
-		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 	}
 }

@@ -1,5 +1,9 @@
 package dev.hwiveloper.app.woomin.aop;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -9,6 +13,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,13 +45,16 @@ public class ControllerAop {
 	}
 
 	@Around("execution(* dev.hwiveloper.app.woomin.controller.*.*(..))")
-	public Object around(ProceedingJoinPoint pjp) throws Throwable {
+	public ResponseEntity<?> around(ProceedingJoinPoint pjp) throws Throwable {
+		logger.info("==========================> " + pjp.getSignature().getDeclaringTypeName() + "." + pjp.getSignature().getName() + "START");
 		logger.info("start - " + pjp.getSignature().getDeclaringTypeName() + " / " + pjp.getSignature().getName());
 		
-		Object result;
-		result = pjp.proceed();
+		ResponseEntity<?> result;
+		result = (ResponseEntity<?>) pjp.proceed();
 
 		logger.info("finished - " + pjp.getSignature().getDeclaringTypeName() + " / " + pjp.getSignature().getName());
+		
+		logger.info("==========================> " + pjp.getSignature().getDeclaringTypeName() + "." + pjp.getSignature().getName() + "END");
 
 		return result;
 	}
