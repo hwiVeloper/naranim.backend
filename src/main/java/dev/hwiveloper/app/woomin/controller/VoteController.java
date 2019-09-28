@@ -46,7 +46,14 @@ public class VoteController {
 		String sgTypeCode = (String) request.get("sg_type_code");
 		String sdName = (String) request.get("sd_name");
 		
-		List<Vote> result = voteRepo.findAllByKeyAndSdName(sgId, sgTypeCode, sdName);
+		List<Vote> result = null;
+		
+		if (request.get("sd_name") == null
+		||  request.get("sd_name").toString().equals("")) {
+			result = voteRepo.findAllByKey(sgId, sgTypeCode);
+		} else {
+			result = voteRepo.findAllByKeyAndSdName(sgId, sgTypeCode, sdName);
+		}
 		
 		return new ResponseEntity<List<Vote>>(result, HttpStatus.OK);
 	}

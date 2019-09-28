@@ -30,7 +30,7 @@ public class MemberController {
 	) {
 		Member member = memberRepo.findById(deptCd).get();
 		if (member == null) {
-			return new ResponseEntity("User with id " + deptCd + " not found", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("User with id " + deptCd + " not found", HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Member>(member, HttpStatus.OK);
 	}
