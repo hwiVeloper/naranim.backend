@@ -1,11 +1,13 @@
 package dev.hwiveloper.app.woomin.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,7 @@ import dev.hwiveloper.app.woomin.domain.common.Election;
 import dev.hwiveloper.app.woomin.domain.common.ElectionType;
 import dev.hwiveloper.app.woomin.repository.ElectionRepository;
 import dev.hwiveloper.app.woomin.repository.ElectionTypeRepository;
+import dev.hwiveloper.app.woomin.service.ElectionService;
 
 @RestController
 @RequestMapping("/elections")
@@ -24,6 +27,9 @@ public class ElectionController {
 	
 	@Autowired
 	ElectionTypeRepository electionTypeRepo;
+	
+	@Autowired
+	ElectionService electionService;
 	
 	/**
 	 * 선거정보리스트 조회
@@ -62,6 +68,17 @@ public class ElectionController {
 	 */
 	@PostMapping("/getDates")
 	public ResponseEntity<List<String>> getDates(@RequestBody Map<String, Object> request) {
-		return new ResponseEntity<List<String>>((List<String>) electionRepo.findDistinctKeySgId(), HttpStatus.OK);
+		Map<String, Object> param = new HashMap<String, Object>();
+		
+		param.put("sgId", request.get("sg_id"));
+		
+		List<String> result = electionService.getElections(param);
+		
+		return new ResponseEntity<List<String>>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/selectTest")
+	public ResponseEntity<List<Map<String, Object>>> selectTest() {
+		return new ResponseEntity<List<Map<String, Object>>>(electionService.selectTest(), HttpStatus.OK);
 	}
 }

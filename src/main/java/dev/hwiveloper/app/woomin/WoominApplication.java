@@ -1,5 +1,6 @@
 package dev.hwiveloper.app.woomin;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -11,9 +12,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
-@EnableAspectJAutoProxy
+//@EnableAspectJAutoProxy
 @EnableScheduling
 @EnableWebMvc
+@MapperScan(basePackages = "dev.hwiveloper.app.woomin.mapper")
 public class WoominApplication {
 
 	public static void main(String[] args) {
