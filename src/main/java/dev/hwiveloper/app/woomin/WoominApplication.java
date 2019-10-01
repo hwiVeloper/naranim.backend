@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
-//@EnableAspectJAutoProxy
+@EnableAspectJAutoProxy
 @EnableScheduling
 @EnableWebMvc
 @MapperScan(basePackages = "dev.hwiveloper.app.woomin.mapper")
