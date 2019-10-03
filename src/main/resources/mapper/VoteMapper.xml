@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+
+<mapper namespace="dev.hwiveloper.woomin.mapper.VoteMapper">	
+	<select id="getVoteInfo" parameterType="Map" resultType="Map">
+		SELECT
+			*
+		FROM woomin_vote
+		WHERE 1=1
+		AND sg_id = #{SG_ID}
+		AND sg_type_code = #{SG_TYPE_CODE}
+		AND sd_name = #{SD_NAME}
+		AND wiw_name != '합계'
+		ORDER BY vr_order
+	</select>
+	
+	<select id="getVoteSdTotalInfo" parameterType="Map" resultType="Map">
+		SELECT
+			*
+		FROM woomin_vote
+		WHERE 1=1
+		AND sg_id = #{SG_ID}
+		AND sg_type_code = #{SG_TYPE_CODE}
+		AND sd_name = #{SD_NAME}
+		AND wiw_name = '합계'
+		ORDER BY vr_order
+	</select>
+	
+	<select id="getVoteTotalInfo" parameterType="Map" resultType="Map">
+		SELECT
+			*
+		FROM woomin_vote
+		WHERE 1=1
+		AND sg_id = #{SG_ID}
+		AND sg_type_code = #{SG_TPYE_CODE}
+		AND wiw_name = '합계'
+		ORDER BY vr_order
+	</select>
+</mapper>

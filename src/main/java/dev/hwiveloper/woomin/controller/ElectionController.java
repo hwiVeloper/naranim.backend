@@ -25,8 +25,11 @@ public class ElectionController {
 	@PostMapping("/getElectionTypes")
 	public ResponseEntity<List<Map<String, Object>>> getElectionTypes(@RequestBody Map<String, Object> param) {
 		log.info("==========================> {}.{} START", getClass().getSimpleName(), new Object() {}.getClass().getEnclosingMethod().getName());
+		
 		List<Map<String, Object>> result = electionService.getElectionTypes();
+		
 		log.info("==========================> {}.{} END", getClass().getSimpleName(), new Object() {}.getClass().getEnclosingMethod().getName());
+		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
 
-<mapper namespace="dev.hwiveloper.app.woomin.mapper.ElectionMapper">
+<mapper namespace="dev.hwiveloper.woomin.mapper.ElectionMapper">
 	<select id="getElectionTypes" resultType="Map">
 		SELECT
 			sg_type_code,
@@ -11,7 +11,7 @@
 		ORDER BY CAST(sg_type_code AS INT)
 	</select>
 	
-	<select id="getElections" parameterType="Map" resultType="Map">
+	<select id="getElections" parameterType="Map" resultType="String">
 		SELECT
 			sg_id
 		FROM woomin_election
@@ -19,7 +19,7 @@
 		ORDER BY STR_TO_DATE(sg_id, '%Y%m%d') DESC
 	</select>
 	
-	<select id="getSdNames" parameterType="Map" resultType="Map">
+	<select id="getSdNames" parameterType="Map" resultType="String">
 		SELECT
 			DISTINCT sd_name
 		FROM woomin_sungeogu
@@ -28,7 +28,7 @@
 		AND sg_id = #{SG_ID}
 	</select>
 	
-	<select id="getSggNames" parameterType="Map" resultType="Map">
+	<select id="getSggNames" parameterType="Map" resultType="String">
 		SELECT
 			DISTINCT sgg_name
 		FROM woomin_sungeogu
@@ -37,7 +37,7 @@
 		AND sd_name = #{SD_NAME}
 	</select>
 	
-	<select id="getWiwNames" parameterType="Map" resultType="Map">
+	<select id="getWiwNames" parameterType="Map" resultType="String">
 		SELECT
 			DISTINCT wiw_name
 		FROM woomin_sungeogu
