@@ -8,7 +8,7 @@
 		<version>2.1.4.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>dev.hwiveloper.app</groupId>
+	<groupId>dev.hwiveloper</groupId>
 	<artifactId>woomin</artifactId>
 	<version>0.1.0</version>
 	<packaging>war</packaging>

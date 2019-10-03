@@ -2,23 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
 
 <mapper namespace="dev.hwiveloper.app.woomin.mapper.ElectionMapper">
-	<select id="selectTest" resultType="Map">
-		SELECT * FROM woomin_election_type
-	</select>
-	
 	<select id="getElectionTypes" resultType="Map">
 		SELECT
 			sg_type_code,
 			sg_type_name
 		FROM
 			woomin_election_type
-		ORDER BY CAST(sg_type_code as INT)
+		ORDER BY CAST(sg_type_code AS INT)
 	</select>
 	
 	<select id="getElections" parameterType="Map" resultType="Map">
 		SELECT
 			sg_id
-		FROM woomin_election e
+		FROM woomin_election
 		WHERE sg_type_code = #{SG_TYPE_CODE}
 		ORDER BY STR_TO_DATE(sg_id, '%Y%m%d') DESC
 	</select>
