@@ -32,7 +32,7 @@
 		FROM woomin_vote
 		WHERE 1=1
 		AND sg_id = #{SG_ID}
-		AND sg_type_code = #{SG_TPYE_CODE}
+		AND sg_type_code = #{SG_TYPE_CODE}
 		AND wiw_name = '합계'
 		ORDER BY vr_order
 	</select>

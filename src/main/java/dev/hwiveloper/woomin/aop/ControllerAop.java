@@ -33,11 +33,11 @@ public class ControllerAop {
 		log.info("=============== onAfterHandler");
 	}
 
-	@AfterReturning(pointcut = "execution(* dev.hwiveloper.woomin.controller.*.*(..))", returning = "ret")
-	public void onAfterReturningHandler(JoinPoint joinPoint, Object ret) {
-		log.info("@AfterReturning : " + ret);
-		log.info("=============== onAfterReturningHandler");
-	}
+//	@AfterReturning(pointcut = "execution(* dev.hwiveloper.woomin.controller.*.*(..))", returning = "ret")
+//	public void onAfterReturningHandler(JoinPoint joinPoint, Object ret) {
+//		log.info("@AfterReturning : " + ret);
+//		log.info("=============== onAfterReturningHandler");
+//	}
 
 	@Around("execution(* dev.hwiveloper.woomin.controller.*.*(..))")
 	public ResponseEntity<?> around(ProceedingJoinPoint pjp) throws Throwable {
