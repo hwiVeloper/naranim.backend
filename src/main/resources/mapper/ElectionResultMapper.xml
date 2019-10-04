@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+
+<mapper namespace="dev.hwiveloper.woomin.mapper.ElectionResultMapper">
+	<select id="getElectionResultByWiwName" parameterType="Map" resultType="Map">
+		SELECT
+			c.*,
+			CASE RIGHT(c.sgg_name, 1)
+				WHEN '갑' THEN 1
+				WHEN '을' THEN 2
+				WHEN '병' THEN 3
+				ELSE 0 END AS order_gan,
+			CASE WHEN w.hubo_id IS NOT NULL then 1
+				ELSE 0 END AS is_winner,
+			vr.sunsu,
+			vr.tusu,
+			vr.yutusu,
+			vr.mutusu,
+			vr.gigwonsu,
+			vr.dugsu,
+			(vr.dugsu / vr.yutusu) * 100 AS dugsu_ratio
+		FROM
+			woomin_candidate AS c
+			LEFT OUTER JOIN woomin_winner AS w
+				ON w.hubo_id = c.hubo_id
+			LEFT OUTER JOIN woomin_vote_result AS vr
+				ON vr.hbj = c.name
+				AND vr.sg_id = c.sg_id
+				AND vr.sg_type_code = c.sg_type_code
+				AND vr.sd_name = c.sd_name
+				AND vr.wiw_name = c.wiw_name
+		WHERE 1=1
+		AND c.sg_type_code = #{SG_TYPE_CODE}
+		AND c.sg_id = #{SG_ID}
+		AND c.sd_name = #{SD_NAME}
+		AND c.wiw_name = #{WIW_NAME}
+		ORDER by order_gan
+	</select>
+	
+	<select id="getElectionResultBySggName" parameterType="Map" resultType="Map">
+		SELECT
+			c.*,
+			CASE RIGHT(c.sgg_name, 1)
+				WHEN '갑' THEN 1
+				WHEN '을' THEN 2
+				WHEN '병' THEN 3
+				ELSE 0 END AS order_gan,
+			CASE WHEN w.hubo_id IS NOT NULL then 1
+				ELSE 0 END AS is_winner,
+			vr.sunsu,
+			vr.tusu,
+			vr.yutusu,
+			vr.mutusu,
+			vr.gigwonsu,
+			vr.dugsu,
+			(vr.dugsu / vr.yutusu) * 100 AS dugsu_ratio
+		FROM
+			woomin_candidate AS c
+			LEFT OUTER JOIN woomin_winner AS w
+				ON w.hubo_id = c.hubo_id
+			LEFT OUTER JOIN woomin_vote_result AS vr
+				ON vr.hbj = c.name
+				AND vr.sg_id = c.sg_id
+				AND vr.sg_type_code = c.sg_type_code
+				AND vr.sd_name = c.sd_name
+				AND vr.wiw_name = c.wiw_name
+		WHERE 1=1
+		AND c.sg_type_code = #{SG_TYPE_CODE}
+		AND c.sg_id = #{SG_ID}
+		AND c.sd_name = #{SD_NAME}
+		AND c.sgg_name = #{SGG_NAME}
+		ORDER by order_gan
+	</select>
+</mapper>
