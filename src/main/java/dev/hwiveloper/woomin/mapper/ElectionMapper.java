@@ -11,7 +11,7 @@ public interface ElectionMapper {
 	List<Map<String, Object>> getElectionTypes();
 	
 	// 선거 일자 조회
-	List<String> getElections(Map<String, Object> param);
+	List<Map<String, Object>> getElections(Map<String, Object> param);
 	
 	// 시도명 조회
 	List<String> getSdNames(Map<String, Object> param);

@@ -11,21 +11,21 @@
 		ORDER BY CAST(sg_type_code AS INT)
 	</select>
 	
-	<select id="getElections" parameterType="Map" resultType="String">
+	<select id="getElections" parameterType="Map" resultType="Map">
 		SELECT
-			sg_id
+			sg_id,
+			sg_type_code
 		FROM woomin_election
-		WHERE sg_type_code = #{SG_TYPE_CODE}
 		ORDER BY STR_TO_DATE(sg_id, '%Y%m%d') DESC
 	</select>
 	
 	<select id="getSdNames" parameterType="Map" resultType="String">
 		SELECT
 			DISTINCT sd_name
-		FROM woomin_sungeogu
+		FROM woomin_gusigun
 		WHERE 1=1
-		AND sg_type_code = #{SG_TYPE_CODE}
 		AND sg_id = #{SG_ID}
+		AND sd_name != ''
 	</select>
 	
 	<select id="getSggNames" parameterType="Map" resultType="String">

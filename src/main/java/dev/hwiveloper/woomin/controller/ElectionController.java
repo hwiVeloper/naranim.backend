@@ -34,8 +34,8 @@ public class ElectionController {
 	}
 	
 	@PostMapping("/getElections")
-	public ResponseEntity<List<String>> getElections(@RequestBody Map<String, Object> param) {
-		List<String> result = electionService.getElections(param);
+	public ResponseEntity<List<Map<String, Object>>> getElections(@RequestBody Map<String, Object> param) {
+		List<Map<String, Object>> result = electionService.getElections(param);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	

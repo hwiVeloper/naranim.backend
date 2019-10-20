@@ -17,7 +17,7 @@ public class ElectionService {
 		return electionMapper.getElectionTypes();
 	}
 	
-	public List<String> getElections(Map<String, Object> param) {
+	public List<Map<String, Object>> getElections(Map<String, Object> param) {
 		return electionMapper.getElections(param);
 	}
 	
