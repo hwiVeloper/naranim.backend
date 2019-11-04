@@ -23,4 +23,8 @@ public class ElectionResultService {
 			return null;
 		}
 	}
+	
+	public List<Map<String, Object>> getCandidateSearch(Map<String, Object> param) {
+		return electionResultMapper.getCandidateSearch(param);
+	}
 }

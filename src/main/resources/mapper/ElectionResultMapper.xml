@@ -71,4 +71,14 @@
 		AND c.sgg_name = #{SGG_NAME}
 		ORDER by order_gan
 	</select>
+	
+	<select id="getCandidateSearch" parameterType="Map" resultType="Map">
+		SELECT
+			DISTINCT
+				name,
+				birthday
+		FROM woomin_candidate
+		WHERE name LIKE CONCAT('%',#{search},'%')
+		ORDER  BY birthday
+	</select>
 </mapper>

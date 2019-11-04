@@ -13,4 +13,7 @@ public interface ElectionResultMapper {
 	
 	// 선거구명 단위 선거결과 조회
 	List<Map<String, Object>> getElectionResultBySggName(Map<String, Object> param);
+	
+	// 정치인 이름찾기
+	List<Map<String, Object>> getCandidateSearch(Map<String, Object> param);
 }

@@ -22,11 +22,6 @@ public class ElectionController {
 	@Autowired
 	ElectionService electionService;
 	
-	@PostMapping("/getCandidates")
-	public ResponseEntity<List<Map<String, Object>>> getCandidates(@RequestBody Map<String, Object> param) {
-		return new ResponseEntity<>(null, HttpStatus.OK);
-	}
-	
 	@PostMapping("/getElectionTypes")
 	public ResponseEntity<List<Map<String, Object>>> getElectionTypes(@RequestBody Map<String, Object> param) {
 		log.info("==========================> {}.{} START", getClass().getSimpleName(), new Object() {}.getClass().getEnclosingMethod().getName());
