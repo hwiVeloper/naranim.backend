@@ -9,11 +9,11 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>dev.hwiveloper</groupId>
-	<artifactId>woomin</artifactId>
+	<artifactId>naranim</artifactId>
 	<version>0.1.0</version>
 	<packaging>war</packaging>
-	<name>woomin</name>
-	<description>우리동네 민주주의 - 우민(woomin)</description>
+	<name>naranim</name>
+	<description>나랏님</description>
 
 	<properties>
 		<java.version>1.8</java.version>
