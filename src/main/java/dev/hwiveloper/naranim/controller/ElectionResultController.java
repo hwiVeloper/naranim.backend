@@ -25,14 +25,13 @@ public class ElectionResultController {
 	@PostMapping("/getElectionResult")
 	public ResponseEntity<List<Map<String, Object>>> getElectionResult(@RequestBody Map<String, Object> param) {
 		List<Map<String, Object>> result = electionResultService.getElectionResult(param);
-		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	@PostMapping("/getCandidateSearch")
 	public ResponseEntity<List<Map<String, Object>>> getCandidateSearch(@RequestBody Map<String, Object> param) {
 		List<Map<String, Object>> result = electionResultService.getCandidateSearch(param);
-		
+		log.info("size : " + result.size());
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 }

@@ -74,11 +74,19 @@
 	
 	<select id="getCandidateSearch" parameterType="Map" resultType="Map">
 		SELECT
-			DISTINCT
-				name,
-				birthday
-		FROM woomin_candidate
+			name,
+			DATE_FORMAT(STR_TO_DATE(birthday, '%Y%m%d'), '%Y.%m.%d') AS birthday,
+			jd_name
+		FROM woomin_candidate c
 		WHERE name LIKE CONCAT('%',#{search},'%')
-		ORDER  BY birthday
+		AND sg_id = (
+			SELECT
+				MAX(sg_id)
+			FROM woomin_candidate
+			WHERE name = c.name
+			AND birthday = c.birthday
+			AND sd_name = c.sd_name
+		)
+		ORDER BY name
 	</select>
 </mapper>

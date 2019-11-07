@@ -1,25 +1,31 @@
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://HOSTNAME:PORT/DATABASE?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
-    username: USERNAME
-    password: PASSWORD
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://HOSTNAME:PORT/DATABASE?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+      username: USERNAME
+      password: PASSWORD
   jpa:
-    hibernate:
-      ddl-auto: update
-    generate-ddl: false
+    generate-ddl: true
     show-sql: false
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
   resources:
     static-locations: classpath:/static/
   profiles:
     active:
     - logging-daily
 server:
-  port: 80
+  port: 8080
 logging:
   config: classpath:logback-woomin.xml
+  level:
+    dev:
+      hwiveloper:
+        naranim:
+          mapper: INFO
 
 # additional config
 spring.jpa.properties.hibernate.format_sql : true
