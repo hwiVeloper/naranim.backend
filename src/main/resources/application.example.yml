@@ -2,7 +2,7 @@
 spring:
   datasource:
     hikari:
-      driver-class-name: com.mysql.cj.jdbc.Driver
+      driver-class-name: org.mariadb.jdbc.Driver
       jdbc-url: jdbc:mysql://HOSTNAME:PORT/DATABASE?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
       username: USERNAME
       password: PASSWORD
