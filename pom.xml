@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>dev.hwiveloper</groupId>
 	<artifactId>naranim</artifactId>
-	<version>0.1.0</version>
+	<version>0.2.0</version>
 	<packaging>war</packaging>
 	<name>naranim</name>
 	<description>나랏님</description>
