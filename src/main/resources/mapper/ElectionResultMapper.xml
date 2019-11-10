@@ -76,7 +76,8 @@
 		SELECT
 			name,
 			DATE_FORMAT(STR_TO_DATE(birthday, '%Y%m%d'), '%Y.%m.%d') AS birthday,
-			jd_name
+			jd_name,
+			hanja_name AS hanjaName
 		FROM woomin_candidate c
 		WHERE name LIKE CONCAT('%',#{search},'%')
 		AND sg_id = (
@@ -85,8 +86,65 @@
 			FROM woomin_candidate
 			WHERE name = c.name
 			AND birthday = c.birthday
-			AND sd_name = c.sd_name
+			AND hanja_name = c.hanja_name
 		)
 		ORDER BY name
+	</select>
+	
+	<select id="getCandidateDetail" parameterType="Map" resultType="Map">
+		SELECT
+			name,
+			DATE_FORMAT(STR_TO_DATE(birthday, '%Y%m%d'), '%Y.%m.%d') AS birthday,
+			jd_name AS jdName,
+			hanja_name as hanjaName,
+			career1,
+			career2
+		FROM woomin_candidate c
+		WHERE name LIKE CONCAT('%',#{name},'%')
+		AND birthday = #{birthday}
+		AND hanja_name = #{hanjaName}
+		AND sg_id = (
+			SELECT
+				MAX(sg_id)
+			FROM woomin_candidate
+			WHERE name = c.name
+			AND birthday = c.birthday
+			AND hanja_name = c.hanja_name
+		)
+		ORDER BY name, birthday
+	</select>
+	
+	<select id="getCandidateHistory" parameterType="Map" resultType="Map">
+		SELECT
+			LEFT(e.sg_id, 4) AS year,
+			sg_name AS sgName,
+			c.sgg_name AS sggName,
+			c.jd_name AS jdName,
+			truncate(vr.dugsu / yutusu * 100, 2) AS dugyul,
+			CASE (
+				SELECT
+					COUNT(*)
+				FROM woomin_winner
+				WHERE sg_id = c.sg_id
+				AND sg_type_code = c.sg_type_code
+				AND sgg_name = c.sgg_name
+				AND hubo_id = c.hubo_id
+			)
+				WHEN 0 THEN 'N'
+				WHEN 1 THEN 'Y'
+				ELSE 'Y' END AS winnerYn
+		FROM woomin_candidate c
+			JOIN woomin_election e
+				ON e.sg_id = c.sg_id
+				AND e.sg_type_code = c.sg_type_code
+			LEFT JOIN woomin_vote_result vr
+				ON vr.sg_id = c.sg_id
+				AND vr.sg_type_code = c.sg_type_code
+				AND vr.sgg_name = c.sgg_name
+				AND vr.hbj = c.name
+		WHERE name = #{name}
+		AND birthday = #{birthday}
+		AND hanja_name = #{hanjaName}
+		ORDER BY c.sg_id DESC
 	</select>
 </mapper>

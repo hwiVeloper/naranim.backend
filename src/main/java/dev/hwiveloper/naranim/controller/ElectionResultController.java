@@ -1,5 +1,6 @@
 package dev.hwiveloper.naranim.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,5 +34,18 @@ public class ElectionResultController {
 		List<Map<String, Object>> result = electionResultService.getCandidateSearch(param);
 		log.info("size : " + result.size());
 		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@PostMapping("/getCandidateDetail")
+	public ResponseEntity<Map<String, Object>> getCandidateDetail(@RequestBody Map<String, Object> param) {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		Map<String, Object> candidateDetailMap = electionResultService.getCandidateDetail(param);
+		List<Map<String, Object>> candidateHistoryList = electionResultService.getCandidateHistory(param);
+		
+		resultMap.put("baseInfo", candidateDetailMap);
+		resultMap.put("history", candidateHistoryList);
+		
+		return new ResponseEntity<>(resultMap, HttpStatus.OK);
 	}
 }

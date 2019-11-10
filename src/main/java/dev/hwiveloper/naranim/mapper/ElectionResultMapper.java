@@ -16,4 +16,10 @@ public interface ElectionResultMapper {
 	
 	// 정치인 이름찾기
 	List<Map<String, Object>> getCandidateSearch(Map<String, Object> param);
+	
+	// 정치인 상세 기본정보
+	Map<String, Object> getCandidateDetail(Map<String, Object> param);
+	
+	// 정치인 이력정보
+	List<Map<String, Object>> getCandidateHistory(Map<String, Object> param);
 }

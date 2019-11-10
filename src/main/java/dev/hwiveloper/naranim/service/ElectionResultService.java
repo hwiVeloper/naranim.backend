@@ -27,4 +27,12 @@ public class ElectionResultService {
 	public List<Map<String, Object>> getCandidateSearch(Map<String, Object> param) {
 		return electionResultMapper.getCandidateSearch(param);
 	}
+	
+	public Map<String, Object> getCandidateDetail(Map<String, Object> param) {
+		return electionResultMapper.getCandidateDetail(param);
+	}
+	
+	public List<Map<String, Object>> getCandidateHistory(Map<String, Object> param) {
+		return electionResultMapper.getCandidateHistory(param);
+	}
 }
