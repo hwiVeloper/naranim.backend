@@ -121,6 +121,7 @@
 			c.sgg_name AS sggName,
 			c.jd_name AS jdName,
 			truncate(vr.dugsu / yutusu * 100, 2) AS dugyul,
+			c.hubo_id AS huboId
 			CASE (
 				SELECT
 					COUNT(*)
