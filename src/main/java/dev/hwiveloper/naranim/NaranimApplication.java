@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @SpringBootApplication
 @EnableAspectJAutoProxy
-//@EnableScheduling
+@EnableScheduling
 @EnableWebMvc
 @MapperScan(basePackages = "dev.hwiveloper.naranim.mapper")
 @Slf4j
