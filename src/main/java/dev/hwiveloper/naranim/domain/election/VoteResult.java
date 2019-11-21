@@ -16,8 +16,6 @@ public class VoteResult {
 	@EmbeddedId
 	private VoteResultPK key;
 	
-	private String sdName;
-	private String wiwName;
 	@Digits(integer=10, fraction=0)
 	private BigDecimal sunsu;
 	@Digits(integer=10, fraction=0)

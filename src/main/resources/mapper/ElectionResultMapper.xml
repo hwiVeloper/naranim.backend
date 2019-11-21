@@ -12,12 +12,12 @@
 				ELSE 0 END AS order_gan,
 			CASE WHEN w.hubo_id IS NOT NULL then 1
 				ELSE 0 END AS is_winner,
-			vr.sunsu,
-			vr.tusu,
-			vr.yutusu,
-			vr.mutusu,
-			vr.gigwonsu,
-			vr.dugsu,
+			vr.sunsu AS sunsu,
+			vr.tusu AS tusu,
+			vr.yutusu AS yutusu,
+			vr.mutusu AS mutusu,
+			vr.gigwonsu AS gigwonsu,
+			vr.dugsu AS dugsu,
 			(vr.dugsu / vr.yutusu) * 100 AS dugsu_ratio
 		FROM
 			woomin_candidate AS c
@@ -34,26 +34,27 @@
 		AND c.sg_id = #{SG_ID}
 		AND c.sd_name = #{SD_NAME}
 		AND c.wiw_name = #{WIW_NAME}
-		ORDER by order_gan
+		ORDER by order_gan, dugsu_ratio
 	</select>
 	
 	<select id="getElectionResultBySggName" parameterType="Map" resultType="Map">
 		SELECT
-			c.*,
+			c.name,
 			CASE RIGHT(c.sgg_name, 1)
 				WHEN '갑' THEN 1
 				WHEN '을' THEN 2
 				WHEN '병' THEN 3
 				ELSE 0 END AS order_gan,
-			CASE WHEN w.hubo_id IS NOT NULL then 1
+			CASE
+				WHEN w.hubo_id IS NOT NULL THEN 1
 				ELSE 0 END AS is_winner,
-			vr.sunsu,
-			vr.tusu,
-			vr.yutusu,
-			vr.mutusu,
-			vr.gigwonsu,
-			vr.dugsu,
-			(vr.dugsu / vr.yutusu) * 100 AS dugsu_ratio
+			sum(vr.sunsu) AS sunsu,
+			sum(vr.tusu) AS tusu,
+			sum(vr.yutusu) AS yutusu,
+			sum(vr.mutusu) AS mutusu,
+			sum(vr.gigwonsu) AS gigwonsu,
+			sum(vr.dugsu) AS dugsu,
+			(sum(vr.dugsu) / sum(vr.yutusu)) * 100 AS dugsu_ratio
 		FROM
 			woomin_candidate AS c
 			LEFT OUTER JOIN woomin_winner AS w
@@ -62,14 +63,17 @@
 				ON vr.hbj = c.name
 				AND vr.sg_id = c.sg_id
 				AND vr.sg_type_code = c.sg_type_code
+		<if test="SG_TYPE_CODE == '1'">
 				AND vr.sd_name = c.sd_name
 				AND vr.wiw_name = c.wiw_name
+		</if>
 		WHERE 1=1
 		AND c.sg_type_code = #{SG_TYPE_CODE}
 		AND c.sg_id = #{SG_ID}
 		AND c.sd_name = #{SD_NAME}
 		AND c.sgg_name = #{SGG_NAME}
-		ORDER by order_gan
+		GROUP BY c.name, order_gan, is_winner
+		ORDER by order_gan, dugsu_ratio DESC
 	</select>
 	
 	<select id="getCandidateSearch" parameterType="Map" resultType="Map">
@@ -98,7 +102,8 @@
 			jd_name AS jdName,
 			hanja_name as hanjaName,
 			career1,
-			career2
+			career2,
+			edu
 		FROM woomin_candidate c
 		WHERE name LIKE CONCAT('%',#{name},'%')
 		AND birthday = #{birthday}
@@ -116,12 +121,16 @@
 	
 	<select id="getCandidateHistory" parameterType="Map" resultType="Map">
 		SELECT
+			c.sg_id AS sgId,
+			c.sg_type_code AS sgTypeCode,
+			c.sd_name AS sdName,
+			c.sgg_name AS sggName,
 			LEFT(e.sg_id, 4) AS year,
 			sg_name AS sgName,
 			c.sgg_name AS sggName,
 			c.jd_name AS jdName,
 			truncate(vr.dugsu / yutusu * 100, 2) AS dugyul,
-			c.hubo_id AS huboId
+			c.hubo_id AS huboId,
 			CASE (
 				SELECT
 					COUNT(*)

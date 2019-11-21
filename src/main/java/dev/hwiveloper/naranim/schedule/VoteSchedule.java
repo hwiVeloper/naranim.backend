@@ -184,6 +184,7 @@ public class VoteSchedule {
 				urlBuilder.append("&" + URLEncoder.encode("sgTypecode","UTF-8") + "=" + URLEncoder.encode(election.getKey().getSgTypeCode().toString(), "UTF-8"));
 				
 				URL url = new URL(urlBuilder.toString());
+				log.info(urlBuilder.toString());
 
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
@@ -240,10 +241,11 @@ public class VoteSchedule {
 							keyVoteResult.setSgId(item.get("sgId").toString());
 							keyVoteResult.setSgTypeCode(item.get("sgTypecode").toString());
 							keyVoteResult.setSggName(item.getString("sggName"));
+							keyVoteResult.setSdName(item.getString("sdName"));
+							keyVoteResult.setWiwName(item.getString("wiwName"));
+							
 							keyVoteResult.setHuboOrder(seq);
 							itemVoteResult.setKey(keyVoteResult);
-							itemVoteResult.setSdName(item.getString("sdName"));
-							itemVoteResult.setWiwName(item.getString("wiwName"));
 							itemVoteResult.setSunsu(item.getBigDecimal("sunsu"));
 							itemVoteResult.setTusu(item.getBigDecimal("tusu"));
 							itemVoteResult.setYutusu(item.getBigDecimal("yutusu"));
@@ -267,6 +269,8 @@ public class VoteSchedule {
 					keyVoteResult.setSgId(item.get("sgId").toString());
 					keyVoteResult.setSgTypeCode(item.get("sgTypecode").toString());
 					keyVoteResult.setSggName(item.getString("sggName"));
+					keyVoteResult.setSdName(item.getString("sdName"));
+					keyVoteResult.setWiwName(item.getString("wiwName"));
 					
 					// 후보자 seq 추출
 					for (int seq = 1; seq <= 30; seq++) {
@@ -277,8 +281,6 @@ public class VoteSchedule {
 						keyVoteResult.setHuboOrder(seq);
 						
 						itemVoteResult.setKey(keyVoteResult);
-						itemVoteResult.setSdName(item.getString("sdName"));
-						itemVoteResult.setWiwName(item.getString("wiwName"));
 						itemVoteResult.setSunsu(item.getBigDecimal("sunsu"));
 						itemVoteResult.setTusu(item.getBigDecimal("tusu"));
 						itemVoteResult.setMutusu(item.getBigDecimal("mutusu"));
