@@ -40,6 +40,8 @@
 	<select id="getElectionResultBySggName" parameterType="Map" resultType="Map">
 		SELECT
 			c.name,
+			c.giho,
+			c.jd_name,
 			CASE RIGHT(c.sgg_name, 1)
 				WHEN '갑' THEN 1
 				WHEN '을' THEN 2
@@ -63,9 +65,9 @@
 				ON vr.hbj = c.name
 				AND vr.sg_id = c.sg_id
 				AND vr.sg_type_code = c.sg_type_code
-		<if test="SG_TYPE_CODE == '1'">
-				AND vr.sd_name = c.sd_name
-				AND vr.wiw_name = c.wiw_name
+		<if test="SG_TYPE_CODE != '1'">
+				AND vr.sd_name = '합계'
+				AND vr.sgg_name = c.sgg_name
 		</if>
 		WHERE 1=1
 		AND c.sg_type_code = #{SG_TYPE_CODE}
@@ -148,10 +150,11 @@
 				ON e.sg_id = c.sg_id
 				AND e.sg_type_code = c.sg_type_code
 			LEFT JOIN woomin_vote_result vr
-				ON vr.sg_id = c.sg_id
+				ON vr.hbj = c.name
+				AND vr.sg_id = c.sg_id
 				AND vr.sg_type_code = c.sg_type_code
+				AND vr.sd_name = '합계'
 				AND vr.sgg_name = c.sgg_name
-				AND vr.hbj = c.name
 		WHERE name = #{name}
 		AND birthday = #{birthday}
 		AND hanja_name = #{hanjaName}

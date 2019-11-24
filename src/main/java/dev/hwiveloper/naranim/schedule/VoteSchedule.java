@@ -224,10 +224,10 @@ public class VoteSchedule {
 						JSONObject item = itemJson.getJSONObject(i);
 						
 						// 데이터 정합성 체크
-						if (item.getString("sdName").equals("합계")
-						||  item.getString("wiwName").equals("합계")) {
-							continue;
-						}
+//						if (item.getString("sdName").equals("합계")
+//						||  item.getString("wiwName").equals("합계")) {
+//							continue;
+//						}
 						
 						// 후보자 seq 추출
 						for (int seq = 1; seq <= 30; seq++) {
