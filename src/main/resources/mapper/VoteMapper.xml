@@ -4,7 +4,19 @@
 <mapper namespace="dev.hwiveloper.naranim.mapper.VoteMapper">	
 	<select id="getVoteInfo" parameterType="Map" resultType="Map">
 		SELECT
-			*
+			num AS num,
+			sg_id AS sgId,
+			sg_type_code AS sgTypeCode,
+			ps_etc_sunsu AS psEtcSunsu,
+			ps_etc_tusu AS psEtcTusu,
+			ps_sunsu AS psSunsu,
+			ps_tusu AS psTusu,
+			sd_name AS sdName,
+			tot_sunsu AS totSunsu,
+			tot_tusu AS totTusu,
+			turnout AS turnout,
+			vr_order AS vrOrder,
+			wiw_name AS wiwName
 		FROM woomin_vote
 		WHERE 1=1
 		AND sg_id = #{SG_ID}
@@ -16,7 +28,19 @@
 	
 	<select id="getVoteSdTotalInfo" parameterType="Map" resultType="Map">
 		SELECT
-			*
+			num AS num,
+			sg_id AS sgId,
+			sg_type_code AS sgTypeCode,
+			ps_etc_sunsu AS psEtcSunsu,
+			ps_etc_tusu AS psEtcTusu,
+			ps_sunsu AS psSunsu,
+			ps_tusu AS psTusu,
+			sd_name AS sdName,
+			tot_sunsu AS totSunsu,
+			tot_tusu AS totTusu,
+			turnout AS turnout,
+			vr_order AS vrOrder,
+			wiw_name AS wiwName
 		FROM woomin_vote
 		WHERE 1=1
 		AND sg_id = #{SG_ID}
@@ -28,7 +52,19 @@
 	
 	<select id="getVoteTotalInfo" parameterType="Map" resultType="Map">
 		SELECT
-			*
+			num AS num,
+			sg_id AS sgId,
+			sg_type_code AS sgTypeCode,
+			ps_etc_sunsu AS psEtcSunsu,
+			ps_etc_tusu AS psEtcTusu,
+			ps_sunsu AS psSunsu,
+			ps_tusu AS psTusu,
+			sd_name AS sdName,
+			tot_sunsu AS totSunsu,
+			tot_tusu AS totTusu,
+			turnout AS turnout,
+			vr_order AS vrOrder,
+			wiw_name AS wiwName
 		FROM woomin_vote
 		WHERE 1=1
 		AND sg_id = #{SG_ID}
