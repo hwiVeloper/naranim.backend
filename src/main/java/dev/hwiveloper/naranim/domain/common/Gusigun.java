@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity(name="woomin_gusigun")
+@Entity(name="gusigun")
 @Getter
 @Setter
 public class Gusigun {

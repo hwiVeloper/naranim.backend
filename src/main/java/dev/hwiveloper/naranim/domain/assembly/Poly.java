@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity(name="woomin_poly")
+@Entity(name="poly")
 @Getter
 @Setter
 public class Poly {

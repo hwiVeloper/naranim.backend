@@ -7,7 +7,7 @@
 			sg_type_code,
 			sg_type_name
 		FROM
-			woomin_election_type
+			election_type
 		ORDER BY CAST(sg_type_code AS INT)
 	</select>
 	
@@ -15,14 +15,14 @@
 		SELECT
 			sg_id,
 			sg_type_code
-		FROM woomin_election
+		FROM election
 		ORDER BY STR_TO_DATE(sg_id, '%Y%m%d') DESC
 	</select>
 	
 	<select id="getSdNames" parameterType="Map" resultType="String">
 		SELECT
 			DISTINCT sd_name
-		FROM woomin_sungeogu
+		FROM sungeogu
 		WHERE 1=1
 		AND sg_id = #{SG_ID}
 		AND sg_type_code = #{SG_TYPE_CODE}
@@ -32,7 +32,7 @@
 	<select id="getSggNames" parameterType="Map" resultType="String">
 		SELECT
 			DISTINCT sgg_name
-		FROM woomin_sungeogu
+		FROM sungeogu
 		WHERE sg_id = #{SG_ID}
 		AND sg_type_code = #{SG_TYPE_CODE}
 		AND sd_name = #{SD_NAME}
@@ -44,7 +44,7 @@
 	<select id="getWiwNames" parameterType="Map" resultType="String">
 		SELECT
 			DISTINCT CASE wiw_name WHEN '' THEN '전지역' ELSE wiw_name END AS wiw_name
-		FROM woomin_sungeogu
+		FROM sungeogu
 		WHERE sg_id = #{SG_ID}
 		AND sg_type_code = #{SG_TYPE_CODE}
 		AND sd_name = #{SD_NAME}

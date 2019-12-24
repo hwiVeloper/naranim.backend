@@ -9,7 +9,7 @@ import javax.validation.constraints.Digits;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity(name="woomin_vote")
+@Entity(name="vote")
 @Getter
 @Setter
 public class Vote {

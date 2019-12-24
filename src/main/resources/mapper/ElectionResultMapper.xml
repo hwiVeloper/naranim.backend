@@ -20,10 +20,10 @@
 			vr.dugsu AS dugsu,
 			(vr.dugsu / vr.yutusu) * 100 AS dugsu_ratio
 		FROM
-			woomin_candidate AS c
-			LEFT OUTER JOIN woomin_winner AS w
+			candidate AS c
+			LEFT OUTER JOIN winner AS w
 				ON w.hubo_id = c.hubo_id
-			LEFT OUTER JOIN woomin_vote_result AS vr
+			LEFT OUTER JOIN vote_result AS vr
 				ON vr.hbj = c.name
 				AND vr.sg_id = c.sg_id
 				AND vr.sg_type_code = c.sg_type_code
@@ -60,10 +60,10 @@
 			sum(vr.dugsu) AS dugsu,
 			(sum(vr.dugsu) / sum(vr.yutusu)) * 100 AS dugsu_ratio
 		FROM
-			woomin_candidate AS c
-			LEFT OUTER JOIN woomin_winner AS w
+			candidate AS c
+			LEFT OUTER JOIN winner AS w
 				ON w.hubo_id = c.hubo_id
-			LEFT OUTER JOIN woomin_vote_result AS vr
+			LEFT OUTER JOIN vote_result AS vr
 				ON vr.hbj = c.name
 				AND vr.sg_id = c.sg_id
 				AND vr.sg_type_code = c.sg_type_code
@@ -86,12 +86,12 @@
 			DATE_FORMAT(STR_TO_DATE(birthday, '%Y%m%d'), '%Y.%m.%d') AS birthday,
 			jd_name,
 			hanja_name AS hanjaName
-		FROM woomin_candidate c
+		FROM candidate c
 		WHERE name LIKE CONCAT('%',#{search},'%')
 		AND sg_id = (
 			SELECT
 				MAX(sg_id)
-			FROM woomin_candidate
+			FROM candidate
 			WHERE name = c.name
 			AND birthday = c.birthday
 			AND hanja_name = c.hanja_name
@@ -108,14 +108,14 @@
 			career1,
 			career2,
 			edu
-		FROM woomin_candidate c
+		FROM candidate c
 		WHERE name LIKE CONCAT('%',#{name},'%')
 		AND birthday = #{birthday}
 		AND hanja_name = #{hanjaName}
 		AND sg_id = (
 			SELECT
 				MAX(sg_id)
-			FROM woomin_candidate
+			FROM candidate
 			WHERE name = c.name
 			AND birthday = c.birthday
 			AND hanja_name = c.hanja_name
@@ -138,7 +138,7 @@
 			CASE (
 				SELECT
 					COUNT(*)
-				FROM woomin_winner
+				FROM winner
 				WHERE sg_id = c.sg_id
 				AND sg_type_code = c.sg_type_code
 				AND sgg_name = c.sgg_name
@@ -147,11 +147,11 @@
 				WHEN 0 THEN 'N'
 				WHEN 1 THEN 'Y'
 				ELSE 'Y' END AS winnerYn
-		FROM woomin_candidate c
-			JOIN woomin_election e
+		FROM candidate c
+			JOIN election e
 				ON e.sg_id = c.sg_id
 				AND e.sg_type_code = c.sg_type_code
-			LEFT JOIN woomin_vote_result vr
+			LEFT JOIN vote_result vr
 				ON vr.hbj = c.name
 				AND vr.sg_id = c.sg_id
 				AND vr.sg_type_code = c.sg_type_code

@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity(name="woomin_reele_gbn")
+@Entity(name="reele_gbn")
 @Getter
 @Setter
 public class ReeleGbn {

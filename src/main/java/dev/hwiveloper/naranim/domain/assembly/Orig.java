@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity(name="woomin_orig")
+@Entity(name="orig")
 @Getter
 @Setter
 public class Orig {

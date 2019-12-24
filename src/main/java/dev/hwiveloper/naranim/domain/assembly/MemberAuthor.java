@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity(name="woomin_member_author")
+@Entity(name="congress_member_author")
 @Getter
 @Setter
 public class MemberAuthor {

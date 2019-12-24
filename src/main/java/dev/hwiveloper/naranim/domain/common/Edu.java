@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name="woomin_edu")
+@Entity(name="edu")
 @Getter
 @Setter
 @NoArgsConstructor

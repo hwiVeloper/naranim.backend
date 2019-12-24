@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 
-@Entity(name="woomin_election_type")
+@Entity(name="election_type")
 @Getter
 public class ElectionType {
 	@Id

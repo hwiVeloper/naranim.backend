@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity(name="woomin_poll_place")
+@Entity(name="poll_place")
 @Getter
 @Setter
 public class PolPlace {

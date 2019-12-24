@@ -17,7 +17,7 @@ import lombok.ToString;
  * origNm		선거구
  * jpgLink		의원사진 파일경로
  */
-@Entity(name="woomin_member")
+@Entity(name="congress_member")
 @Getter
 @Setter
 @ToString

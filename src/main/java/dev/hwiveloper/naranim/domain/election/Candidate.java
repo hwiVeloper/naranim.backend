@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity(name="woomin_candidate")
+@Entity(name="candidate")
 @Getter
 @Setter
 public class Candidate {
