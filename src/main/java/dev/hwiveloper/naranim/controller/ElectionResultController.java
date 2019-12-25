@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.hwiveloper.naranim.service.ElectionResultService;
+import dev.hwiveloper.naranim.service.EvaluationService;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -22,6 +23,9 @@ public class ElectionResultController {
 	
 	@Autowired
 	ElectionResultService electionResultService;
+	
+	@Autowired
+	EvaluationService evaluationService;
 	
 	@PostMapping("/getElectionResult")
 	public ResponseEntity<List<Map<String, Object>>> getElectionResult(@RequestBody Map<String, Object> param) {
@@ -42,9 +46,11 @@ public class ElectionResultController {
 		
 		Map<String, Object> candidateDetailMap = electionResultService.getCandidateDetail(param);
 		List<Map<String, Object>> candidateHistoryList = electionResultService.getCandidateHistory(param);
+		List<Map<String, Object>> candidateEvaluationList = evaluationService.getEvaluationByCandidate(param); 
 		
 		resultMap.put("baseInfo", candidateDetailMap);
 		resultMap.put("history", candidateHistoryList);
+		resultMap.put("evaluation", candidateEvaluationList);
 		
 		return new ResponseEntity<>(resultMap, HttpStatus.OK);
 	}

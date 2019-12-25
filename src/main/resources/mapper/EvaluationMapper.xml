@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+
+<mapper namespace="dev.hwiveloper.naranim.mapper.EvaluationMapper">	
+	<select id="getEvaluationByCandidate" parameterType="Map" resultType="Map">
+		SELECT
+			*
+		FROM
+			evaluation e
+		WHERE 1=1
+		AND candidate_name = #{name}
+		AND candidate_birthday = #{birthday}
+		AND candidate_hanja_name = #{hanjaName}
+	</select>
+</mapper>
