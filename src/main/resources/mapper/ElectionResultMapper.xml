@@ -107,7 +107,10 @@
 			hanja_name as hanjaName,
 			career1,
 			career2,
-			edu
+			edu,
+			hubo_id AS huboId,
+			sg_id AS sgId,
+			sg_type_code AS sgTypeCode
 		FROM candidate c
 		WHERE name LIKE CONCAT('%',#{name},'%')
 		AND birthday = #{birthday}
