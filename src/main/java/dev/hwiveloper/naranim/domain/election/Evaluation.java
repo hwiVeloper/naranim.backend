@@ -65,6 +65,8 @@ public class Evaluation {
 	@Column(name="eval_individual_s")
 	private Integer evalIndividualS;
 	
+	@Column(length = 255, nullable = false)
+	private String evalTitle;
 	@Column(length = 4000, nullable = false)
 	private String evalDescription;
 	
