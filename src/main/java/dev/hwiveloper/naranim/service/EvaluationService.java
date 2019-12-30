@@ -1,5 +1,6 @@
 package dev.hwiveloper.naranim.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,13 @@ public class EvaluationService {
 	EvaluationMapper evaluationMapper;
 	
 	public List<Map<String, Object>> getEvaluationByCandidate(Map<String, Object> param) {
-		return evaluationMapper.getEvaluationByCandidate(param);
+		Map<String, Object> sqlParam = new HashMap<String, Object>();
+		sqlParam.put("huboId", param.get("huboId"));
+		
+		return evaluationMapper.getEvaluationByCandidate(sqlParam);
+	}
+	
+	public List<Map<String, Object>> getElectionByCandidate(Map<String, Object> param) {
+		return evaluationMapper.getElectionByCandidate(param);
 	}
 }

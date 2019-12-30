@@ -12,4 +12,25 @@
 		AND candidate_birthday = #{birthday}
 		AND candidate_hanja_name = #{hanjaName}
 	</select>
+	
+	<select id="getElectionByCandidate" parameterType="Map" resultType="Map">
+		SELECT
+			CONCAT(c.sg_id, '||', c.sg_type_code) code,
+			CONCAT(t.upper_sg_name, ' : ', t.lower_sg_name) label
+		FROM candidate c,
+			(
+				SELECT
+					t1.sg_id AS sg_id,
+					t1.sg_type_code AS sg_type_code,
+					t2.sg_name AS upper_sg_name,
+					t1.sg_name AS lower_sg_name
+				FROM election t1, election t2
+				WHERE 1=1
+				AND t1.sg_id = t2.sg_id
+				AND t2.sg_type_code = '0'
+			) t
+		WHERE c.sg_id = t.sg_id
+		AND c.sg_type_code = t.sg_type_code
+		AND hubo_id = #{huboId}
+	</select>
 </mapper>

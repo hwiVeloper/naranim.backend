@@ -46,11 +46,16 @@ public class ElectionResultController {
 		
 		Map<String, Object> candidateDetailMap = electionResultService.getCandidateDetail(param);
 		List<Map<String, Object>> candidateHistoryList = electionResultService.getCandidateHistory(param);
-		List<Map<String, Object>> candidateEvaluationList = evaluationService.getEvaluationByCandidate(param); 
+		List<Map<String, Object>> candidateEvaluationList = evaluationService.getEvaluationByCandidate(param);
+		List<Map<String, Object>> candidateElectionList = evaluationService.getElectionByCandidate(candidateDetailMap);
 		
 		resultMap.put("baseInfo", candidateDetailMap);
 		resultMap.put("history", candidateHistoryList);
 		resultMap.put("evaluation", candidateEvaluationList);
+		resultMap.put("electionList", candidateElectionList);
+		
+		log.info("=========================");
+		log.info(candidateElectionList.size() + "");
 		
 		return new ResponseEntity<>(resultMap, HttpStatus.OK);
 	}
