@@ -39,6 +39,9 @@
 	
 	<select id="getElectionResultBySggName" parameterType="Map" resultType="Map">
 		SELECT
+			c.sg_id,
+			c.sg_type_code,
+			c.hubo_id,
 			c.name,
 			c.giho,
 			c.jd_name,

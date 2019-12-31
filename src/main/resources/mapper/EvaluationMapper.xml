@@ -11,12 +11,13 @@
 		AND candidate_name = #{name}
 		AND candidate_birthday = #{birthday}
 		AND candidate_hanja_name = #{hanjaName}
+		AND apply_yn = 'Y'
 	</select>
 	
 	<select id="getElectionByCandidate" parameterType="Map" resultType="Map">
 		SELECT
-			CONCAT(c.sg_id, '||', c.sg_type_code) code,
-			CONCAT(t.upper_sg_name, ' : ', t.lower_sg_name) label
+			hubo_id AS code,
+			CONCAT(t.upper_sg_name, ' : ', t.lower_sg_name) AS label
 		FROM candidate c,
 			(
 				SELECT
@@ -31,6 +32,6 @@
 			) t
 		WHERE c.sg_id = t.sg_id
 		AND c.sg_type_code = t.sg_type_code
-		AND hubo_id = #{huboId}
+		AND c.hubo_id = #{huboId}
 	</select>
 </mapper>

@@ -9,16 +9,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity(name="evaluation")
 @Table(name = "evaluation")
 @Getter
 @Setter
+@ToString
 public class Evaluation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +27,9 @@ public class Evaluation {
 	
 	@Column(length = 50, nullable = false)
 	private String userId;
+	
+	@Column(length = 10, nullable = false)
+	private String huboId;
 	
 	@Column(length = 50)
 	private String candidateName;
@@ -36,14 +40,8 @@ public class Evaluation {
 	
 	@Column(length = 8)
 	private String sgId;
-	@Column(length = 5)
+	@Column(length = 2)
 	private String sgTypeCode;
-	@Column(length = 100)
-	private String sdName;
-	@Column(length = 100)
-	private String wiwName;
-	@Column(length = 100)
-	private String sggName;
 	
 	@Column(name="eval_pledge_s")
 	private Integer evalPledgeS;
