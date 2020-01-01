@@ -4,7 +4,25 @@
 <mapper namespace="dev.hwiveloper.naranim.mapper.EvaluationMapper">	
 	<select id="getEvaluationByCandidate" parameterType="Map" resultType="Map">
 		SELECT
-			*
+			id,
+			apply_yn,
+			eval_description,
+			eval_individual_l,
+			eval_individual_p,
+			eval_individual_s,
+			eval_individual_u,
+			eval_pledge_a,
+			eval_pledge_m,
+			eval_pledge_r,
+			eval_pledge_s,
+			eval_pledge_t,
+			eval_title,
+			hubo_id,
+			reg_date,
+			user_id,
+			sg_id,
+			sg_type_code,
+			(SELECT sg_type_name FROM election_type WHERE sg_type_code = e.sg_type_code) AS sg_type_name
 		FROM
 			evaluation e
 		WHERE 1=1
@@ -32,6 +50,8 @@
 			) t
 		WHERE c.sg_id = t.sg_id
 		AND c.sg_type_code = t.sg_type_code
-		AND c.hubo_id = #{huboId}
+		AND c.name = #{name}
+		AND c.birthday = #{birthday}
+		AND c.hanja_name = #{hanjaName}
 	</select>
 </mapper>
