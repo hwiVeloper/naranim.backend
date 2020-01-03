@@ -1,0 +1,45 @@
+# default config
+spring:
+  datasource:
+    hikari:
+      driver-class-name: org.mariadb.jdbc.Driver
+      jdbc-url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+      username: ${DB_USER}
+      password: ${DB_PASS}
+  jpa:
+    generate-ddl: true
+    show-sql: false
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+  resources:
+    static-locations: classpath:/static/
+  profiles:
+    active:
+    - logging-daily
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+server:
+  port: 80
+logging:
+  config: classpath:logback-woomin.xml
+  level:
+    dev:
+      hwiveloper:
+        naranim:
+          mapper: INFO
+
+# additional config
+spring.jpa.properties.hibernate.format_sql: true
+
+# keys
+keys:
+  national-assembly-info-service: ${GOV_API_KEY}
+  agenda-schedule-info-service: ${GOV_API_KEY}
+  common-code-service: ${GOV_API_KEY}
+  poll-place-service: ${GOV_API_KEY}
+  vote-service: ${GOV_API_KEY}
+  winner-service: ${GOV_API_KEY}
