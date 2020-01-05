@@ -70,6 +70,8 @@ public class Evaluation {
 	
 	@Column(columnDefinition = "char(1) default 'N' not null")
 	private Character applyYn; // Y, N
+	@Column(length = 200)
+	private String rejectDescription;
 	
 	@CreationTimestamp
 	private Timestamp regDate;

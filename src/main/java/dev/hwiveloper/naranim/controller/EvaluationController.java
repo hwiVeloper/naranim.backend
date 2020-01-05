@@ -1,5 +1,6 @@
 package dev.hwiveloper.naranim.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -46,8 +47,14 @@ public class EvaluationController {
 	
 	@PostMapping("/getEvaluationByUserId")
 	public ResponseEntity<List<Evaluation>> getEvaluationByUserId(@RequestBody Evaluation evaluation) {
-		List<Evaluation> myEvaluation = evaluationRepo.findByUserId(evaluation.getUserId());
+		List<Evaluation> myEvaluation = evaluationRepo.findByUserIdOrderByIdDesc(evaluation.getUserId());
 		
 		return new ResponseEntity<List<Evaluation>>(myEvaluation, HttpStatus.OK);
+	}
+	
+	@GetMapping("/latest")
+	public ResponseEntity<List<Evaluation>> getLatestFiveEvaluations() {
+		List<Evaluation> top5Evaluation = evaluationRepo.findTop5ByApplyYnOrderByIdDesc('Y');
+		return new ResponseEntity<List<Evaluation>>(top5Evaluation, HttpStatus.OK);
 	}
 }
