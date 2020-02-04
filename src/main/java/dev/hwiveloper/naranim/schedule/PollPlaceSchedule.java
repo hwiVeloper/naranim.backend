@@ -84,6 +84,11 @@ public class PollPlaceSchedule {
 
 				rd.close();
 				conn.disconnect();
+				
+				if (! XML.toJSONObject(sb.toString()).has("response")) {
+					continue;
+				}
+				
 
 				// 후처리
 				JSONObject tmpJson = XML.toJSONObject(sb.toString())
@@ -188,6 +193,10 @@ public class PollPlaceSchedule {
 
 				rd.close();
 				conn.disconnect();
+				
+				if (! XML.toJSONObject(sb.toString()).has("response")) {
+					continue;
+				}
 
 				// 후처리
 				JSONObject tmpJson = XML.toJSONObject(sb.toString())

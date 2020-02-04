@@ -205,6 +205,10 @@ public class VoteSchedule {
 
 				rd.close();
 				conn.disconnect();
+				
+				if (! XML.toJSONObject(sb.toString()).has("response")) {
+					continue;
+				}
 
 				// 후처리
 				JSONObject resultBody = XML.toJSONObject(sb.toString())

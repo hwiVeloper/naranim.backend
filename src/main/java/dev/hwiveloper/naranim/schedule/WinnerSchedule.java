@@ -82,6 +82,10 @@ public class WinnerSchedule {
 
 				rd.close();
 				conn.disconnect();
+				
+				if (! XML.toJSONObject(sb.toString()).getJSONObject("response").has("response")) {
+					continue;
+				}
 
 				// 후처리
 				JSONObject resultBody = XML.toJSONObject(sb.toString())
