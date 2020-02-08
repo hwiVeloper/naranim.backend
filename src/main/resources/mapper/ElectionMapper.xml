@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
 
 <mapper namespace="dev.hwiveloper.naranim.mapper.ElectionMapper">
-	<select id="getElectionTypes" resultType="Map">
+	<select id="getElectionTypes" parameterType="Map" resultType="Map">
 		SELECT
 			sg_type_code,
 			sg_type_name
@@ -13,10 +13,16 @@
 	
 	<select id="getElections" parameterType="Map" resultType="Map">
 		SELECT
-			sg_id,
-			sg_type_code
-		FROM election
-		ORDER BY STR_TO_DATE(sg_id, '%Y%m%d') DESC
+			e.sg_id,
+			e.sg_type_code,
+			et.sg_type_name
+		FROM election e, election_type et
+		WHERE e.sg_type_code = et.sg_type_code 
+		AND e.sg_type_code != '0'
+		<if test="SG_ID != null and SG_ID != ''">
+		AND e.sg_id = #{SG_ID}
+		</if>
+		ORDER BY STR_TO_DATE(e.sg_id, '%Y%m%d') DESC
 	</select>
 	
 	<select id="getSdNames" parameterType="Map" resultType="String">

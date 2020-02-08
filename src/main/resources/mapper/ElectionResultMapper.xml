@@ -89,12 +89,22 @@
 			DATE_FORMAT(STR_TO_DATE(birthday, '%Y%m%d'), '%Y.%m.%d') AS birthday,
 			jd_name,
 			hanja_name AS hanjaName
+		<if test='pre == null or pre == "N"'>
 		FROM candidate c
+		</if>
+		<if test='pre != null and pre == "Y"'>
+		FROM pre_candidate c
+		</if>
 		WHERE name LIKE CONCAT('%',#{search},'%')
 		AND sg_id = (
 			SELECT
 				MAX(sg_id)
-			FROM candidate
+			<if test='pre == null or pre == "N"'>
+			FROM candidate c
+			</if>
+			<if test='pre != null and pre == "Y"'>
+			FROM pre_candidate c
+			</if>
 			WHERE name = c.name
 			AND birthday = c.birthday
 			AND hanja_name = c.hanja_name
@@ -114,14 +124,24 @@
 			hubo_id AS huboId,
 			sg_id AS sgId,
 			sg_type_code AS sgTypeCode
+		<if test='pre == null or pre == "N"'>
 		FROM candidate c
+		</if>
+		<if test='pre != null and pre == "Y"'>
+		FROM pre_candidate c
+		</if>
 		WHERE name LIKE CONCAT('%',#{name},'%')
 		AND birthday = #{birthday}
 		AND hanja_name = #{hanjaName}
 		AND sg_id = (
 			SELECT
 				MAX(sg_id)
+			<if test='pre == null or pre == "N"'>
 			FROM candidate
+			</if>
+			<if test='pre != null and pre == "Y"'>
+			FROM pre_candidate
+			</if>
 			WHERE name = c.name
 			AND birthday = c.birthday
 			AND hanja_name = c.hanja_name
