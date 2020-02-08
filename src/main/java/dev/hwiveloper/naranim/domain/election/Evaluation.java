@@ -43,6 +43,8 @@ public class Evaluation {
 	@Column(length = 2)
 	private String sgTypeCode;
 	
+	@Column(name="eval_score")
+	private Integer evalScore;
 	@Column(name="eval_pledge_s")
 	private Integer evalPledgeS;
 	@Column(name="eval_pledge_m")
