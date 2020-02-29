@@ -31,3 +31,6 @@
 - WinnerSchedule
   - 당선인 정보를 조회하여 DB에 저장한다.
   - 매일 03:00:00 => getWinnerInfoInqire (당선인 조회)
+- PromiseSchedule
+  - 공약 정보를 조회하여 DB에 저장한다.
+  - 매일 03:15:00 => elecPrmsInfoInqireService (공약 조회)

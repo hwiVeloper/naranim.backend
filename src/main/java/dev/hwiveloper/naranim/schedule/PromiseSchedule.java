@@ -41,7 +41,7 @@ public class PromiseSchedule {
 	@Autowired
 	CandidateRepository candidateRepository;
 
-	@Scheduled(initialDelay = 5000, fixedDelay = 9999999)
+	@Scheduled(cron="0 15 3 * * *")
 	public void elecPrmsInfoInqireService() {
 		try {
 			List<Election> electionList = (List<Election>) electionRepo.findAll();
