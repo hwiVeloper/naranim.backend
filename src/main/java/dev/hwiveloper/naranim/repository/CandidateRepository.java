@@ -15,6 +15,9 @@ public interface CandidateRepository extends CrudRepository<Candidate, Candidate
 	@Query("SELECT c FROM candidate c WHERE c.key.sgId=:sgId AND c.key.sgTypeCode=:sgTypeCode AND c.sggName=:sggName ORDER BY c.key.giho")
 	public List<Candidate> findCandidatesBySggName(String sgId, String sgTypeCode, String sggName);
 	
-	@Query("SELECT c FROm candidate c WHERE c.key.huboId=:huboId")
+	@Query("SELECT c FROM candidate c WHERE c.key.huboId=:huboId")
 	public Candidate findByKeyHuboId(String huboId);
+	
+	@Query("SELECT c FROM candidate c WHERE c.key.sgId=:sgId AND c.key.sgTypeCode=:sgTypeCode")
+	public List<Candidate> findByElection(String sgId, String sgTypeCode);
 }

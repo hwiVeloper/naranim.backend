@@ -83,7 +83,7 @@ public class WinnerSchedule {
 				rd.close();
 				conn.disconnect();
 				
-				if (! XML.toJSONObject(sb.toString()).getJSONObject("response").has("response")) {
+				if (! XML.toJSONObject(sb.toString()).has("response")) {
 					continue;
 				}
 
