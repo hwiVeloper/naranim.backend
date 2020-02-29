@@ -48,14 +48,14 @@ public class PromiseSchedule {
 
 			for (Election election : electionList) {
 				
-				log.info("=====================================================================");
-				log.info(election.getKey().getSgId() + " :: " + election.getKey().getSgTypeCode());
+//				log.info("=====================================================================");
+//				log.info(election.getKey().getSgId() + " :: " + election.getKey().getSgTypeCode());
 
 				List<Candidate> candidateList = candidateRepository.findByElection(election.getKey().getSgId(), election.getKey().getSgTypeCode());
 
 				for (Candidate candidate : candidateList) {
 					
-					log.info(" > " + candidate.getKey().getHuboId());
+//					log.info(" > " + candidate.getKey().getHuboId());
 					
 					// URL 생성
 					StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9760000/ElecPrmsInfoInqireService/getCnddtElecPrmsInfoInqire"); /*URL*/
@@ -167,7 +167,7 @@ public class PromiseSchedule {
 					promiseRepo.saveAll(listPromise);
 
 				}
-				log.info("=====================================================================");
+//				log.info("=====================================================================");
 			}
 
 			LogUtil.scheduleSccssLog(log, new Object() {});
