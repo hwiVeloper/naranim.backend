@@ -95,13 +95,15 @@ public class VoteSchedule {
 				conn.disconnect();
 
 				// 후처리
-				JSONObject resultBody = XML.toJSONObject(sb.toString())
-						.getJSONObject("response")
-						.getJSONObject("body");
-				if (resultBody.getInt("totalCount") == 0) {
+				JSONObject tmpRes = XML.toJSONObject(sb.toString());
+				
+				if (!tmpRes.has("response")) {
 					continue;
 				}
-				JSONObject tmpJson = resultBody.getJSONObject("items");
+				
+				JSONObject tmpJson = tmpRes.getJSONObject("response")
+						.getJSONObject("body")
+						.getJSONObject("items");
 
 				List<Vote> listVote = new ArrayList<Vote>();
 

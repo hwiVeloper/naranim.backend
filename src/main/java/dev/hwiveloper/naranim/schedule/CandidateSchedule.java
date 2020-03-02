@@ -44,7 +44,7 @@ public class CandidateSchedule {
 
 	@Autowired
 	CandidateRepository candidateRepo;
-	
+		
 	@Autowired
 	PreCandidateRepository preCandidateRepo;
 
@@ -97,10 +97,16 @@ public class CandidateSchedule {
 				conn.disconnect();
 
 				// 후처리
-				JSONObject tmpJson = XML.toJSONObject(sb.toString())
-						.getJSONObject("response")
+				JSONObject tmpRes = XML.toJSONObject(sb.toString());
+				
+				if (!tmpRes.has("response")) {
+					continue;
+				}
+				
+				JSONObject tmpJson = tmpRes.getJSONObject("response")
 						.getJSONObject("body")
 						.getJSONObject("items");
+						
 				List<Candidate> listCandidate = new ArrayList<Candidate>();
 
 				// JSONArray | JSONObject 케이스에 따라 분기처리

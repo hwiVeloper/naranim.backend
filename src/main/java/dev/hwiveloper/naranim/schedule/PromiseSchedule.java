@@ -144,9 +144,9 @@ public class PromiseSchedule {
 						JSONObject item = tmpItems.getJSONObject("item");
 						Promise promise = new Promise();
 						
-						promise.setHuboId(item.getString("cnddtId"));
-						promise.setSgId(item.getString("sgId"));
-						promise.setSgTypeCode(item.getString("sgTypecode"));
+						promise.setHuboId(item.get("cnddtId").toString());
+						promise.setSgId(item.get("sgId").toString());
+						promise.setSgTypeCode(item.get("sgTypecode").toString());
 						promise.setSggName(item.getString("sggName"));
 						promise.setSidoName(item.getString("sidoName"));
 						promise.setWiwName(item.getString("wiwName"));
