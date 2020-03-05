@@ -158,7 +158,7 @@ public class PromiseSchedule {
 							promise.setPrmsOrd(p);
 							promise.setPrmsRealmName(item.getString("prmsRealmName"+p));
 							promise.setPrmsTitle(item.getString("prmsTitle"+p));
-							promise.setPrmsContent(item.getString("prmsCont"+p));
+							promise.setPrmsContent(item.getString("prmmCont"+p));
 							
 							listPromise.add(promise);
 						}
