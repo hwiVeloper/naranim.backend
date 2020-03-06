@@ -20,6 +20,7 @@ import dev.hwiveloper.naranim.common.LogUtil;
 import dev.hwiveloper.naranim.domain.common.Election;
 import dev.hwiveloper.naranim.domain.election.Candidate;
 import dev.hwiveloper.naranim.domain.election.Promise;
+import dev.hwiveloper.naranim.domain.election.PromisePK;
 import dev.hwiveloper.naranim.repository.CandidateRepository;
 import dev.hwiveloper.naranim.repository.ElectionRepository;
 import dev.hwiveloper.naranim.repository.PromiseRepository;
@@ -119,8 +120,9 @@ public class PromiseSchedule {
 						for (int i = 0; i < itemJson.length(); i++) {
 							JSONObject item = itemJson.getJSONObject(i);
 							Promise promise = new Promise();
+							PromisePK key = new PromisePK();
+							key.setHuboId(item.getString("cnddtId"));
 							
-							promise.setHuboId(item.getString("cnddtId"));
 							promise.setSgId(item.getString("sgId"));
 							promise.setSgTypeCode(item.getString("sgTypecode"));
 							promise.setSggName(item.getString("sggName"));
@@ -131,10 +133,12 @@ public class PromiseSchedule {
 							promise.setCnName(item.getString("cnName"));
 							
 							for (int p = 1; p <= item.getInt("prmsCnt"); p++) {
-								promise.setPrmsOrd(p);
+								key.setPrmsOrd(p);
 								promise.setPrmsRealmName(item.getString("prmsRealmName"+p));
 								promise.setPrmsTitle(item.getString("prmsTitle"+p));
 								promise.setPrmsContent(item.getString("prmsCont"+p));
+								
+								promise.setKey(key);
 								
 								listPromise.add(promise);
 							}
@@ -143,8 +147,9 @@ public class PromiseSchedule {
 					} else if (tmpItems.get("item") instanceof JSONObject) {
 						JSONObject item = tmpItems.getJSONObject("item");
 						Promise promise = new Promise();
+						PromisePK key = new PromisePK();
 						
-						promise.setHuboId(item.get("cnddtId").toString());
+						key.setHuboId(item.getString("cnddtId"));
 						promise.setSgId(item.get("sgId").toString());
 						promise.setSgTypeCode(item.get("sgTypecode").toString());
 						promise.setSggName(item.getString("sggName"));
@@ -155,10 +160,12 @@ public class PromiseSchedule {
 						promise.setCnName(item.getString("cnName"));
 						
 						for (int p = 1; p <= item.getInt("prmsCnt"); p++) {
-							promise.setPrmsOrd(p);
+							key.setPrmsOrd(p);
 							promise.setPrmsRealmName(item.getString("prmsRealmName"+p));
 							promise.setPrmsTitle(item.getString("prmsTitle"+p));
 							promise.setPrmsContent(item.getString("prmmCont"+p));
+							
+							promise.setKey(key);
 							
 							listPromise.add(promise);
 						}
