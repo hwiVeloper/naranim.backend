@@ -100,10 +100,10 @@
 			SELECT
 				MAX(sg_id)
 			<if test='pre == null or pre == "N"'>
-			FROM candidate c
+			FROM candidate
 			</if>
 			<if test='pre != null and pre == "Y"'>
-			FROM pre_candidate c
+			FROM pre_candidate
 			</if>
 			WHERE name = c.name
 			AND birthday = c.birthday
