@@ -121,7 +121,7 @@ public class PromiseSchedule {
 							JSONObject item = itemJson.getJSONObject(i);
 							Promise promise = new Promise();
 							PromisePK key = new PromisePK();
-							key.setHuboId(item.getString("cnddtId"));
+							key.setHuboId(item.get("cnddtId").toString());
 							
 							promise.setSgId(item.getString("sgId"));
 							promise.setSgTypeCode(item.getString("sgTypecode"));
@@ -149,7 +149,7 @@ public class PromiseSchedule {
 						Promise promise = new Promise();
 						PromisePK key = new PromisePK();
 						
-						key.setHuboId(item.getString("cnddtId"));
+						key.setHuboId(item.get("cnddtId").toString());
 						promise.setSgId(item.get("sgId").toString());
 						promise.setSgTypeCode(item.get("sgTypecode").toString());
 						promise.setSggName(item.getString("sggName"));
