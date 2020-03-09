@@ -142,7 +142,8 @@ public class PromiseSchedule {
 								
 								listPromise.add(promise);
 							}
-
+							
+							log.info("후보자 : " + key.getHuboId() + " :: " + listPromise.size());
 						}
 					} else if (tmpItems.get("item") instanceof JSONObject) {
 						JSONObject item = tmpItems.getJSONObject("item");
@@ -159,7 +160,9 @@ public class PromiseSchedule {
 						promise.setKrName(item.getString("krName"));
 						promise.setCnName(item.getString("cnName"));
 						
-						for (int p = 1; p <= item.getInt("prmsCnt"); p++) {
+						int count = item.getInt("prmsCnt");
+						
+						for (int p = 1; p <= count; p++) {
 							key.setPrmsOrd(p);
 							promise.setPrmsRealmName(item.getString("prmsRealmName"+p));
 							promise.setPrmsTitle(item.getString("prmsTitle"+p));
@@ -169,6 +172,8 @@ public class PromiseSchedule {
 							
 							listPromise.add(promise);
 						}
+						
+						log.info("후보자 : " + key.getHuboId() + " :: " + listPromise.size());
 					}
 
 					promiseRepo.saveAll(listPromise);
