@@ -49,14 +49,9 @@ public class PromiseSchedule {
 
 			for (Election election : electionList) {
 				
-//				log.info("=====================================================================");
-//				log.info(election.getKey().getSgId() + " :: " + election.getKey().getSgTypeCode());
-
 				List<Candidate> candidateList = candidateRepository.findByElection(election.getKey().getSgId(), election.getKey().getSgTypeCode());
 
 				for (Candidate candidate : candidateList) {
-					
-//					log.info(" > " + candidate.getKey().getHuboId());
 					
 					// URL 생성
 					StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/9760000/ElecPrmsInfoInqireService/getCnddtElecPrmsInfoInqire"); /*URL*/
@@ -119,20 +114,22 @@ public class PromiseSchedule {
 						JSONArray itemJson = tmpItems.getJSONArray("item");
 						for (int i = 0; i < itemJson.length(); i++) {
 							JSONObject item = itemJson.getJSONObject(i);
-							Promise promise = new Promise();
-							PromisePK key = new PromisePK();
-							key.setHuboId(item.get("cnddtId").toString());
+							int count = item.getInt("prmsCnt");
 							
-							promise.setSgId(item.getString("sgId"));
-							promise.setSgTypeCode(item.getString("sgTypecode"));
-							promise.setSggName(item.getString("sggName"));
-							promise.setSidoName(item.getString("sidoName"));
-							promise.setWiwName(item.getString("wiwName"));
-							promise.setPartyName(item.getString("partyName"));
-							promise.setKrName(item.getString("krName"));
-							promise.setCnName(item.getString("cnName"));
-							
-							for (int p = 1; p <= item.getInt("prmsCnt"); p++) {
+							for (int p = 1; p <= count; p++) {
+								
+								Promise promise = new Promise();
+								PromisePK key = new PromisePK();
+								key.setHuboId(item.get("cnddtId").toString());
+								
+								promise.setSgId(item.getString("sgId"));
+								promise.setSgTypeCode(item.getString("sgTypecode"));
+								promise.setSggName(item.getString("sggName"));
+								promise.setSidoName(item.getString("sidoName"));
+								promise.setWiwName(item.getString("wiwName"));
+								promise.setPartyName(item.getString("partyName"));
+								promise.setKrName(item.getString("krName"));
+								promise.setCnName(item.getString("cnName"));
 								key.setPrmsOrd(p);
 								promise.setPrmsRealmName(item.getString("prmsRealmName"+p));
 								promise.setPrmsTitle(item.getString("prmsTitle"+p));
@@ -143,27 +140,28 @@ public class PromiseSchedule {
 								listPromise.add(promise);
 							}
 							
-							log.info("후보자 : " + key.getHuboId() + " :: " + listPromise.size());
 						}
 					} else if (tmpItems.get("item") instanceof JSONObject) {
 						JSONObject item = tmpItems.getJSONObject("item");
-						Promise promise = new Promise();
-						PromisePK key = new PromisePK();
-						
-						key.setHuboId(item.get("cnddtId").toString());
-						promise.setSgId(item.get("sgId").toString());
-						promise.setSgTypeCode(item.get("sgTypecode").toString());
-						promise.setSggName(item.getString("sggName"));
-						promise.setSidoName(item.getString("sidoName"));
-						promise.setWiwName(item.getString("wiwName"));
-						promise.setPartyName(item.getString("partyName"));
-						promise.setKrName(item.getString("krName"));
-						promise.setCnName(item.getString("cnName"));
 						
 						int count = item.getInt("prmsCnt");
 						
 						for (int p = 1; p <= count; p++) {
+							Promise promise = new Promise();
+							PromisePK key = new PromisePK();
+							
+							key.setHuboId(item.get("cnddtId").toString());
 							key.setPrmsOrd(p);
+							
+							promise.setSgId(item.get("sgId").toString());
+							promise.setSgTypeCode(item.get("sgTypecode").toString());
+							promise.setSggName(item.getString("sggName"));
+							promise.setSidoName(item.getString("sidoName"));
+							promise.setWiwName(item.getString("wiwName"));
+							promise.setPartyName(item.getString("partyName"));
+							promise.setKrName(item.getString("krName"));
+							promise.setCnName(item.getString("cnName"));
+							
 							promise.setPrmsRealmName(item.getString("prmsRealmName"+p));
 							promise.setPrmsTitle(item.getString("prmsTitle"+p));
 							promise.setPrmsContent(item.getString("prmmCont"+p));
@@ -173,13 +171,11 @@ public class PromiseSchedule {
 							listPromise.add(promise);
 						}
 						
-						log.info("후보자 : " + key.getHuboId() + " :: " + listPromise.size());
 					}
 
 					promiseRepo.saveAll(listPromise);
 
 				}
-//				log.info("=====================================================================");
 			}
 
 			LogUtil.scheduleSccssLog(log, new Object() {});
