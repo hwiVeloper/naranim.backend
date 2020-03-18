@@ -15,9 +15,6 @@ public class Region {
 	@EmbeddedId
 	private RegionPK key;
 	
-	@Column(name="etc_name", nullable=true, length=50)
-	private String etcName;
-	
 	@Column(name="jungsu", length=1)
 	private Integer jungsu;
 	

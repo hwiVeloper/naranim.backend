@@ -12,6 +12,10 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.XML;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -330,5 +334,22 @@ public class CandidateSchedule {
 			log.error("[SCHEDULE FAILED] getPoelpcddRegistSttusInfoInqire");
 			log.error(e.getMessage());
 		}
+	}
+	
+	public String getAdditionalInfo(String sgId, String huboId) {
+		try {
+			Connection.Response response = Jsoup.connect("http://info.nec.go.kr/electioninfo/precandidate_detail_info.xhtml?electionId=00"+sgId+"&huboId="+huboId)
+												.method(Connection.Method.GET)
+												.execute();
+			Document huboDocument = response.parse();
+			Element imgEl = huboDocument.select(".pic img").first();
+			String imgUrl = imgEl.attr("src");
+			
+			return imgUrl;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 }
