@@ -88,6 +88,9 @@
 			name,
 			DATE_FORMAT(STR_TO_DATE(birthday, '%Y%m%d'), '%Y.%m.%d') AS birthday,
 			jd_name,
+			<if test='pre != null and pre == "Y"'>
+			image,
+			</if>
 			hanja_name AS hanjaName
 		<if test='pre == null or pre == "N"'>
 		FROM candidate c
@@ -122,6 +125,9 @@
 			career2,
 			edu,
 			hubo_id AS huboId,
+			<if test='pre != null and pre == "Y"'>
+			image,
+			</if>
 			sg_id AS sgId,
 			sg_type_code AS sgTypeCode
 		<if test='pre == null or pre == "N"'>

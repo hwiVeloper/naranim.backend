@@ -1,5 +1,6 @@
 package dev.hwiveloper.naranim.domain.election;
 
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 
@@ -30,4 +31,6 @@ public class PreCandidate {
 	private String career1;
 	private String career2;
 	private String status;
+	@Column(name="image", length = 255)
+	private String image;
 }

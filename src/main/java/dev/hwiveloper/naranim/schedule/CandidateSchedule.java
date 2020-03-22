@@ -36,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
  * CandidateSchedule
  * 후보자 정보 조회 후 DB에 저장한다.
  * 
- * 매일 0?:??:?? => getPoelpcddRegistSttusInfoInqire (예비후보자 정보 조회 / 미개발)
+ * 매일 02:15:00 => getPoelpcddRegistSttusInfoInqire (예비후보자 정보 조회)
  * 매일 02:00:00 => getPofelcddRegistSttusInfoInqire (후보자 정보 조회)
  */
 @Component
@@ -292,39 +292,40 @@ public class CandidateSchedule {
 						itemCndd.setCareer1(item.isNull("career1") ? "" : item.getString("career1"));
 						itemCndd.setCareer2(item.isNull("career2") ? "" : item.getString("career2"));
 						itemCndd.setStatus(item.getString("status"));
+						itemCndd.setImage(getPreHuboImageUrl(item.get("sgId").toString(), item.get("huboid").toString()));
 
 						listCandidate.add(itemCndd);
 					}
-				} else
-					if (tmpJson.get("item") instanceof JSONObject) {
-						JSONObject item = tmpJson.getJSONObject("item");
-						PreCandidate itemCndd = new PreCandidate();
-						PreCandidatePK keyCndd = new PreCandidatePK();
+				} else if (tmpJson.get("item") instanceof JSONObject) {
+					JSONObject item = tmpJson.getJSONObject("item");
+					PreCandidate itemCndd = new PreCandidate();
+					PreCandidatePK keyCndd = new PreCandidatePK();
 
-						keyCndd.setSgId(item.get("sgId").toString());
-						keyCndd.setSgTypeCode(item.get("sgTypecode").toString());
-						keyCndd.setHuboId(item.get("huboid").toString());
+					keyCndd.setSgId(item.get("sgId").toString());
+					keyCndd.setSgTypeCode(item.get("sgTypecode").toString());
+					keyCndd.setHuboId(item.get("huboid").toString());
 
-						itemCndd.setKey(keyCndd);
-						itemCndd.setSdName(item.getString("sdName"));
-						itemCndd.setWiwName(item.getString("wiwName"));
-						itemCndd.setJdName(item.getString("jdName"));
-						itemCndd.setName(item.getString("name"));
-						itemCndd.setHanjaName(item.getString("hanjaName"));
-						itemCndd.setGender(item.getString("gender"));
-						itemCndd.setBirthday(item.get("birthday").toString());
-						itemCndd.setAge(item.getInt("age"));
-						itemCndd.setAddr(item.getString("addr"));
-						itemCndd.setJobId(item.get("jobId").toString());
-						itemCndd.setJob(item.getString("job"));
-						itemCndd.setEduId(item.get("eduId").toString());
-						itemCndd.setEdu(item.getString("edu"));
-						itemCndd.setCareer1(item.isNull("career1") ? "" : item.getString("career1"));
-						itemCndd.setCareer2(item.isNull("career2") ? "" : item.getString("career2"));
-						itemCndd.setStatus(item.getString("status"));
+					itemCndd.setKey(keyCndd);
+					itemCndd.setSdName(item.getString("sdName"));
+					itemCndd.setWiwName(item.getString("wiwName"));
+					itemCndd.setJdName(item.getString("jdName"));
+					itemCndd.setName(item.getString("name"));
+					itemCndd.setHanjaName(item.getString("hanjaName"));
+					itemCndd.setGender(item.getString("gender"));
+					itemCndd.setBirthday(item.get("birthday").toString());
+					itemCndd.setAge(item.getInt("age"));
+					itemCndd.setAddr(item.getString("addr"));
+					itemCndd.setJobId(item.get("jobId").toString());
+					itemCndd.setJob(item.getString("job"));
+					itemCndd.setEduId(item.get("eduId").toString());
+					itemCndd.setEdu(item.getString("edu"));
+					itemCndd.setCareer1(item.isNull("career1") ? "" : item.getString("career1"));
+					itemCndd.setCareer2(item.isNull("career2") ? "" : item.getString("career2"));
+					itemCndd.setStatus(item.getString("status"));
+					itemCndd.setImage(getPreHuboImageUrl(item.get("sgId").toString(), item.get("huboid").toString()));
 
-						listCandidate.add(itemCndd);
-					}
+					listCandidate.add(itemCndd);
+				}
 
 				preCandidateRepo.saveAll(listCandidate);
 			}
@@ -336,7 +337,7 @@ public class CandidateSchedule {
 		}
 	}
 	
-	public String getAdditionalInfo(String sgId, String huboId) {
+	public String getPreHuboImageUrl(String sgId, String huboId) {
 		try {
 			Connection.Response response = Jsoup.connect("http://info.nec.go.kr/electioninfo/precandidate_detail_info.xhtml?electionId=00"+sgId+"&huboId="+huboId)
 												.method(Connection.Method.GET)
@@ -344,12 +345,14 @@ public class CandidateSchedule {
 			Document huboDocument = response.parse();
 			Element imgEl = huboDocument.select(".pic img").first();
 			String imgUrl = imgEl.attr("src");
-			
-			return imgUrl;
+//			String gsgCode = imgUrl.split("/")[2];
+//			String sungeoguCode = gsgCode.substring(3);
+//			http://info.nec.go.kr/photo_20200415/Gsg1113/Hb100137164/gicho/100137164.JPG
+			log.info("http://info.nec.go.kr" + imgUrl);
+			return "http://info.nec.go.kr" + imgUrl;
 		} catch (IOException e) {
 			e.printStackTrace();
+			return null;
 		}
-		
-		return null;
 	}
 }
