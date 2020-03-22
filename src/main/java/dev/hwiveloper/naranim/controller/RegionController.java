@@ -49,7 +49,7 @@ public class RegionController {
 		param.put("emdName", reqParam.get("emdName"));
 		
 		return new ResponseEntity<>(regionMapper.getRegions(param), HttpStatus.OK);
-	}O
+	}
 	
 	@PostMapping("/registerUserRegion")
 	public ResponseEntity<?> registerUserRegion(@RequestBody UserRegion userRegion) {
