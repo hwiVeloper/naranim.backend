@@ -10,4 +10,6 @@ import dev.hwiveloper.naranim.domain.common.Region;
 @Mapper
 public interface RegionMapper {
 	List<HashMap<String, Object>> getRegions(HashMap<String, Object> param);
+	
+	List<HashMap<String, Object>> getMyRegionCandidates(HashMap<String, Object> param);
 }

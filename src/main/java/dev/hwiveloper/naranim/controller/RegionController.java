@@ -56,4 +56,10 @@ public class RegionController {
 		userRegionRepo.save(userRegion);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
+	@PostMapping("/getMyRegionCandidates")
+	public ResponseEntity<?> getMyRegionCandidates(@RequestBody HashMap<String, Object> reqParam) {
+		log.info(reqParam.toString());
+		return new ResponseEntity<>(regionMapper.getMyRegionCandidates(reqParam), HttpStatus.OK);
+	}
 }

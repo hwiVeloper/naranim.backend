@@ -14,7 +14,7 @@
 			<if test="emdName != null and emdName != ''">
 			, sgg_name AS sggName
 			</if>
-			, sg_id AS sgId,
+			, sg_id AS sgId
 			, sg_type_code AS sgTypeCode
 		FROM region
 		WHERE 1=1
@@ -30,5 +30,29 @@
 		AND sg_id = '20200415'
 		AND sg_type_code = '2'
 		ORDER BY sd_name, gusigun_name, emd_name
+	</select>
+	
+	<select id="getMyRegionCandidates" parameterType="Map" resultType="Map">
+		SELECT
+			hubo_id AS huboId,
+			name,
+			DATE_FORMAT(STR_TO_DATE(birthday, '%Y%m%d'), '%Y.%m.%d') AS birthday,
+			jd_name as jdName,
+			<if test='pre != null and pre == "Y"'>
+			image,
+			</if>
+			hanja_name AS hanjaName
+		<if test='pre == null or pre == "N"'>
+		FROM candidate c
+		</if>
+		<if test='pre != null and pre == "Y"'>
+		FROM pre_candidate c
+		</if>
+		WHERE 1=1
+		<if test='pre != null and pre == "Y"'>
+		AND sg_id = '20200415'
+		AND sg_type_code = '2'
+		AND sgg_name = #{sggName}
+		</if>
 	</select>
 </mapper>
