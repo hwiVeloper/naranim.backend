@@ -62,7 +62,8 @@
 			sum(vr.mutusu) AS mutusu,
 			sum(vr.gigwonsu) AS gigwonsu,
 			sum(vr.dugsu) AS dugsu,
-			(sum(vr.dugsu) / sum(vr.yutusu)) * 100 AS dugsu_ratio
+			(sum(vr.dugsu) / sum(vr.yutusu)) * 100 AS dugsu_ratio,
+			image
 		FROM
 			candidate AS c
 			LEFT OUTER JOIN winner AS w
@@ -81,7 +82,7 @@
 		AND c.sd_name = #{SD_NAME}
 		AND c.sgg_name = #{SGG_NAME}
 		GROUP BY c.name, order_gan, is_winner
-		ORDER by order_gan, dugsu_ratio DESC
+		ORDER by giho, order_gan, dugsu_ratio DESC
 	</select>
 	
 	<select id="getCandidateSearch" parameterType="Map" resultType="Map">
