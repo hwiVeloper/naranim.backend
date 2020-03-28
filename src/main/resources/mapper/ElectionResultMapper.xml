@@ -18,7 +18,8 @@
 			vr.mutusu AS mutusu,
 			vr.gigwonsu AS gigwonsu,
 			vr.dugsu AS dugsu,
-			(vr.dugsu / vr.yutusu) * 100 AS dugsu_ratio
+			(vr.dugsu / vr.yutusu) * 100 AS dugsu_ratio,
+			image
 		FROM
 			candidate AS c
 			LEFT OUTER JOIN winner AS w
@@ -34,7 +35,7 @@
 		AND c.sg_id = #{SG_ID}
 		AND c.sd_name = #{SD_NAME}
 		AND c.wiw_name = #{WIW_NAME}
-		ORDER by order_gan, dugsu_ratio
+		ORDER by giho, order_gan, dugsu_ratio
 	</select>
 	
 	<select id="getElectionResultBySggName" parameterType="Map" resultType="Map">
@@ -88,26 +89,14 @@
 			name,
 			DATE_FORMAT(STR_TO_DATE(birthday, '%Y%m%d'), '%Y.%m.%d') AS birthday,
 			jd_name,
-			<if test='pre != null and pre == "Y"'>
 			image,
-			</if>
 			hanja_name AS hanjaName
-		<if test='pre == null or pre == "N"'>
 		FROM candidate c
-		</if>
-		<if test='pre != null and pre == "Y"'>
-		FROM pre_candidate c
-		</if>
 		WHERE name LIKE CONCAT('%',#{search},'%')
 		AND sg_id = (
 			SELECT
 				MAX(sg_id)
-			<if test='pre == null or pre == "N"'>
 			FROM candidate
-			</if>
-			<if test='pre != null and pre == "Y"'>
-			FROM pre_candidate
-			</if>
 			WHERE name = c.name
 			AND birthday = c.birthday
 			AND hanja_name = c.hanja_name
@@ -125,29 +114,17 @@
 			career2,
 			edu,
 			hubo_id AS huboId,
-			<if test='pre != null and pre == "Y"'>
 			image,
-			</if>
 			sg_id AS sgId,
 			sg_type_code AS sgTypeCode
-		<if test='pre == null or pre == "N"'>
 		FROM candidate c
-		</if>
-		<if test='pre != null and pre == "Y"'>
-		FROM pre_candidate c
-		</if>
 		WHERE name LIKE CONCAT('%',#{name},'%')
 		AND birthday = #{birthday}
 		AND hanja_name = #{hanjaName}
 		AND sg_id = (
 			SELECT
 				MAX(sg_id)
-			<if test='pre == null or pre == "N"'>
 			FROM candidate
-			</if>
-			<if test='pre != null and pre == "Y"'>
-			FROM pre_candidate
-			</if>
 			WHERE name = c.name
 			AND birthday = c.birthday
 			AND hanja_name = c.hanja_name
