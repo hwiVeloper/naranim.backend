@@ -117,7 +117,8 @@
 			hubo_id AS huboId,
 			image,
 			sg_id AS sgId,
-			sg_type_code AS sgTypeCode
+			sg_type_code AS sgTypeCode,
+			image
 		FROM candidate c
 		WHERE name LIKE CONCAT('%',#{name},'%')
 		AND birthday = #{birthday}
