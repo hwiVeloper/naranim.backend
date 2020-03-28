@@ -194,7 +194,7 @@ public class CandidateSchedule {
 	 * getPoelpcddRegistSttusInfoInqire
 	 * 예비후보자 정보
 	 */
-	@Scheduled(cron="0 15 2 * * *")
+//	@Scheduled(cron="0 15 2 * * *")
 	public void getPoelpcddRegistSttusInfoInqire() {
 		try {
 			// sgId, sgTypeCode 가져오기 (선거리스트)

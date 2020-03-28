@@ -38,21 +38,13 @@
 			name,
 			DATE_FORMAT(STR_TO_DATE(birthday, '%Y%m%d'), '%Y.%m.%d') AS birthday,
 			jd_name as jdName,
-			<if test='pre != null and pre == "Y"'>
-			image,
-			</if>
-			hanja_name AS hanjaName
-		<if test='pre == null or pre == "N"'>
+			hanja_name AS hanjaName,
+			giho
 		FROM candidate c
-		</if>
-		<if test='pre != null and pre == "Y"'>
-		FROM pre_candidate c
-		</if>
 		WHERE 1=1
-		<if test='pre != null and pre == "Y"'>
 		AND sg_id = '20200415'
 		AND sg_type_code = '2'
 		AND sgg_name = #{sggName}
-		</if>
+		ORDER BY giho
 	</select>
 </mapper>
