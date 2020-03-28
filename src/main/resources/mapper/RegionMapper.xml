@@ -39,7 +39,8 @@
 			DATE_FORMAT(STR_TO_DATE(birthday, '%Y%m%d'), '%Y.%m.%d') AS birthday,
 			jd_name as jdName,
 			hanja_name AS hanjaName,
-			giho
+			giho,
+			image
 		FROM candidate c
 		WHERE 1=1
 		AND sg_id = '20200415'

@@ -31,4 +31,5 @@ public class Candidate {
 	private String career1;
 	private String career2;
 	private String status;
+	private String image;
 }

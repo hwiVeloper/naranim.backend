@@ -67,6 +67,9 @@ public class CandidateSchedule {
 
 			// 본서비스 호출 (loop)
 			for (Election election : electionList) {
+				if (!election.getKey().getSgId().toString().equals("20200415")) {
+					continue;
+				}
 				if (election.getKey().getSgTypeCode().toString().equals("0")) {
 					continue;
 				}
@@ -146,6 +149,10 @@ public class CandidateSchedule {
 						itemCndd.setCareer1(item.isNull("career1") ? "" : item.getString("career1"));
 						itemCndd.setCareer2(item.isNull("career2") ? "" : item.getString("career2"));
 						itemCndd.setStatus(item.getString("status"));
+						
+						if (item.get("sgId").toString().equals("20200415")) {
+							itemCndd.setImage(getPreHuboImageUrl(item.get("sgId").toString(), item.get("huboid").toString()));
+						}
 
 						listCandidate.add(itemCndd);
 					}
@@ -178,6 +185,10 @@ public class CandidateSchedule {
 						itemCndd.setCareer1(item.isNull("career1") ? "" : item.getString("career1"));
 						itemCndd.setCareer2(item.isNull("career2") ? "" : item.getString("career2"));
 						itemCndd.setStatus(item.getString("status"));
+						
+						if (item.get("sgId").toString().equals("20200415")) {
+							itemCndd.setImage(getPreHuboImageUrl(item.get("sgId").toString(), item.get("huboid").toString()));
+						}
 
 						listCandidate.add(itemCndd);
 					}
@@ -339,7 +350,7 @@ public class CandidateSchedule {
 	
 	public String getPreHuboImageUrl(String sgId, String huboId) {
 		try {
-			Connection.Response response = Jsoup.connect("http://info.nec.go.kr/electioninfo/precandidate_detail_info.xhtml?electionId=00"+sgId+"&huboId="+huboId)
+			Connection.Response response = Jsoup.connect("http://info.nec.go.kr/electioninfo/candidate_detail_info.xhtml?electionId=00"+sgId+"&huboId="+huboId)
 												.method(Connection.Method.GET)
 												.execute();
 			Document huboDocument = response.parse();
@@ -348,7 +359,6 @@ public class CandidateSchedule {
 //			String gsgCode = imgUrl.split("/")[2];
 //			String sungeoguCode = gsgCode.substring(3);
 //			http://info.nec.go.kr/photo_20200415/Gsg1113/Hb100137164/gicho/100137164.JPG
-			log.info("http://info.nec.go.kr" + imgUrl);
 			return "http://info.nec.go.kr" + imgUrl;
 		} catch (IOException e) {
 			e.printStackTrace();
