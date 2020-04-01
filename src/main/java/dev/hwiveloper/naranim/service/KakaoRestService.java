@@ -44,7 +44,7 @@ public class KakaoRestService {
 		String emdName     = (String) param.get("emdName");
 		String address     = sdName + " " + gusigunName + " " + emdName;
 
-		log.info("query address >>>>> " + address);
+		log.info("query address value >>>>> " + address);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 
