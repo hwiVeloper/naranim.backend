@@ -27,8 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class KakaoRestService {
 
-	@Value("${keys.kakao-rest-key}")
-	String KAKAO_REST_KEY;
+	String KAKAO_REST_KEY = "a137689844fdc0dd06194c0550d1e7de";
 
 	private String kakaoLocalEndpoint = "https://dapi.kakao.com/v2/local";
 	
