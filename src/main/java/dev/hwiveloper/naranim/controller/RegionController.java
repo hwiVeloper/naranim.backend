@@ -1,6 +1,7 @@
 package dev.hwiveloper.naranim.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,10 +76,11 @@ public class RegionController {
 		Map<String, Object> coords = kakaoRestService.getCenterPoint(reqParam);
 		
 		// 해당 선거구 투표소 조회
-		
+		List<Map<String, Object>> pollPlaces = kakaoRestService.getPollPlacesPoint(reqParam);
 		
 		result.put("sungeogu", sungeogu);
 		result.put("center", coords);
+		result.put("pollPlaces", pollPlaces);
 		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}

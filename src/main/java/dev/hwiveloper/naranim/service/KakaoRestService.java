@@ -102,8 +102,70 @@ public class KakaoRestService {
 	
 	public List<Map<String, Object>> getPollPlacesPoint(Map<String, Object> param) {
 		
-		List<HashMap<String, Object>> pollPlaces = regionMapper.getPollPlaces((HashMap<String, Object>) param);
+		List<Map<String, Object>> pollPlaces = regionMapper.getPollPlaces((HashMap<String, Object>) param);
 		
-		return null;
+		for (Map<String, Object> pollPlace : pollPlaces) {
+			Map<String, Object> coords = getCoordsByAddr(pollPlace);
+			pollPlace.put("x", coords.get("x").toString());
+			pollPlace.put("y", coords.get("y").toString());
+		}
+		
+		return pollPlaces;
+	}
+	
+	public Map<String, Object> getCoordsByAddr(Map<String, Object> pollPlace) {
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			// URL 생성
+			StringBuilder urlBuilder = new StringBuilder(kakaoLocalEndpoint.concat("/search/address.json")); /*URL*/
+			urlBuilder.append("?" + URLEncoder.encode("query", "UTF-8") + "=" + URLEncoder.encode((String) pollPlace.get("addr"), "UTF-8"));
+			urlBuilder.append("&" + URLEncoder.encode("AddressSize", "UTF-8") + "=" + 1);
+			URL url = new URL(urlBuilder.toString());
+			
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Authorization", "KakaoAK ".concat(KAKAO_REST_KEY));
+
+			BufferedReader rd;
+			if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+				rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			} else {
+				rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+			}
+
+			StringBuilder sb = new StringBuilder();
+			String line;
+			while ((line = rd.readLine()) != null) {
+				sb.append(line);
+			}
+
+			rd.close();
+			conn.disconnect();
+			
+			JSONObject resultJson = new JSONObject(sb.toString());
+			
+			JSONArray documents = resultJson.getJSONArray("documents");
+			JSONObject document = new JSONObject();
+			
+			if (documents.length() > 0) {
+				document = documents.getJSONObject(0);
+				resultMap.put("x", document.get("x").toString());
+				resultMap.put("y", document.get("y").toString());
+			}
+
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return resultMap;
 	}
 }

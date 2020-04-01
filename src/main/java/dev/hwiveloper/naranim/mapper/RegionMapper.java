@@ -2,6 +2,7 @@ package dev.hwiveloper.naranim.mapper;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,5 +14,5 @@ public interface RegionMapper {
 	
 	String getSggByRegion(HashMap<String, Object> param);
 	
-	List<HashMap<String, Object>> getPollPlaces(HashMap<String, Object> param);
+	List<Map<String, Object>> getPollPlaces(HashMap<String, Object> param);
 }

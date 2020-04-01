@@ -76,8 +76,7 @@
 		from poll_place
 		where sg_id='20200415'
 		and pre_yn = '1' -- 조건부
-		and sd_name = '서울특별시'
-		and wiw_name = '서대문구'
-		-- and emd_name = '연희동' -- 구까지만 해도 속도 괜찮은지 테스트 필요
+		and sd_name = #{sdName}
+		and wiw_name = #{gusigunName}
 	</select>
 </mapper>
