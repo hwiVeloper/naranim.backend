@@ -48,4 +48,36 @@
 		AND sgg_name = #{sggName}
 		ORDER BY giho
 	</select>
+	
+	<select id="getSggByRegion" parameterType="Map" resultType="String">
+		SELECT
+			sgg_name AS sggName
+		FROM region
+		WHERE 1=1
+		AND sd_name = #{sdName}
+		AND gusigun_name = #{gusigunName}
+		AND emd_name = #{emdName}
+		AND sg_id = '20200415'
+		AND sg_type_code = '2'
+	</select>
+	
+	<select id="getPollPlaces" parameterType="Map" resultType="Map">
+		select
+			sd_name as sdName,
+			sg_id as sgId,
+			addr as addr,
+			emd_name as emdName,
+			ev_order as evOrder,
+			ev_ps_name as evPsName,
+			floor as floor,
+			place_name as placeName,
+			ps_name as psName,
+			wiw_name as gusigunName
+		from poll_place
+		where sg_id='20200415'
+		and pre_yn = '1' -- 조건부
+		and sd_name = '서울특별시'
+		and wiw_name = '서대문구'
+		-- and emd_name = '연희동' -- 구까지만 해도 속도 괜찮은지 테스트 필요
+	</select>
 </mapper>

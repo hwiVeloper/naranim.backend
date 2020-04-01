@@ -43,3 +43,4 @@ keys:
   poll-place-service: ${GOV_API_KEY}
   vote-service: ${GOV_API_KEY}
   winner-service: ${GOV_API_KEY}
+  kakao-rest-key: ${KAKAO_REST_KEY}

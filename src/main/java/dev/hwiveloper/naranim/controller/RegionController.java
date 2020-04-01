@@ -1,25 +1,22 @@
 package dev.hwiveloper.naranim.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.hwiveloper.naranim.domain.common.Region;
-import dev.hwiveloper.naranim.domain.common.RegionPK;
 import dev.hwiveloper.naranim.domain.common.UserRegion;
 import dev.hwiveloper.naranim.mapper.RegionMapper;
 import dev.hwiveloper.naranim.repository.RegionRepository;
 import dev.hwiveloper.naranim.repository.UserRegionRepository;
+import dev.hwiveloper.naranim.service.KakaoRestService;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -31,6 +28,9 @@ public class RegionController {
 	
 	@Autowired
 	RegionRepository regionRepo;
+	
+	@Autowired
+	KakaoRestService kakaoRestService;
 	
 	@Autowired
 	RegionMapper regionMapper;
@@ -61,5 +61,25 @@ public class RegionController {
 	public ResponseEntity<?> getMyRegionCandidates(@RequestBody HashMap<String, Object> reqParam) {
 		log.info(reqParam.toString());
 		return new ResponseEntity<>(regionMapper.getMyRegionCandidates(reqParam), HttpStatus.OK);
+	}
+	
+	@PostMapping("/getPollPlaces")
+	public ResponseEntity<?> getPollPlaces(@RequestBody HashMap<String, Object> reqParam) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		// 선거구 조회
+		String sungeogu = regionMapper.getSggByRegion(reqParam);
+		
+		// 중심점 좌표
+		Map<String, Object> coords = kakaoRestService.getCenterPoint(reqParam);
+		
+		// 해당 선거구 투표소 조회
+		
+		
+		result.put("sungeogu", sungeogu);
+		result.put("center", coords);
+		
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 }

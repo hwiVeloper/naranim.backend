@@ -39,3 +39,4 @@ keys:
   poll-place-service: SERVICE_KEY
   vote-service: SERVICE_KEY
   winner-service: SERVICE_KEY
+  kakao-rest-key: KAKAO_REST_KEY
