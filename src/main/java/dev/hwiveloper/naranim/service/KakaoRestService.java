@@ -15,7 +15,6 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
@@ -154,6 +153,64 @@ public class KakaoRestService {
 				document = documents.getJSONObject(0);
 				resultMap.put("x", document.get("x").toString());
 				resultMap.put("y", document.get("y").toString());
+			}
+
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return resultMap;
+	}
+	
+	public Map<String, Object> getAreaAndCenterByCoords(Map<String, Object> param) {
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			// URL 생성
+			StringBuilder urlBuilder = new StringBuilder(kakaoLocalEndpoint.concat("/geo/coord2regioncode.json")); /*URL*/
+			urlBuilder.append("?" + URLEncoder.encode("x", "UTF-8") + "=" + param.get("longitude"));
+			urlBuilder.append("&" + URLEncoder.encode("y", "UTF-8") + "=" + param.get("latitude"));
+			URL url = new URL(urlBuilder.toString());
+			
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Authorization", "KakaoAK ".concat(KAKAO_REST_KEY));
+
+			BufferedReader rd;
+			if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+				rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			} else {
+				rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+			}
+
+			StringBuilder sb = new StringBuilder();
+			String line;
+			while ((line = rd.readLine()) != null) {
+				sb.append(line);
+			}
+
+			rd.close();
+			conn.disconnect();
+			
+			JSONObject resultJson = new JSONObject(sb.toString());
+			
+			JSONArray documents = resultJson.getJSONArray("documents");
+			JSONObject document = new JSONObject();
+			
+			if (documents.length() > 0) {
+				document = documents.getJSONObject(0);
+				// 행정구역명
+				resultMap.put("sdName", document.get("region_1depth_name").toString());
+				resultMap.put("gusigunName", document.get("region_2depth_name").toString().replaceAll(" " , ""));
+				resultMap.put("emdName", document.get("region_3depth_name").toString().concat(document.get("region_4depth_name").toString()));
 			}
 
 		} catch (UnsupportedEncodingException e) {

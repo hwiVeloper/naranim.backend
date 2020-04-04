@@ -84,4 +84,30 @@ public class RegionController {
 		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	
+	@PostMapping("/getPollPlacesByLocation")
+	public ResponseEntity<?> getPollPlacesByLocation(@RequestBody HashMap<String, Object> reqParam) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		// 위치에 따른 행정구역 & 중심점 좌표 조회
+		Map<String, Object> areaAndCoords = kakaoRestService.getAreaAndCenterByCoords(reqParam);
+		
+		// 선거구 조회
+		String sungeogu = regionMapper.getSggByRegion((HashMap<String, Object>) areaAndCoords);
+		
+		// 해당 선거구 투표소 조회
+		List<Map<String, Object>> pollPlaces = kakaoRestService.getPollPlacesPoint(areaAndCoords);
+		
+		// 중심점 좌표
+		Map<String, Object> coords = new HashMap<String, Object>();
+		coords.put("x", reqParam.get("longitude"));
+		coords.put("y", reqParam.get("latitude"));
+		
+		
+		result.put("sungeogu", sungeogu);
+		result.put("center", coords);
+		result.put("pollPlaces", pollPlaces);
+		
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 }
