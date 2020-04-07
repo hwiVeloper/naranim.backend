@@ -1,5 +1,8 @@
 package dev.hwiveloper.naranim.aop;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -23,13 +26,13 @@ public class ControllerAop {
 	@Before("execution(* dev.hwiveloper.naranim.controller.*.*(..))")
 	public void onBeforeHandler(JoinPoint joinPoint) {
 		// 메서드 실행 전에 수행
-		log.info("=============== onBeforeThing");
+		log.info(">>>>> onBeforeThing");
 	}
 
 	@After("execution(* dev.hwiveloper.naranim.controller.*.*(..))")
 	public void onAfterHandler(JoinPoint joinPoint) {
 		// 메서드 실행 후에 수행
-		log.info("=============== onAfterHandler");
+		log.info(">>>>> onAfterHandler");
 	}
 
 //	@AfterReturning(pointcut = "execution(* dev.hwiveloper.naranim.controller.*.*(..))", returning = "ret")
@@ -38,17 +41,26 @@ public class ControllerAop {
 //		log.info("=============== onAfterReturningHandler");
 //	}
 
+	@SuppressWarnings("unchecked")
 	@Around("execution(* dev.hwiveloper.naranim.controller.*.*(..))")
 	public ResponseEntity<?> around(ProceedingJoinPoint pjp) throws Throwable {
-		log.info("==========================> " + pjp.getSignature().getDeclaringTypeName() + "." + pjp.getSignature().getName() + " START");
-		log.info("start - " + pjp.getSignature().getDeclaringTypeName() + " / " + pjp.getSignature().getName());
+		log.info(">>>>> " + pjp.getSignature().getDeclaringTypeName() + "." + pjp.getSignature().getName() + " START");
+		
+		Map<String, Object> argMap = new HashMap<String, Object>();
+		
+		Object[] args = pjp.getArgs();
+		for (Object arg : args) {
+			log.info(">>>>> Request Arguments");
+			if (arg instanceof Map) {
+				argMap = (Map<String, Object>) arg;
+				argMap.forEach((key, value) -> log.info(key + " : " + value));
+			}
+		}
 		
 		ResponseEntity<?> result;
 		result = (ResponseEntity<?>) pjp.proceed();
 
-		log.info("finished - " + pjp.getSignature().getDeclaringTypeName() + " / " + pjp.getSignature().getName());
-		
-		log.info("==========================> " + pjp.getSignature().getDeclaringTypeName() + "." + pjp.getSignature().getName() + " END");
+		log.info(">>>>> " + pjp.getSignature().getDeclaringTypeName() + "." + pjp.getSignature().getName() + " END");
 
 		return result;
 	}
