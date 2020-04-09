@@ -359,7 +359,10 @@ public class CandidateSchedule {
 //			String gsgCode = imgUrl.split("/")[2];
 //			String sungeoguCode = gsgCode.substring(3);
 //			http://info.nec.go.kr/photo_20200415/Gsg1113/Hb100137164/gicho/100137164.JPG
-			return "http://info.nec.go.kr" + imgUrl;
+			if (imgUrl.equals("") || imgUrl == null) {
+				return "";
+			}
+			return imgUrl;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
