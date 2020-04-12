@@ -75,7 +75,7 @@
 			wiw_name as gusigunName
 		from poll_place
 		where sg_id='20200415'
-		and pre_yn = '1' -- 조건부
+		and pre_yn = '0' -- 조건부
 		and sd_name = #{sdName}
 		and wiw_name = #{gusigunName}
 	</select>
