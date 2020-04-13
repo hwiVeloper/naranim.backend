@@ -68,7 +68,7 @@
 			addr as addr,
 			emd_name as emdName,
 			ev_order as evOrder,
-			ev_ps_name as evPsName,
+			NULLIF(ps_name, ev_ps_name) as evPsName,
 			floor as floor,
 			place_name as placeName,
 			ps_name as psName,
