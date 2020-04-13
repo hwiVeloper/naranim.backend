@@ -104,8 +104,13 @@ public class KakaoRestService {
 		
 		List<Map<String, Object>> pollPlaces = regionMapper.getPollPlaces((HashMap<String, Object>) param);
 		
+		log.info("pollPlaces : " + pollPlaces);
+		
 		for (Map<String, Object> pollPlace : pollPlaces) {
 			Map<String, Object> coords = getCoordsByAddr(pollPlace);
+			if (!coords.containsKey("x") || !coords.containsKey("y")) {
+				continue;
+			}
 			pollPlace.put("x", coords.get("x").toString());
 			pollPlace.put("y", coords.get("y").toString());
 		}
