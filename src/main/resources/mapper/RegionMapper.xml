@@ -62,21 +62,24 @@
 	</select>
 	
 	<select id="getPollPlaces" parameterType="Map" resultType="Map">
-		select
-			sd_name as sdName,
-			sg_id as sgId,
-			addr as addr,
-			emd_name as emdName,
-			ev_order as evOrder,
-			NULLIF(ps_name, ev_ps_name) as evPsName,
-			floor as floor,
-			place_name as placeName,
-			ps_name as psName,
-			wiw_name as gusigunName
-		from poll_place
-		where sg_id='20200415'
-		and pre_yn = '0' -- 조건부
-		and sd_name = #{sdName}
-		and wiw_name = #{gusigunName}
+		SELECT
+			sd_name AS sdName,
+			sg_id AS sgId,
+			addr AS addr,
+			emd_name AS emdName,
+			ev_order AS evOrder,
+			CASE pre_yn
+				WHEN '0' THEN ev_ps_name
+				WHEN '1' THEN ps_name
+			END AS evPsName,
+			floor AS floor,
+			place_name AS placeName,
+			ps_name AS psName,
+			wiw_name AS gusigunName
+		FROM poll_place
+		WHERE sg_id='20200415'
+		AND pre_yn = '0'
+		AND sd_name = #{sdName}
+		AND wiw_name = #{gusigunName}
 	</select>
 </mapper>
