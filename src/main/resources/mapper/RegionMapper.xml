@@ -68,10 +68,7 @@
 			addr AS addr,
 			emd_name AS emdName,
 			ev_order AS evOrder,
-			CASE pre_yn
-				WHEN '0' THEN ev_ps_name
-				WHEN '1' THEN ps_name
-			END AS evPsName,
+			ev_ps_name AS evPsName,
 			floor AS floor,
 			place_name AS placeName,
 			ps_name AS psName,
